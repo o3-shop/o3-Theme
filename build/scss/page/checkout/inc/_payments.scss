@@ -95,5 +95,9 @@
                 background-color: $secondary;
             }
         }
+
+        &:not(:checked) ~ .form-check-label .input-group {
+            display: none;
+        }
     }
 }

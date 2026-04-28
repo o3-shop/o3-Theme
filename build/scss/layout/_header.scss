@@ -65,8 +65,8 @@ header {
     position: relative;
     justify-content: space-between;
     align-items: center;
-    background-color: $black;
-    color: $white;
+    background-color: $gray-100;
+    color: $body-color;
 
     &:before {
         content: "";
@@ -91,7 +91,7 @@ header {
     }
 
     a, .dropdown-toggle {
-        color: $white;
+        color: $body-color;
     }
 }
 
@@ -104,6 +104,8 @@ header {
     flex: 1 1 calc(49% - 10px);
 	max-width: 150px;
 	min-width: 100px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 
     @include media-breakpoint-up(md) {
         flex: 0 1 auto;

@@ -15,7 +15,7 @@
 
     [{if $products && !empty($products)}]
 
-        <div class="component__productslider-[{$listId}] splide" data-list-id="[{$listId}]" data-splide='{
+        <div class="component__productslider-[{$listId}] splide" data-list-id="[{$listId}]" data-splide='[{if $splideConfig}][{$splideConfig}][{else}]{
                                 "mediaQuery": "min",
                                 "perMove":1,
                                 "breakpoints":{
@@ -35,7 +35,7 @@
                                         "arrows": false
                                     }
                                 }
-                                }'
+                                }[{/if}]'
         >
             <div class="splide__arrows">
                 <button type="button" class="splide__arrow splide__arrow--prev">

@@ -47,6 +47,7 @@ import './offcanvas-mainnav.js';
 import './productslider.js';
 import './remove-from-basket.js';
 import './tobasket.js';
+import './widget/payment-toggle.js';
 
 // ─────────────────────────────────────────────
 // MODUL-JS

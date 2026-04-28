@@ -9,7 +9,7 @@
                 [{/foreach}]
             [{/block}]
         </button>
-        <ul class="dropdown-menu dropdown-menu-dark">
+        <ul class="dropdown-menu">
             [{block name="dd_layout_page_header_icon_menu_languages_list"}]
                 [{foreach from=$oxcmp_lang item=_lng}]
                     <li>

@@ -64,13 +64,19 @@
 
             [{if $oxcmp_user}]
                 <a class="component__productbox-noticelist" href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getTopActiveClassName() params="aid=`$product->oxarticles__oxnid->value`&anid=`$product->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams()|cat:"&amp;stoken="|cat:$oViewConf->getSessionChallengeToken()}]">
-                    <svg width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    [{if $product->isInList()}]
+                        <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" fill="#929292" stroke="#929292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    [{else}]
+                        <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    [{/if}]
                 </a>
             [{else}]
                 <a class="component__productbox-noticelist" title="[{oxmultilang ident="LOGIN_TO_ACCESS_GIFT_REGISTRY"}]" href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getTopActiveClassName()|cat:$oViewConf->getNavUrlParams()}]">
-                    <svg width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </a>
@@ -80,8 +86,9 @@
 
             [{if (($owishid && ($owishid==$oxcmp_user->oxuser__oxid->value)) || (($wishid==$oxcmp_user->oxuser__oxid->value)) || $recommid)}]
                 <button data-js-noticelist="remove_[{$removeFunction}][{$testid}]" type="submit" class="component__productbox-remove btn" title="[{oxmultilang ident="REMOVE"}]">
-                    <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.4375 2.3125H5.25C5.35313 2.3125 5.4375 2.22812 5.4375 2.125V2.3125ZM5.4375 2.3125H12.5625V2.125C12.5625 2.22812 12.6469 2.3125 12.75 2.3125H12.5625V4H14.25V2.125C14.25 1.29766 13.5773 0.625 12.75 0.625H5.25C4.42266 0.625 3.75 1.29766 3.75 2.125V4H5.4375V2.3125ZM17.25 4H0.75C0.335156 4 0 4.33516 0 4.75V5.5C0 5.60313 0.084375 5.6875 0.1875 5.6875H1.60312L2.18203 17.9453C2.21953 18.7445 2.88047 19.375 3.67969 19.375H14.3203C15.1219 19.375 15.7805 18.7469 15.818 17.9453L16.3969 5.6875H17.8125C17.9156 5.6875 18 5.60313 18 5.5V4.75C18 4.33516 17.6648 4 17.25 4ZM14.1398 17.6875H3.86016L3.29297 5.6875H14.707L14.1398 17.6875Z" fill="#D4D4D4"/>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1.5 14a2 2 0 01-2 1.5H8.5a2 2 0 01-2-1.5L5 6" stroke="#999" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 11v5M14 11v5" stroke="#999" stroke-width="1.6" stroke-linecap="round"/>
                     </svg>
                 </button>
             [{/if}]
@@ -89,9 +96,37 @@
         [{/if}]
 
         [{block name="widget_product_listitem_infogrid_gridpicture"}]
-            <a class="component__productbox-picture mb-4" href="[{$_productLink}]" title="[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
-                <img loading="lazy" src="[{$product->getThumbnailUrl()}]" alt="[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
-            </a>
+            [{assign var="sHoverPic" value=$product->getPictureUrl(2)}]
+            <div class="component__productbox-picture mb-4">
+                <a class="component__productbox-picture-link" href="[{$_productLink}]" title="[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
+                    <img loading="lazy" src="[{$product->getThumbnailUrl()}]" alt="[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
+                    [{if $sHoverPic && !($sHoverPic|strstr:'nopic')}]
+                        <img class="img-hover" loading="lazy" src="[{$sHoverPic}]" alt="[{$product->oxarticles__oxtitle->value}] [{$product->oxarticles__oxvarselect->value}]">
+                    [{/if}]
+                </a>
+                [{if $blShowToBasket}]
+                [{oxhasrights ident="TOBASKET"}]
+                <form class="component__productbox-quickadd" action="[{$oViewConf->getSelfActionLink()}]" method="post">
+                    [{$oViewConf->getNavFormParams()}]
+                    [{$oViewConf->getHiddenSid()}]
+                    <input type="hidden" name="pgNr" value="[{$oView->getActPage()}]">
+                    <input type="hidden" name="cl" value="[{$oViewConf->getTopActiveClassName()}]">
+                    <input type="hidden" name="fnc" value="tobasket">
+                    <input type="hidden" name="aid" value="[{$product->oxarticles__oxid->value}]">
+                    <input type="hidden" name="anid" value="[{$product->oxarticles__oxnid->value}]">
+                    [{include file="widget/product/tobasket.tpl"
+                        name="am"
+                        value=1
+                        submit=true
+                        blCanBuy=true
+                        stockflag=$product->oxarticles__oxstockflag->value
+                        stock=$product->oxarticles__oxstock->value
+                        disabled=false
+                    }]
+                </form>
+                [{/oxhasrights}]
+                [{/if}]
+            </div>
         [{/block}]
 
 

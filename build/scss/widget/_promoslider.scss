@@ -1,11 +1,59 @@
 .start__promoslider {
-    margin: 15px calc(var(--bs-gutter-x) * -0.5) 80px;
+    margin: 20px calc(var(--bs-gutter-x) * -0.5) 50px;
 
     @include media-breakpoint-up(md) {
-        margin: 0 calc(var(--bs-gutter-x) * -0.5) 80px;
+        margin: 5px calc(var(--bs-gutter-x) * -0.5) 50px;
     }
 
     @include media-breakpoint-up(xxl) {
-        margin: 0 0 80px;
+        margin: 5px 0 50px;
+    }
+
+    // Arrow buttons
+    .splide__arrow {
+        width: 48px;
+        height: 48px;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: background 0.2s;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        svg path {
+            stroke: #fff;
+            stroke-width: 2;
+        }
+    }
+
+    .splide__arrow--prev {
+        left: 1rem;
+    }
+
+    .splide__arrow--next {
+        right: 1rem;
+    }
+
+    // Pagination dots
+    .splide__pagination__page {
+        background: rgba(255, 255, 255, 0.5);
+
+        &.is-active {
+            background: $white;
+            transform: scale(1.2);
+        }
+    }
+
+    // Slide images fill container height consistently
+    .splide__slide img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
     }
 }

@@ -6,6 +6,7 @@
 
         <div class="start__promoslider splide" data-splide='{
                                 "mediaQuery": "min",
+                                "rewind": true,
                                 [{if $oViewConf->getViewThemeParam('sSliderAutostart') == "on"}]
                                     "autoplay": true,
                                     "interval": [{$oViewConf->getViewThemeParam('sSliderInterval')}],
@@ -43,7 +44,7 @@
                         [{foreach from=$oBanners key="iPicNr" item="oBanner" name="promoslider"}]
                             [{assign var="oArticle" value=$oBanner->getBannerArticle()}]
                             [{assign var="sBannerPictureUrl" value=$oBanner->getBannerPictureUrl()}]
-                            [{if $sBannerPictureUrl && !$oBanner->oxactions__oxid->value|strstr:"fixedBanner"}]
+                            [{if $sBannerPictureUrl && !($sBannerPictureUrl|strstr:'nopic') && !$oBanner->oxactions__oxid->value|strstr:"fixedBanner"}]
                                 [{assign var="sBannerLink" value=$oBanner->getBannerLink()}]
                                 [{if $sBannerLink}]
                                     <a class="splide__slide" href="[{$sBannerLink}]" title="[{$oBanner->oxactions__oxtitle->value}]">
