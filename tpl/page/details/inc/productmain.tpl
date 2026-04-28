@@ -267,9 +267,15 @@
             <div class="details__share">
                 [{if $oxcmp_user}]
                     <a href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl="|cat:$oViewConf->getTopActiveClassName() params="aid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;anid=`$oDetailsProduct->oxarticles__oxnid->value`&amp;fnc=tonoticelist&amp;am=1"|cat:$oViewConf->getNavUrlParams()|cat:"&amp;stoken="|cat:$oViewConf->getSessionChallengeToken()}]">
-                        <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.95 1.06397C3.21625 1.06397 1 3.21612 1 5.87082C1 10.6777 6.85 15.0475 10 16.064C13.15 15.0475 19 10.6777 19 5.87082C19 3.21612 16.7837 1.06397 14.05 1.06397C12.376 1.06397 10.8955 1.87108 10 3.10644C9.54356 2.47508 8.93717 1.95983 8.23219 1.60429C7.52721 1.24876 6.74438 1.06342 5.95 1.06397Z" stroke="#929292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        [{if $oDetailsProduct->isInList()}]
+                            <svg width="20" height="17" viewBox="0 0 20 17" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.95 1.06397C3.21625 1.06397 1 3.21612 1 5.87082C1 10.6777 6.85 15.0475 10 16.064C13.15 15.0475 19 10.6777 19 5.87082C19 3.21612 16.7837 1.06397 14.05 1.06397C12.376 1.06397 10.8955 1.87108 10 3.10644C9.54356 2.47508 8.93717 1.95983 8.23219 1.60429C7.52721 1.24876 6.74438 1.06342 5.95 1.06397Z" fill="#929292" stroke="#929292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        [{else}]
+                            <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.95 1.06397C3.21625 1.06397 1 3.21612 1 5.87082C1 10.6777 6.85 15.0475 10 16.064C13.15 15.0475 19 10.6777 19 5.87082C19 3.21612 16.7837 1.06397 14.05 1.06397C12.376 1.06397 10.8955 1.87108 10 3.10644C9.54356 2.47508 8.93717 1.95983 8.23219 1.60429C7.52721 1.24876 6.74438 1.06342 5.95 1.06397Z" stroke="#929292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        [{/if}]
                     </a>
                 [{else}]
                     <a href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" params="anid=`$oDetailsProduct->oxarticles__oxnid->value`"|cat:"&amp;sourcecl="|cat:$oViewConf->getTopActiveClassName()|cat:$oViewConf->getNavUrlParams()}]">

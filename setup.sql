@@ -57,7 +57,7 @@ VALUES (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sGATrackingId', 'st
         'a:4:{i:0;s:2:"12";i:1;s:2:"16";i:2;s:2:"24";i:3;s:2:"32";}', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sFavicon512PngFile', 'str', 'icon-512.png', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sDeliveryDaysOnStock', 'str', '6', NOW()),
-       (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'blPrimaryColor', 'str', '#2555FF', NOW()),
+       (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'blPrimaryColor', 'str', '#82BA00', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sShoppingCountry', 'str', 'DE', NOW());
 
 INSERT INTO `oxconfigdisplay` (`OXID`, `OXCFGMODULE`, `OXCFGVARNAME`, `OXGROUPING`, `OXVARCONSTRAINT`, `OXPOS`, `OXTIMESTAMP`)

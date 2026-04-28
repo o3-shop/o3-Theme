@@ -84,6 +84,7 @@
             [{else}]
                 [{oxstyle include="css/main.css"}]
             [{/if}]
+            [{oxstyle include="css/photoswipe.css"}]
         [{/block}]
 
         [{block name="base_fonts"}]
@@ -136,6 +137,8 @@
     <body class="cl-[{$oView->getClassName()}][{if $blIsCheckout}] is-checkout[{/if}][{if $oxcmp_user && $oxcmp_user->oxuser__oxpassword->value}] is-logged[{/if}]">
 
     [{block name="theme_svg_icons"}][{/block}]
+
+    [{include file="page/details/inc/photoswipe.tpl"}]
 
     [{foreach from=$oxidBlock_pageBody item="_block"}]
         [{$_block}]

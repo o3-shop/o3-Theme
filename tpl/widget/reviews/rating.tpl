@@ -55,7 +55,7 @@
 
 [{else}]
 
-    <div class="component__rating">
+    <div class="component__rating"[{if !$iRatingValue}] style="visibility:hidden"[{/if}]>
         [{$ratingIcon}]
     </div>
 

@@ -10,7 +10,7 @@ html {
 
 main {
     position: relative;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
 
     &.backdrop {
         &:after {
@@ -19,7 +19,7 @@ main {
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% + 80px);
+            height: calc(100% + 40px);
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
@@ -37,11 +37,6 @@ main {
         font-size: 2rem;
     }
 
-    span {
-        font-size: 0.875rem;
-        color: $input-placeholder-color;
-        font-weight: 500;
-    }
 }
 
 .title-small {
@@ -100,7 +95,8 @@ main {
 
 .btn-edit {
     line-height: 17px;
-    border-bottom: 1px dashed $body-color;
+    text-decoration: underline;
+    text-decoration-style: dashed;
     --bs-btn-padding-x: 0.1rem;
     --bs-btn-padding-y: 0.1rem;
 }

@@ -1,13 +1,13 @@
 <div class="component__tobasket"[{if !$blCanBuy}] data-tooltip="[{oxmultilang ident="TO_CART_NOVARIANT"}]"[{/if}] data-js="tobasket">
     <button class="btn component__tobasket-minus" type="button"[{if $value == 1 || $disabled}] disabled[{/if}] data-js="tobasket-minus">
         <svg width="20" height="2" viewBox="0 0 20 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 1H10H20" stroke="#2555FF" stroke-width="1.5"/>
+            <path d="M0 1H10H20" stroke="#82BA00" stroke-width="1.5"/>
         </svg>
     </button>
     <input class="component__tobasket-input"[{if $oConfig->getConfigParam('blAllowUnevenAmounts')}] data-allow-decimal="true"[{/if}] type="number" name="[{$name}]" value="[{$value}]" autocomplete="off" min="1"[{if $stockflag == 3}] max="[{$stock}]"[{/if}] step="[{if $oConfig->getConfigParam('blAllowUnevenAmounts')}]any[{else}]1[{/if}]" data-js="tobasket-input"[{if $disabled}] disabled[{/if}]>
     <button class="btn component__tobasket-plus" type="button"[{if ($stockflag == 3 && $value >= $stock) || $disabled}] disabled[{/if}] data-js="tobasket-plus">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 0V10M10 20V10M10 10H0M10 10H20" stroke="#2555FF" stroke-width="1.5"/>
+            <path d="M10 0V10M10 20V10M10 10H0M10 10H20" stroke="#82BA00" stroke-width="1.5"/>
         </svg>
     </button>
     [{if $submit}]

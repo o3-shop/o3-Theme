@@ -65,19 +65,19 @@ $aTheme = array(
             'group' => 'colors',
             'name'  => 'blPrimaryColor',
             'type'  => 'str',
-            'value' => '#2555FF',
+            'value' => '#82BA00',
         ),
         array(
             'group' => 'colors',
             'name'  => 'blSecondaryColor',
             'type'  => 'str',
-            'value' => '#F2F6FF',
+            'value' => '#F2F8E6',
         ),
         array(
             'group' => 'colors',
             'name'  => 'blFooterColor',
             'type'  => 'str',
-            'value' => '#01071C',
+            'value' => '#F4F8F9',
         ),
         array(
             'group' => 'display',
@@ -248,7 +248,7 @@ $aTheme = array(
             'group' => 'logo',
             'name'  => 'sEmailLogo',
             'type'  => 'str',
-            'value' => 'logo.svg',
+            'value' => 'logo_email.png',
         ),
         array(
             'group' => 'footer',
@@ -320,7 +320,7 @@ $aTheme = array(
             'group' => 'logo',
             'name'  => 'sLogoFile',
             'type'  => 'str',
-            'value' => 'logo.svg',
+            'value' => 'logo_o3.png',
         ),
         array(
             'group' => 'images',
@@ -362,7 +362,7 @@ $aTheme = array(
             'group' => 'images',
             'name'  => 'sThumbnailsize',
             'type'  => 'str',
-            'value' => '330*185',
+            'value' => '412*240',
         ),
         array(
             'group' => 'footer',
@@ -386,7 +386,7 @@ $aTheme = array(
             'group' => 'form',
             'name'  => 'iPasswordLength',
             'type'  => 'str',
-            'value' => '12',
+            'value' => '10',
         ),
         array(
             'group' => 'form',

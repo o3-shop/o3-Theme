@@ -75,7 +75,7 @@
         [{/if}]
     [{/block}]
 
-    [{if $fixedBanner.fixedBannerBig}]
+    [{if $fixedBanner.fixedBannerBig && !($fixedBanner.fixedBannerBig->getBannerPictureUrl()|strstr:'nopic')}]
         [{if $fixedBanner.fixedBannerBig->getBannerLink()}]
             <a class="start__fixedbanner d-block" href="[{$fixedBanner.fixedBannerBig->getBannerLink()}]">
                 <img class="img-fluid" src="[{$fixedBanner.fixedBannerBig->getBannerPictureUrl()}]" alt="[{$fixedBanner.fixedBannerBig->oxactions__oxtitle->value}]">

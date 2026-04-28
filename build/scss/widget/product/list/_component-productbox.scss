@@ -7,6 +7,30 @@
 	}
 }
 
+// [{* PLP product frame *}] outer padding = half the 20px gap between frames
+.component__productbox:not(.border-bottom) {
+	padding: 10px;
+}
+
+// [{* PLP product frame *}] xs (<576px): 1 col → no horizontal padding
+@include media-breakpoint-down(sm) {
+	.component__productbox:not(.border-bottom) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+// [{* PLP product frame *}]
+.component__productbox-frame {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #d8d8d8;
+	border-radius: 3px;
+	padding: 10px;
+	height: 100%;
+}
+
 .component__productbox-noticelist, .component__productbox-remove {
 	position: absolute;
 	display: flex;
@@ -14,18 +38,12 @@
 	align-items: center;
 	width: 36px;
 	height: 36px;
-	top: 20px;
-	right: 20px;
+	top: 14px;
+	right: 14px;
 	padding: 0;
 	background-color: #F8F8F8;
 	border-radius: 50%;
 	z-index: 1;
-}
-
-.component__productbox-remove {
-	width: auto;
-	height: auto;
-	aspect-ratio: 1 / 1;
 }
 
 .component__productbox-title {
@@ -42,24 +60,94 @@
 	color: #616060;
 }
 
+// Fills remaining card height, centres image vertically within that space
 .component__productbox-picture {
-	//width: 100%;
-	height: 185px;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	flex: 1;
+	min-height: 0;
 	display: flex;
-	align-items: center;
+	flex-direction: column;
 	justify-content: center;
+
+	&:hover .img-hover {
+		opacity: 1;
+	}
+
+	&:hover .component__productbox-quickadd {
+		opacity: 1;
+		pointer-events: auto;
+	}
+}
+
+.component__productbox-picture-link {
+	display: block;
+	width: 100%;
 
 	img {
 		display: block;
 		width: 100%;
+		height: auto;
+		transition: opacity 0.3s ease;
+	}
+
+	.img-hover {
+		position: absolute;
+		inset: 0;
+		width: 100%;
 		height: 100%;
 		object-fit: contain;
+		opacity: 0;
+	}
+}
+
+.component__productbox-quickadd {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.95);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease;
+	z-index: 2;
+
+	.component__tobasket {
+		flex-wrap: nowrap;
+		border: none;
+	}
+
+	.component__tobasket-minus,
+	.component__tobasket-plus {
+		display: none;
+	}
+
+	.component__tobasket-input {
+		font-size: 0.875rem;
+	}
+
+	.component__tobasket-submit {
+		font-size: 0.875rem;
+		padding: 6px 12px;
+		justify-content: center;
+		white-space: nowrap;
+
+		svg {
+			display: none;
+		}
 	}
 }
 
 .component__productbox-price {
 	display: flex;
 	flex-direction: column;
+	font-size: 1.125rem;
+
+	.lead {
+		font-size: 1.125rem;
+	}
 }
 
 .component__productbox-price-old {

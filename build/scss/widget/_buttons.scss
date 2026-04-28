@@ -1,0 +1,26 @@
+.btn-primary {
+    --bs-btn-color: #{$white};
+    --bs-btn-hover-color: #{$white};
+    --bs-btn-active-color: #{$white};
+    --bs-btn-disabled-color: #{$white};
+    color: $white;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        color: $white;
+    }
+}
+
+.btn-outline-primary {
+    --bs-btn-hover-color: #{$white};
+    --bs-btn-active-color: #{$white};
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        color: $white;
+    }
+}

@@ -21,12 +21,21 @@
 
 [data-level="is-level-1"] {
     &.nav-item {
-        border-bottom-width: 2px;
-        border-bottom-style: solid;
-        border-bottom-color: $white;
+        position: relative;
 
-        &:hover {
-            border-bottom-color: var(--bs-primary);
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: transparent;
+        }
+
+        &:hover::after,
+        &.active::after {
+            background-color: var(--bs-primary);
         }
     }
 

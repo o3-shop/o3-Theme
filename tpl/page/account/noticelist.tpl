@@ -13,17 +13,21 @@
             [{include file="layout/sidebar.tpl" content="account" active_link="noticelist"}]
         </div>
 
-        <div class="col-12 col-md-7 col-lg-8 offset-md-1">
+        <div class="col-12 col-md-8 col-lg-9">
 
             <h1 class="title-big">[{oxmultilang ident="MY_WISH_LIST"}]</h1>
             <hr>
 
             [{if $oView->getNoticeProductList()}]
-                [{include file="widget/product/list.tpl" listId="noticelistProductList" products=$oView->getNoticeProductList() removeFunction="tonoticelist" owishid=$oxcmp_user->oxuser__oxid->value}]
+                <div class="component__productslider">
+                    [{include file="widget/product/list_splide.tpl" listId="noticelistProductList" products=$oView->getNoticeProductList() removeFunction="tonoticelist" owishid=$oxcmp_user->oxuser__oxid->value splideConfig='{"mediaQuery":"min","perMove":1,"arrows":false,"pagination":true,"breakpoints":{"1400":{"perPage":3},"992":{"perPage":2},"768":{"perPage":2},"0":{"perPage":1}}}'}]
+                </div>
             [{else}]
                 <p class="alert alert-info">[{oxmultilang ident="WISH_LIST_EMPTY"}]</p>
             [{/if}]
+
         </div>
+
     </div>
     [{insert name="oxid_tracker" title=$template_title}]
 [{/capture}]
