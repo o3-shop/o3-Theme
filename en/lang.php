@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales Wave theme.
  *
@@ -19,7 +20,7 @@
  * @copyright (C) OXID eSales AG 2003-2016
  */
 
-$sLangName = "English";
+$sLangName = 'English';
 
 $aLang = [
     'charset'                                               => 'UTF-8',
@@ -142,8 +143,8 @@ $aLang = [
     'WIDGET_PRODUCT_RELATED_PRODUCTS_ACCESSORIES_SUBHEADER' => 'The following products fit well to this product.',
     'WIDGET_PRODUCT_RELATED_PRODUCTS_SIMILAR_SUBHEADER'     => 'Take a look at our similar products.',
     'WIDGET_PRODUCT_RELATED_PRODUCTS_CROSSSELING_SUBHEADER' => 'Customers who viewed this product also viewed the following products.',
-    'DETAILS_VPE_MESSAGE_1'                                 => "This product can only be ordered in packaging units of ",
-    'DETAILS_VPE_MESSAGE_2'                                 => "",
+    'DETAILS_VPE_MESSAGE_1'                                 => 'This product can only be ordered in packaging units of ',
+    'DETAILS_VPE_MESSAGE_2'                                 => '',
     'TO_CART_NOVARIANT'                                     => 'Choose a variant',
     'REVIEWS'                                               => 'Reviews',
     'O3_WRITE_REVIEW'                                       => 'Write a review',

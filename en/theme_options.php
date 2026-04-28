@@ -20,9 +20,7 @@
  * @copyright (C) OXID eSales AG 2003-2016
  */
 
-
-
-$aLang = array(
+$aLang = [
     'charset'                                       => 'UTF-8',
 
     'SHOP_THEME_GROUP_mode'                         => 'Modus',
@@ -246,4 +244,4 @@ $aLang = array(
     'SHOP_THEME_blFullwidthLayout'                      => 'Activate full width layout',
 
     'SHOP_THEME_blEmailsShowProductPictures'        => 'Show product pictures in emails',
-);
+];

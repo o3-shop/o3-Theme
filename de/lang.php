@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales Wave theme.
  *
@@ -19,7 +20,7 @@
  * @copyright (C) OXID eSales AG 2003-2016
  */
 
-$sLangName = "Deutsch";
+$sLangName = 'Deutsch';
 
 $aLang = [
     'charset'                                               => 'UTF-8',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of O3-Shop.
  *
@@ -21,32 +22,32 @@
 /**
  * Theme Information
  */
-$aTheme = array(
+$aTheme = [
     'id'          => 'o3-theme',
     'title'       => 'O3-Theme',
     'description' => 'O3-Theme is O3-Shops official responsive theme based on the CSS framework Bootstrap 5.',
     'thumbnail'   => 'theme.png',
     'version'     => '1.0.0',
     'author'      => '<a href="https://www.o3-shop.com" title="O3-Shop">O3-Shop</a>',
-    'settings'    => array(
-        array(
+    'settings'    => [
+        [
             'group' => 'mode',
             'name'  => 'sShowMode',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'mode',
             'name'  => 'sShowModePosition',
             'type'        => 'select',
             'value'       => 'topleft',
             'constraints' => 'topleft|topright|bottomleft|bottomright',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'aDetailImageSizes',
             'type'  => 'aarr',
-            'value' => array(
+            'value' => [
                 'oxpic1'  => '752*633',
                 'oxpic2'  => '752*633',
                 'oxpic3'  => '752*633',
@@ -59,370 +60,370 @@ $aTheme = array(
                 'oxpic10' => '752*633',
                 'oxpic11' => '752*633',
                 'oxpic12' => '752*633',
-            ),
-        ),
-        array(
+            ],
+        ],
+        [
             'group' => 'colors',
             'name'  => 'blPrimaryColor',
             'type'  => 'str',
             'value' => '#82BA00',
-        ),
-        array(
+        ],
+        [
             'group' => 'colors',
             'name'  => 'blSecondaryColor',
             'type'  => 'str',
             'value' => '#F2F8E6',
-        ),
-        array(
+        ],
+        [
             'group' => 'colors',
             'name'  => 'blFooterColor',
             'type'  => 'str',
             'value' => '#F4F8F9',
-        ),
-        array(
+        ],
+        [
             'group' => 'display',
             'name'  => 'aNrofCatArticles',
             'type'  => 'arr',
-            'value' => array("10", "20", "50", "100"),
-        ),
-        array(
+            'value' => ['10', '20', '50', '100'],
+        ],
+        [
             'group' => 'display',
             'name'  => 'aNrofCatArticlesInGrid',
             'type'  => 'arr',
-            'value' => array("12", "16", "24", "32"),
-        ),
-        array(
+            'value' => ['12', '16', '24', '32'],
+        ],
+        [
             'group' => 'display',
             'name'  => 'bl_showManufacturer',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'features',
             'name'  => 'bl_showVouchers',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'emails',
             'name'  => 'blEmailsShowProductPictures',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'blFooterShowHelp',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'blFooterShowNewsletter',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'display',
             'name'  => 'blHomeLink',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'googleanalytics',
             'name'  => 'blGAAnonymizeIPs',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'display',
             'name'  => 'blShowBirthdayFields',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'display',
             'name'  => 'blShowFilters',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'display',
             'name'  => 'blShowFiltersSearch',
             'type'  => 'str',
             'value' => 10,
-        ),
-        array(
+        ],
+        [
             'group' => 'googleanalytics',
             'name'  => 'blUseGAEcommerceTracking',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'googleanalytics',
             'name'  => 'blUseGAPageTracker',
             'type'  => 'bool',
             'value' => 1,
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'blUseGoogleTS',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'sInstagramUrl',
             'type'  => 'str',
             'value' => 'https://instagram.com',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sCatIconsize',
             'type'  => 'str',
             'value' => '168*100',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sCatPromotionsize',
             'type'  => 'str',
             'value' => '370*107',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sCatThumbnailsize',
             'type'  => 'str',
             'value' => '1296*500',
-        ),
-        array(
+        ],
+        [
             'group'       => 'display',
             'name'        => 'sDefaultListDisplayType',
             'type'        => 'select',
             'value'       => 'grid',
             'constraints' => 'grid|line',
-        ),
-        array(
+        ],
+        [
             'group' => 'slider',
             'name'  => 'sSliderSlideFade',
             'type'        => 'select',
             'value'       => 'fade',
             'constraints' => 'slide|fade',
-        ),
-        array(
+        ],
+        [
             'group' => 'slider',
             'name'  => 'sSliderAutostart',
             'type'        => 'select',
             'value'       => 'on',
             'constraints' => 'on|off',
-        ),
-        array(
+        ],
+        [
             'group' => 'slider',
             'name'  => 'sSliderInterval',
             'type'  => 'str',
             'value' => '5000',
-        ),
-        array(
+        ],
+        [
             'group' => 'slider',
             'name'  => 'sSliderSpeed',
             'type'  => 'str',
             'value' => '400',
-        ),
-        array(
+        ],
+        [
             'group' => 'Jquery',
             'name'  => 'activateJquery',
             'type'  => 'bool',
             'value' => 0,
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sDeliveryDaysNotOnStock',
             'type'  => 'str',
             'value' => '14',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sDeliveryDaysOnStock',
             'type'  => 'str',
             'value' => '6',
-        ),
-        array(
+        ],
+        [
             'group' => 'logo',
             'name'  => 'sEmailLogo',
             'type'  => 'str',
             'value' => 'logo_email.png',
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'sFacebookUrl',
             'type'  => 'str',
             'value' => 'https://www.facebook.com',
-        ),
-        array(
+        ],
+        [
             'group' => 'favicons',
             'name'  => 'sFaviconIcoFile',
             'type'  => 'str',
             'value' => 'favicon.ico',
-        ),
-        array(
+        ],
+        [
             'group' => 'favicons',
             'name'  => 'sFaviconSvgFile',
             'type'  => 'str',
             'value' => 'icon.svg',
-        ),
-        array(
+        ],
+        [
             'group' => 'favicons',
             'name'  => 'sFaviconAppleFile',
             'type'  => 'str',
             'value' => 'apple-touch-icon.png',
-        ),
-        array(
+        ],
+        [
             'group' => 'favicons',
             'name'  => 'sFavicon192PngFile',
             'type'  => 'str',
             'value' => 'icon-192.png',
-        ),
-        array(
+        ],
+        [
             'group' => 'favicons',
             'name'  => 'sFavicon512PngFile',
             'type'  => 'str',
             'value' => 'icon-512.png',
-        ),
-        array(
+        ],
+        [
             'group' => 'googleanalytics',
             'name'  => 'sGATrackingId',
             'type'  => 'str',
             'value' => '',
-        ),
-        array(
+        ],
+        [
             'group' => 'contact',
             'name'  => 'sGoogleMapsAddr',
             'type'  => 'str',
             'value' => 'O3-Shop, Musterstraße 17, 12345 Musterstadt',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sGoogleShoppingAccountId',
             'type'  => 'str',
             'value' => '',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sGoogleVendorId',
             'type'  => 'str',
             'value' => '',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sIconsize',
             'type'  => 'str',
             'value' => '114*114',
-        ),
-        array(
+        ],
+        [
             'group' => 'logo',
             'name'  => 'sLogoFile',
             'type'  => 'str',
             'value' => 'logo_o3.png',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sManufacturerIconsize',
             'type'  => 'str',
             'value' => '100*100',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sPageLanguage',
             'type'  => 'str',
             'value' => 'de_DE',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sShippingDaysNotOnStock',
             'type'  => 'str',
             'value' => '5',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sShippingDaysOnStock',
             'type'  => 'str',
             'value' => '3',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sShoppingCountry',
             'type'  => 'str',
             'value' => 'DE',
-        ),
-        array(
+        ],
+        [
             'group' => 'googlets',
             'name'  => 'sShoppingLanguage',
             'type'  => 'str',
             'value' => 'de',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sThumbnailsize',
             'type'  => 'str',
             'value' => '412*240',
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'sTwitterUrl',
             'type'  => 'str',
             'value' => 'https://twitter.com',
-        ),
-        array(
+        ],
+        [
             'group' => 'footer',
             'name'  => 'sYouTubeUrl',
             'type'  => 'str',
             'value' => 'https://www.youtube.com',
-        ),
-        array(
+        ],
+        [
             'group' => 'images',
             'name'  => 'sZoomImageSize',
             'type'  => 'str',
             'value' => '665*665',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'iPasswordLength',
             'type'  => 'str',
             'value' => '10',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputCompany',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputUstid',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputState',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputFax',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputMobilePhone',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-        array(
+        ],
+        [
             'group' => 'form',
             'name'  => 'bInputPrivatPhone',
             'type'  => 'bool',
             'value' => 'false',
-        ),
-    ),
-);
+        ],
+    ],
+];
