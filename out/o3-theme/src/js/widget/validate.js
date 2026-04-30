@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ==========================================
 
         const passwordLengthInput = document.querySelector('[data-js="password-length"]');
-        const minLength = passwordLengthInput ? parseInt(passwordLengthInput.value, 10) : 12;
+        const minLength = passwordLengthInput ? parseInt(passwordLengthInput.value, 10) : 10;
 
         // Elements for password validation
         const passwordBar = form.querySelector('.component__password-bar');
