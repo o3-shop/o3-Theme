@@ -72,8 +72,7 @@
             [{assign var="sFavicon16File"  value=$oViewConf->getViewThemeParam('sFaviconSvgFile')}]
             [{assign var="sFavicon32File"  value=$oViewConf->getViewThemeParam('sFaviconAppleFile')}]
 
-            <link rel="icon" href="[{$oViewConf->getResourceUrl()}]favicon/favicon.ico" sizes="32x32">
-            <link rel="icon" href="[{$oViewConf->getResourceUrl()}]favicon/icon.svg" type="image/svg+xml">
+            <link rel="icon" href="[{$oViewConf->getResourceUrl()}]favicon/favicon.ico" sizes="any">
             <link rel="apple-touch-icon" href="[{$oViewConf->getResourceUrl()}]favicon/apple-touch-icon.png"> [{* 180×180 *}]
             <link rel="manifest" href="[{$oViewConf->getResourceUrl()}]favicon/manifest.webmanifest">
         [{/block}]
