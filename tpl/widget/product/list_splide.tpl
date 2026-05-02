@@ -15,23 +15,26 @@
 
     [{if $products && !empty($products)}]
 
+        [{* Cap perPage at item count so a short list (e.g. 4 articles) fills the
+            full slider width instead of leaving an empty trailing slot. *}]
+        [{assign var="_splideCount" value=$products->count()}]
         <div class="component__productslider-[{$listId}] splide" data-list-id="[{$listId}]" data-splide='[{if $splideConfig}][{$splideConfig}][{else}]{
                                 "mediaQuery": "min",
                                 "perMove":1,
                                 "breakpoints":{
                                     "1400":{
-                                        "perPage":5,
+                                        "perPage":[{if $_splideCount < 5}][{$_splideCount}][{else}]5[{/if}],
                                         "pagination": false,
                                         "arrows": true
                                     },
                                     "992":{
-                                        "perPage":4
+                                        "perPage":[{if $_splideCount < 4}][{$_splideCount}][{else}]4[{/if}]
                                     },
                                     "768":{
-                                        "perPage":3
+                                        "perPage":[{if $_splideCount < 3}][{$_splideCount}][{else}]3[{/if}]
                                     },
                                     "0":{
-                                        "perPage":2,
+                                        "perPage":[{if $_splideCount < 2}][{$_splideCount}][{else}]2[{/if}],
                                         "arrows": false
                                     }
                                 }
