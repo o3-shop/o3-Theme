@@ -13048,6 +13048,13 @@ header.is-minimal .header__logo {
   color: #fff;
 }
 
+.footer__revocation {
+  margin-top: 12px;
+}
+.footer__revocation-btn {
+  text-decoration: none !important;
+}
+
 :root {
   --footer-bg: #F4F8F9;
 }
