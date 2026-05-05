@@ -12725,6 +12725,9 @@ input[type=number] {
 }
 
 .megamenu {
+  --bridge: 12px;
+  --pad-x: 28px;
+  --caret-x: 28px;
   position: absolute;
   top: 100%;
   left: 0;
@@ -12733,32 +12736,36 @@ input[type=number] {
   min-width: 240px;
   max-width: min(720px, 100vw - 40px);
   width: max-content;
-  margin-top: 12px;
-  padding: 22px 28px 18px;
-  background: #fff;
-  border: 1px solid rgba(17, 34, 17, 0.06);
-  border-radius: 12px;
-  box-shadow: 0 24px 48px -16px rgba(18, 18, 18, 0.18), 0 4px 12px -4px rgba(18, 18, 18, 0.06);
+  padding: var(--bridge) 0 0;
 }
 .megamenu::before {
   content: "";
   position: absolute;
-  top: -7px;
-  left: 28px;
+  top: var(--bridge);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border: 1px solid rgba(17, 34, 17, 0.06);
+  border-radius: 12px;
+  box-shadow: 0 24px 48px -16px rgba(18, 18, 18, 0.18), 0 4px 12px -4px rgba(18, 18, 18, 0.06);
+  z-index: -1;
+}
+.megamenu::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--bridge) - 6px);
+  left: var(--caret-x);
   width: 12px;
   height: 12px;
   background: #fff;
   border-top: 1px solid rgba(17, 34, 17, 0.06);
   border-left: 1px solid rgba(17, 34, 17, 0.06);
   transform: rotate(45deg);
+  z-index: -1;
 }
-.megamenu::after {
-  content: "";
-  position: absolute;
-  top: -12px;
-  left: 0;
-  right: 0;
-  height: 12px;
+.megamenu > .row {
+  padding: 22px var(--pad-x) 18px;
 }
 .megamenu .row {
   display: grid;
@@ -12781,6 +12788,8 @@ input[type=number] {
   position: relative;
   transition: color 0.15s ease;
   line-height: 1.45;
+  font-weight: 500;
+  font-size: 0.9375rem;
 }
 .megamenu a::after {
   content: "";
@@ -12798,23 +12807,13 @@ input[type=number] {
 .megamenu a:hover::after, .megamenu a:focus-visible::after, .megamenu a.current::after {
   width: 100%;
 }
-.megamenu [data-level=is-level-2] {
-  font-weight: 600;
-  font-size: 0.9375rem;
-  letter-spacing: 0.01em;
-  color: #121212;
-  margin-bottom: 6px;
-  display: block;
+.navbar-nav > .nav-item:nth-last-child(-n+2) > .megamenu {
+  left: auto;
+  right: 0;
 }
-.megamenu [data-level=is-level-3] {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: rgba(18, 18, 18, 0.6);
-  padding: 3px 0;
-}
-.megamenu [data-level=is-level-3]::after {
-  bottom: 1px;
+.navbar-nav > .nav-item:nth-last-child(-n+2) > .megamenu::after {
+  left: auto;
+  right: var(--caret-x);
 }
 
 [data-level=is-level-1].nav-item {
@@ -12844,7 +12843,7 @@ input[type=number] {
   display: block;
   animation: megamenu-reveal 0.18s ease-out;
 }
-.mega-dropdown:hover > .nav-link svg {
+.mega-dropdown:hover > .nav-link svg, .mega-dropdown:focus-within > .nav-link svg {
   transform: rotate(180deg);
 }
 .mega-dropdown .nav-link svg {

@@ -50,11 +50,6 @@
                                                                 [{if $osubcat->getIsVisible()}]
                                                                     <div class="col-3 mb-4">
                                                                         <a data-level="is-level-2"[{if $homeSelected == 'false' && $osubcat->expanded}] class="current"[{/if}] href="[{$osubcat->getLink()}]" itemprop="url"><span itemprop="name">[{$osubcat->oxcategories__oxtitle->value}]</span></a>
-                                                                        [{foreach from=$osubcat->getSubCats() item=osubsubcat key=subsubcatkey name=SubsubCat}]
-                                                                            [{if $osubsubcat->getIsVisible() }]
-                                                                                <a data-level="is-level-3" href="[{$osubsubcat->getLink()}]" itemprop="url"><span itemprop="name">[{$osubsubcat->oxcategories__oxtitle->value}]</span></a>
-                                                                            [{/if}]
-                                                                        [{/foreach}]
                                                                     </div>
                                                                 [{/if}]
                                                             [{/if}]

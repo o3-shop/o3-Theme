@@ -2,8 +2,17 @@
 //
 // Auto-sizes to content for few sub-categories (e.g. one item — issue #141)
 // while still expanding into a multi-column megamenu when there are many.
+//
+// Hit-area trick: the visible panel is drawn by ::before, sitting `--bridge`
+// pixels below the parent nav item. The .megamenu element itself has a
+// transparent padding-top of the same height so the cursor can travel from
+// parent → menu without ever leaving a hovered region.
 
 .megamenu {
+    --bridge: 12px;
+    --pad-x: 28px;
+    --caret-x: 28px;
+
     position: absolute;
     top: 100%;
     left: 0;
@@ -12,37 +21,46 @@
     min-width: 240px;
     max-width: min(720px, calc(100vw - 40px));
     width: max-content;
-    margin-top: 12px;
-    padding: 22px 28px 18px;
-    background: $white;
-    border: 1px solid rgba(17, 34, 17, 0.06);
-    border-radius: 12px;
-    box-shadow:
-        0 24px 48px -16px rgba(18, 18, 18, 0.18),
-        0 4px 12px -4px rgba(18, 18, 18, 0.06);
 
-    // small caret pointing up to the parent nav item
+    // padding-top *is* the bridge — transparent strip above the visible panel
+    // so cursor leaving the parent LI lands inside the still-hovered menu.
+    padding: var(--bridge) 0 0;
+
+    // Visible panel (offset by --bridge from the top of .megamenu)
     &::before {
         content: '';
         position: absolute;
-        top: -7px;
-        left: 28px;
+        top: var(--bridge);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: $white;
+        border: 1px solid rgba(17, 34, 17, 0.06);
+        border-radius: 12px;
+        box-shadow:
+            0 24px 48px -16px rgba(18, 18, 18, 0.18),
+            0 4px 12px -4px rgba(18, 18, 18, 0.06);
+        z-index: -1;
+    }
+
+    // Caret pointing up to the parent nav item
+    &::after {
+        content: '';
+        position: absolute;
+        top: calc(var(--bridge) - 6px);
+        left: var(--caret-x);
         width: 12px;
         height: 12px;
         background: $white;
         border-top: 1px solid rgba(17, 34, 17, 0.06);
         border-left: 1px solid rgba(17, 34, 17, 0.06);
         transform: rotate(45deg);
+        z-index: -1;
     }
 
-    // bridging strip so cursor can travel parent → menu without losing hover
-    &::after {
-        content: '';
-        position: absolute;
-        top: -12px;
-        left: 0;
-        right: 0;
-        height: 12px;
+    // Inner content padding (below the bridge)
+    > .row {
+        padding: 22px var(--pad-x) 18px;
     }
 
     // CSS-grid replacement for the bootstrap row/col-3 markup —
@@ -70,6 +88,8 @@
         position: relative;
         transition: color 0.15s ease;
         line-height: 1.45;
+        font-weight: 500;
+        font-size: 0.9375rem;
 
         // animated underline that grows from left on hover
         &::after {
@@ -94,26 +114,18 @@
         }
     }
 
-    // Level-2 sub-category title — heavier weight, slight letter-spacing
-    [data-level="is-level-2"] {
-        font-weight: 600;
-        font-size: 0.9375rem;
-        letter-spacing: 0.01em;
-        color: $body-color;
-        margin-bottom: 6px;
-        display: block;
-    }
-
-    // Level-3 (sub-sub) — quieter, smaller, sits below its parent in the same column
-    [data-level="is-level-3"] {
-        display: block;
-        font-size: 0.875rem;
-        font-weight: 400;
-        color: rgba(18, 18, 18, 0.6);
-        padding: 3px 0;
+    // Right-edge flip: when the parent nav item sits in the right portion of
+    // the navbar, anchor the menu to the parent's right edge instead of left.
+    // Pure-CSS approximation via :nth-last-child (works for the typical
+    // ≤ 8-item shop nav). For very-long menus, JS-based detection would be
+    // better — but this keeps build deps untouched and handles the demo data.
+    .navbar-nav > .nav-item:nth-last-child(-n+2) > & {
+        left: auto;
+        right: 0;
 
         &::after {
-            bottom: 1px;
+            left: auto;
+            right: var(--caret-x);
         }
     }
 }
@@ -155,7 +167,8 @@
     }
 
     // gentle chevron rotation on parent hover
-    &:hover > .nav-link svg {
+    &:hover > .nav-link svg,
+    &:focus-within > .nav-link svg {
         transform: rotate(180deg);
     }
 
