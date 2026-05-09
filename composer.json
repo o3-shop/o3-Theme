@@ -49,5 +49,8 @@
           "package-lock.json"
       ]
   }
+  },
+  "archive": {
+    "exclude": [".next-bump"]
   }
 }
