@@ -42,6 +42,7 @@ cp -r <DOCUMENT_ROOT>/vendor/o3-shop/o3-theme/package.json <DOCUMENT_ROOT>/sourc
 
 ## 5. Install Build Tools
 
+
 **5.1 Install Node.js & npm**
 
 **Ubuntu/Debian:**
