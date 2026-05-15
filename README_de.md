@@ -29,6 +29,7 @@ Das Theme wird mit dem o3-Shop System mit jedem neuen Release aktualisiert.
 
 #### Step 2: Copy Assets to Out Directory
 
+
 ```bash
 cp -r <DOCUMENT_ROOT>/vendor/o3-shop/o3-theme/build <DOCUMENT_ROOT>/source/Application/views/<THEME_NAME>
 cp -r <DOCUMENT_ROOT>/vendor/o3-shop/o3-theme/package.json <DOCUMENT_ROOT>/source/Application/views/<THEME_NAME>
