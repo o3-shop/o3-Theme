@@ -159,13 +159,22 @@
             [{/if}]
             <div id="variants" class="details__variants">
                 [{assign var="blHasActiveSelections" value=false}]
+                [{assign var="iActiveSelections" value=0}]
+                [{assign var="iTotalSelections" value=$aVariantSelections.selections|@count}]
                 [{foreach from=$aVariantSelections.selections item=oList key=iKey}]
                     [{if $oList->getActiveSelection()}]
                         [{assign var="blHasActiveSelections" value=true}]
+                        [{assign var="iActiveSelections" value=$iActiveSelections+1}]
                     [{/if}]
                     [{include file="widget/product/selectbox.tpl" oSelectionList=$oList iKey=$iKey blInDetails=true}]
                 [{/foreach}]
             </div>
+
+            [{if $iActiveSelections == $iTotalSelections && !$blCanBuy}]
+                <div class="alert alert-warning mt-0">
+                    [{oxmultilang ident="DETAILS_VARIANT_NOT_AVAILABLE"}]
+                </div>
+            [{/if}]
         [{/if}]
     [{/block}]
 

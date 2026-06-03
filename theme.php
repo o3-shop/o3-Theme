@@ -27,7 +27,7 @@ $aTheme = [
     'title'       => 'O3-Theme',
     'description' => 'O3-Theme is O3-Shops official responsive theme based on the CSS framework Bootstrap 5.',
     'thumbnail'   => 'theme.png',
-    'version'     => '1.3.4',
+    'version'     => '1.4.0',
     'author'      => '<a href="https://www.o3-shop.com" title="O3-Shop">O3-Shop</a>',
     'settings'    => [
         [
@@ -64,21 +64,51 @@ $aTheme = [
         ],
         [
             'group' => 'colors',
-            'name'  => 'blPrimaryColor',
+            'name'  => 'sPrimaryColor',
             'type'  => 'str',
             'value' => '#82BA00',
         ],
         [
             'group' => 'colors',
-            'name'  => 'blSecondaryColor',
+            'name'  => 'sSecondaryColor',
             'type'  => 'str',
             'value' => '#F2F8E6',
         ],
         [
             'group' => 'colors',
-            'name'  => 'blFooterColor',
+            'name'  => 'sAccentColor',
+            'type'  => 'str',
+            'value' => '#ffffff',
+        ],
+        [
+            'group' => 'colors',
+            'name'  => 'sFooterColor',
             'type'  => 'str',
             'value' => '#F4F8F9',
+        ],
+        [
+            'group' => 'colors',
+            'name'  => 'sBackgroundColor',
+            'type'  => 'str',
+            'value' => '#FFFFFF',
+        ],
+        [
+            'group' => 'colors',
+            'name'  => 'sShowBackgroundImage',
+            'type'  => 'bool',
+            'value' => 0,
+        ],
+        [
+            'group' => 'colors',
+            'name'  => 'sBackgroundImage',
+            'type'  => 'str',
+            'value' => 'mein_hintergrundbild.jpg',
+        ],
+        [
+            'group' => 'colors',
+            'name'  => 'iContentInnerMargin',
+            'type'  => 'str',
+            'value' => '0',
         ],
         [
             'group' => 'display',

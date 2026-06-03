@@ -100,9 +100,22 @@ $aLang = [
     'SHOP_THEME_blShowFiltersSearch'                => 'Maximum number of filter values (before More button)',
     'HELP_SHOP_THEME_blShowFiltersSearch'           => 'If this value exceeds the number of possible filter values, the remaining filter values are hidden but can be expanded using a button below. A search for this filter is also displayed.',
 
-    'SHOP_THEME_blPrimaryColor'                     => 'Primarycolor',
-    'SHOP_THEME_blSecondaryColor'                   => 'Secondarycolor',
-    'SHOP_THEME_blFooterColor'                      => 'Background-color Footer',
+    'SHOP_THEME_sPrimaryColor'                     => 'Primary color',
+    'HELP_SHOP_THEME_sPrimaryColor'                => 'HEX value. E.g.: #950952',
+    'SHOP_THEME_sSecondaryColor'                   => 'Secondary color',
+    'HELP_SHOP_THEME_sSecondaryColor'              => 'HEX value. E.g.: #fce8f3',
+    'SHOP_THEME_sAccentColor'                      => 'Accent color',
+    'HELP_SHOP_THEME_sAccentColor'                 => 'HEX value. E.g.: #ffe6ca',
+    'SHOP_THEME_sFooterColor'                      => 'Footer background color',
+    'HELP_SHOP_THEME_sFooterColor'                 => 'HEX value. E.g.: #F2F2F2',
+    'SHOP_THEME_sBackgroundColor'                  => 'Page background color',
+    'HELP_SHOP_THEME_sBackgroundColor'             => 'HEX value. E.g.: #FFF8F0',
+    'SHOP_THEME_sShowBackgroundImage'              => 'Show background image',
+    'HELP_SHOP_THEME_sShowBackgroundImage'         => 'Enables background image (overrides page background color).',
+    'SHOP_THEME_sBackgroundImage'                  => 'Background image (filename)',
+    'HELP_SHOP_THEME_sBackgroundImage'             => 'Filename in out/o3-theme/src/img/. E.g.: mein_hintergrundbild.jpg',
+    'SHOP_THEME_iContentInnerMargin'               => 'Content inner margin (px)',
+    'HELP_SHOP_THEME_iContentInnerMargin'          => 'Horizontal inner padding of content area in pixels. 0 = no padding.',
 
     'SHOP_THEME_iTopNaviCatCount'                   => 'Anzahl der Kategorien, die oben angezeigt werden (weitere Kategorien werden ebenfalls oben unter "mehr" aufgelistet)', //SHOP_CONFIG_TOPNAVICATCOUNT
     'SHOP_THEME_blShowFinalStep'                    => 'Bestellbestätigung anzeigen, wenn die Bestellung abgeschlossen ist (fünfter Bestellschritt)', //SHOP_SYSTEM_SHOWFINALSTEP

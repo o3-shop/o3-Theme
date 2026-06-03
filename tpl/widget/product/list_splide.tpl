@@ -2,6 +2,7 @@
     [{assign var="type" value="grid"}]
 [{/if}]
 
+
 [{if !$testid }]
     [{assign var=testid value=$oView->getViewParameter('testid')}]
 [{/if}]
@@ -23,19 +24,20 @@
                                 "perMove":1,
                                 "breakpoints":{
                                     "1400":{
-                                        "perPage":[{if $_splideCount < 5}][{$_splideCount}][{else}]5[{/if}],
+                                        "perPage":[{if $_splideCount < 4}][{$_splideCount}][{else}]4[{/if}],
                                         "pagination": false,
                                         "arrows": true
                                     },
                                     "992":{
-                                        "perPage":[{if $_splideCount < 4}][{$_splideCount}][{else}]4[{/if}]
+                                        "perPage":[{if $_splideCount < 4}][{$_splideCount}][{else}]4[{/if}],
+                                        "arrows": true
                                     },
                                     "768":{
                                         "perPage":[{if $_splideCount < 3}][{$_splideCount}][{else}]3[{/if}]
                                     },
                                     "0":{
                                         "perPage":[{if $_splideCount < 2}][{$_splideCount}][{else}]2[{/if}],
-                                        "arrows": false
+                                        "gap": "1rem"
                                     }
                                 }
                                 }[{/if}]'
