@@ -7106,6 +7106,18 @@
   });
 
   // build/js/productslider.js
+  function positionSliderArrowsOnImage(element) {
+    const firstPicture = element.querySelector(".splide__slide .component__productbox-picture");
+    if (!firstPicture) return;
+    const pictureRect = firstPicture.getBoundingClientRect();
+    if (pictureRect.height === 0) return;
+    const splideRect = element.getBoundingClientRect();
+    const arrowTop = (pictureRect.top - splideRect.top) + pictureRect.height / 2 + 1;
+    element.querySelectorAll(".splide__arrow").forEach((arrow) => {
+      arrow.style.top = `${arrowTop}px`;
+      arrow.style.transform = "translateY(-50%)";
+    });
+  }
   function initProductSlider(element, listId) {
     let splide = new Splide(element);
     let bar = element.querySelector(".splide__progress-bar");
@@ -7113,6 +7125,14 @@
       let end = splide.Components.Controller.getEnd() + 1;
       let rate = Math.min((splide.index + 1) / end, 1);
       bar.style.width = `${100 * rate}%`;
+    });
+    splide.on("mounted", function() {
+      const firstPicture = element.querySelector(".splide__slide .component__productbox-picture");
+      if (!firstPicture) return;
+      const ro = new ResizeObserver(() => {
+        positionSliderArrowsOnImage(element);
+      });
+      ro.observe(firstPicture);
     });
     splide.mount();
   }

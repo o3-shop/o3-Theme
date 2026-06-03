@@ -30,6 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Event-Listener erneut binden
                 initVariantSelects();
 
+                // Wenn alle Dropdowns vorausgefüllt sind aber Button noch disabled → nochmals reloaden
+                const allSelects = document.querySelectorAll('#variants .dropDown .form-select');
+                const submitBtn = document.querySelector('.component__tobasket-submit');
+                if (allSelects.length > 0
+                    && Array.from(allSelects).every(s => s.value !== '')
+                    && submitBtn && submitBtn.disabled) {
+                    allSelects[allSelects.length - 1].dispatchEvent(new Event('change'));
+                }
+
                 // Bilderslider neu initialisieren, wenn Thumbnails vorhanden sind
                 if (document.querySelector('.details__picture-thumbnails')) {
                     initPictureSlider();

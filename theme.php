@@ -102,7 +102,7 @@ $aTheme = [
             'group' => 'colors',
             'name'  => 'sBackgroundImage',
             'type'  => 'str',
-            'value' => 'mein_hintergrundbild.jpg',
+            'value' => '',
         ],
         [
             'group' => 'colors',
