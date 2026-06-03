@@ -78,7 +78,7 @@ $aTheme = [
             'group' => 'colors',
             'name'  => 'sAccentColor',
             'type'  => 'str',
-            'value' => '#ffffff',
+            'value' => '#FFFFFF',
         ],
         [
             'group' => 'colors',
