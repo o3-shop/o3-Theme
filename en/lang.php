@@ -204,6 +204,8 @@ $aLang = [
     'DD_SELECT_SALUTATION'                                  => 'Please choose',
 
     'DD_CATEGORY_RESET_BUTTON'                              => 'Reset',
+
+    'DD_FOOTER_O3ShopLink'                                  => '<a href="https://www.o3-shop.com/" target="_blank">powered by O3 Shop</a>',
 ];
 
 /*
