@@ -48,7 +48,7 @@ VALUES (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sGATrackingId', 'st
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sDeliveryDaysNotOnStock', 'str', '14', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sManufacturerIconsize', 'str', '100*100', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'blFooterShowNewsletter', 'bool', '1', NOW()),
-       (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sGoogleMapsAddr', 'str', 'O3-Shop, Musterstraße 17, 12345 Musterstadt', NOW()),
+       (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sGoogleMapsAddr', 'str', '', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sSliderAutostart', 'select', 'on', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sThumbnailsize', 'str', '330*185', NOW()),
        (LOWER(REPLACE(UUID(),'-','')), 1, 'theme:o3-theme', 'sFaviconAppleFile', 'str', 'apple-touch-icon.png', NOW()),
