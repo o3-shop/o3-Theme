@@ -7106,15 +7106,15 @@
   });
 
   // build/js/productslider.js
-  function positionSliderArrowsOnImage(element) {
-    const firstPicture = element.querySelector(".splide__slide .component__productbox-picture");
-    if (!firstPicture) return;
-    const pictureRect = firstPicture.getBoundingClientRect();
+  function positionArrows(element) {
+    const picture = element.querySelector(".splide__slide .component__productbox-picture");
+    if (!picture) return;
+    const pictureRect = picture.getBoundingClientRect();
     if (pictureRect.height === 0) return;
-    const splideRect = element.getBoundingClientRect();
-    const arrowTop = (pictureRect.top - splideRect.top) + pictureRect.height / 2 + 1;
+    const sliderRect = element.getBoundingClientRect();
+    const top = pictureRect.top - sliderRect.top + pictureRect.height / 2 + 1;
     element.querySelectorAll(".splide__arrow").forEach((arrow) => {
-      arrow.style.top = `${arrowTop}px`;
+      arrow.style.top = `${top}px`;
       arrow.style.transform = "translateY(-50%)";
     });
   }
@@ -7127,12 +7127,12 @@
       bar.style.width = `${100 * rate}%`;
     });
     splide.on("mounted", function() {
-      const firstPicture = element.querySelector(".splide__slide .component__productbox-picture");
-      if (!firstPicture) return;
-      const ro = new ResizeObserver(() => {
-        positionSliderArrowsOnImage(element);
+      const picture = element.querySelector(".splide__slide .component__productbox-picture");
+      if (!picture) return;
+      const observer = new ResizeObserver(() => {
+        positionArrows(element);
       });
-      ro.observe(firstPicture);
+      observer.observe(picture);
     });
     splide.mount();
   }

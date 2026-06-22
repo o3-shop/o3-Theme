@@ -27,7 +27,7 @@ $aTheme = [
     'title'       => 'O3-Theme',
     'description' => 'O3-Theme is O3-Shops official responsive theme based on the CSS framework Bootstrap 5.',
     'thumbnail'   => 'theme.png',
-    'version'     => '1.4.2',
+    'version'     => '1.5.0',
     'author'      => '<a href="https://www.o3-shop.com" title="O3-Shop">O3-Shop</a>',
     'settings'    => [
         [
@@ -230,6 +230,18 @@ $aTheme = [
             'type'        => 'select',
             'value'       => 'grid',
             'constraints' => 'grid|line',
+        ],
+        [
+            'group' => 'display',
+            'name'  => 'blShowSubcatTiles',
+            'type'  => 'bool',
+            'value' => 0,
+        ],
+        [
+            'group' => 'display',
+            'name'  => 'sEnable3xl',
+            'type'  => 'bool',
+            'value' => 1,
         ],
         [
             'group' => 'slider',

@@ -9,7 +9,7 @@
 :root {
   --page-bg: #FFFFFF;
   --bs-body-bg: var(--page-bg);
-  --accent-color: #F2F8E6;
+  --accent-color: #F4F8F9;
   --footer-bg: #F4F8F9;
 }
 
@@ -110,6 +110,11 @@ body.has-bg-image {
 
   > main > .container-xxl {
     display: flow-root;
+    padding-bottom: 60px;
+  }
+
+  > main {
+    margin-bottom: 0;
   }
 
   > header .header__topinfo {
@@ -154,10 +159,6 @@ body.has-bg-image {
     }
   }
 
-  > main {
-    margin-bottom: 0;
-  }
-
   footer {
     background-color: transparent;
 
@@ -188,3 +189,57 @@ body.has-bg-image {
     }
   }
 }
+
+body.xxxl-enabled {
+  @include media-breakpoint-up(xxxl) {
+    // All layout templates use container-xxl; container-xxxl is never used in HTML.
+    .container-xxl {
+      max-width: $xxxl-container-width;
+    }
+  }
+
+  &.has-bg-image {
+    @include media-breakpoint-up(xxxl) {
+      > header > .container-xxl,
+      > main > .container-xxl {
+        max-width: $xxxl-container-width;
+      }
+
+      footer .container-xxl {
+        max-width: $xxxl-container-width;
+      }
+    }
+  }
+}
+
+// topinfo + mainnav always extend edge-to-edge when --content-inner-margin is set
+.header__topinfo,
+.header__mainnav {
+  margin-left:  calc(-1 * var(--content-inner-margin, 0px));
+  margin-right: calc(-1 * var(--content-inner-margin, 0px));
+  padding-left:  var(--content-inner-margin, 0px);
+  padding-right: var(--content-inner-margin, 0px);
+}
+
+// product slider: edge-to-edge
+.component__productslider {
+  padding-left:  var(--content-inner-margin, 0px);
+  padding-right: var(--content-inner-margin, 0px);
+}
+
+// alerts: use accent color
+.alert-info,
+.alert-warning {
+  background-color: var(--accent-color) !important;
+  border-color:     var(--accent-color) !important;
+  color: inherit !important;
+}
+
+// password strength bar
+.component__password-bar ~ .bg-light {
+  background-color: var(--accent-color) !important;
+}
+
+// splide pagination dots
+.splide__pagination__page          { background: var(--accent-color) !important; }
+.splide__pagination__page.is-active { background: #121212 !important; }
