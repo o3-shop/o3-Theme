@@ -62,9 +62,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <textarea name="c_message" id="c_message" class="form-control" placeholder="[{oxmultilang ident="MESSAGE"}][{if $contactFormFields.message.isRequired}]*[{/if}]"[{if $contactFormFields.message.isRequired}] required[{/if}]>
-                [{$oView->getContactMessage()}]
-            </textarea>
+            <textarea name="c_message" id="c_message" class="form-control" placeholder="[{oxmultilang ident="MESSAGE"}][{if $contactFormFields.message.isRequired}]*[{/if}]"[{if $contactFormFields.message.isRequired}] required[{/if}]>[{$oView->getContactMessage()}]</textarea>
             <label for="c_message">[{oxmultilang ident="MESSAGE"}][{if $contactFormFields.message.isRequired}]*[{/if}]</label>
             <div class="invalid-feedback">
                 [{oxmultilang ident="O3_FORM_VALIDATION_MESSAGE"}]
