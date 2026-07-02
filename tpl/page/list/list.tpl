@@ -130,9 +130,14 @@
                                         <a class="btn" href="[{$ocont->getLink()}]">[{$ocont->oxcontents__oxtitle->value}]</a>
                                     [{/foreach}]
                                 [{/if}]
-                                <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="[{$category->getLink()}]" title="[{oxmultilang ident="VIEW_ALL_PRODUCTS"}]">
-                                    <img src="[{$category->getIconUrl()}]" alt="[{$category->oxcategories__oxtitle->value}]">
-                                </a>
+                                [{assign var='iconUrl' value=$category->getIconUrl()}]
+                                [{if $iconUrl}]
+                                    <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="[{$category->getLink()}]" title="[{oxmultilang ident="VIEW_ALL_PRODUCTS"}]">
+                                        <img src="[{$iconUrl}]" alt="[{$category->oxcategories__oxtitle->value}]">
+                                    </a>
+                                [{else}]
+                                    <a class="btn" href="[{$category->getLink()}]">[{$category->oxcategories__oxtitle->value}]</a>
+                                [{/if}]
                             [{/foreach}]
                         </nav>
 
