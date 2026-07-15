@@ -47,6 +47,12 @@
         </div>
 [{/oxhasrights}]
 
+[{block name="details_productmain_guaranteenotice"}]
+    [{if $oViewConf->getLegalGuaranteeNoticeVisible() && $oViewConf->getLegalGuaranteeNoticePlacement() == 'page'}]
+        [{include file="layout/inc/guaranteenotice.tpl"}]
+    [{/if}]
+[{/block}]
+
 [{block name="details_productmain_title"}]
     <h1 class="details__title" itemprop="name">
         [{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]
@@ -103,6 +109,12 @@
     [{* article number *}]
     [{block name="details_productmain_artnumber"}]
         <div class="details__info-artnum" itemprop="sku" content="[{$oDetailsProduct->oxarticles__oxartnum->value}]">[{oxmultilang ident="O3_ARTNUM" suffix="COLON"}] [{$oDetailsProduct->oxarticles__oxartnum->value}]</div>
+    [{/block}]
+
+    [{block name="details_productmain_guaranteelabel"}]
+        [{if $oView->isDurabilityGuaranteeLabelVisible()}]
+            [{include file="page/details/inc/guaranteelabel.tpl" guaranteeProduct=$oDetailsProduct}]
+        [{/if}]
     [{/block}]
 
     [{block name="details_productmain_shortdesc"}]

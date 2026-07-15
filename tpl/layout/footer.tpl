@@ -145,6 +145,14 @@
                     [{oxmultilang ident="DD_FOOTER_O3ShopLink"}]
                 </div>
 
+                [{block name="footer_guaranteenotice"}]
+                    [{if $oViewConf->getLegalGuaranteeNoticeVisible() && $oViewConf->getLegalGuaranteeNoticePlacement() == 'footer'}]
+                        <div>
+                            [{include file="layout/inc/guaranteenotice.tpl"}]
+                        </div>
+                    [{/if}]
+                [{/block}]
+
                 <div class="d-flex gap-5">
                     [{oxifcontent ident="oximpressum" object="_cont"}]
                         <div><a href="[{$_cont->getLink()}]">[{$_cont->oxcontents__oxtitle->value}]</a></div>
