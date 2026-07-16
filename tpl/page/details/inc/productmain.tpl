@@ -113,6 +113,12 @@
     [{include file="page/details/inc/pictures.tpl"}]
 [{/block}]
 
+[{block name="o3_details_guarantee_label"}]
+    [{assign var="oGuaranteeArticle" value=$oDetailsProduct}]
+    [{assign var="sGuaranteeContext" value="o3-guarantee-label--detail"}]
+    [{include file="page/details/inc/guaranteelabel.tpl"}]
+[{/block}]
+
 <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="details__wrapper">
     <meta itemprop="url" content="[{$oDetailsProduct->getMainLink()}]">
 

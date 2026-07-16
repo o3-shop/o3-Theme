@@ -142,6 +142,9 @@
                             [{/block}]
                         </div>
                     [{/oxifcontent}]
+                    [{block name="o3_footer_guarantee_notice"}]
+                        [{include file="layout/inc/guaranteenotice.tpl"}]
+                    [{/block}]
                     [{oxmultilang ident="DD_FOOTER_O3ShopLink"}]
                 </div>
 
