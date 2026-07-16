@@ -16646,21 +16646,35 @@ footer a {
 }
 
 .o3-guarantee-notice {
-  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(17, 34, 17, 0.133333);
+}
+.o3-guarantee-notice__link {
+  display: block;
+  cursor: zoom-in;
 }
 .o3-guarantee-notice__img {
   display: block;
-  max-width: 340px;
+  max-width: 300px;
   width: 100%;
   height: auto;
 }
 .o3-guarantee-notice__info {
-  margin-top: 0.5rem;
+  flex: 1;
+  min-width: 240px;
   font-size: 0.875rem;
 }
 
 .o3-guarantee-label {
   margin: 1rem 0;
+}
+.o3-guarantee-label__link {
+  display: block;
+  cursor: zoom-in;
 }
 .o3-guarantee-label__img {
   display: block;
@@ -16678,6 +16692,9 @@ footer a {
 }
 .o3-guarantee-label__conditions summary {
   cursor: pointer;
+}
+.o3-guarantee-label--detail .o3-guarantee-label__img {
+  max-width: 200px;
 }
 .o3-guarantee-label--order {
   margin: 0.5rem 0 0.5rem 1rem;

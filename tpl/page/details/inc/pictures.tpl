@@ -160,4 +160,10 @@
         })();
     "}]
 
+    [{block name="o3_details_guarantee_label"}]
+        [{assign var="oGuaranteeArticle" value=$oDetailsProduct}]
+        [{assign var="sGuaranteeContext" value="o3-guarantee-label--detail"}]
+        [{include file="page/details/inc/guaranteelabel.tpl"}]
+    [{/block}]
+
 </div>
