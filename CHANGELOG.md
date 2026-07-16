@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] — 2026-07-16
+
+### Added
+- EU guarantee labels (#219) — shop-global legal-guarantee notice (footer) and producer durability-guarantee label (product page, order page, order email). Requires shop-ce with #219 core (graceful no-op on older shops).
+
+---
+
 ## [1.5.0] — 2026-06-19
 
 ### New Features / Overview

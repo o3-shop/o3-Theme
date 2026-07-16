@@ -16645,6 +16645,47 @@ footer a {
   gap: 20px;
 }
 
+.o3-guarantee-notice {
+  margin: 1rem 0;
+}
+.o3-guarantee-notice__img {
+  display: block;
+  max-width: 340px;
+  width: 100%;
+  height: auto;
+}
+.o3-guarantee-notice__info {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.o3-guarantee-label {
+  margin: 1rem 0;
+}
+.o3-guarantee-label__img {
+  display: block;
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+}
+.o3-guarantee-label__fallback {
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
+}
+.o3-guarantee-label__conditions {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+.o3-guarantee-label__conditions summary {
+  cursor: pointer;
+}
+.o3-guarantee-label--order {
+  margin: 0.5rem 0 0.5rem 1rem;
+}
+.o3-guarantee-label--order .o3-guarantee-label__img {
+  max-width: 200px;
+}
+
 .component__tobasket-minus,
 .component__tobasket-plus {
   color: #82BA00;
