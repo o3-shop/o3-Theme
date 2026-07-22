@@ -271,6 +271,12 @@
         [{/block}]
     </div>
 
+    [{block name="o3_details_guarantee_label"}]
+        [{assign var="oGuaranteeArticle" value=$oDetailsProduct}]
+        [{assign var="sGuaranteeContext" value="o3-guarantee--detail"}]
+        [{include file="page/details/inc/guaranteelabel.tpl"}]
+    [{/block}]
+
     [{block name="details_productmain_productlinksselector"}]
         [{block name="details_productmain_productlinks"}]
             <div class="details__share">
