@@ -6,8 +6,10 @@ name: Theme Tests (shop-ce)
 # published dev-main; here the theme under test comes from the pushed/PR commit.
 #
 # o3-theme is shop-ce's DEFAULT active theme (initial_data.sql sets
-# sTheme = 'o3-theme'), so the suite actually renders this checkout's templates
-# — no companion theme is required.
+# sTheme = 'o3-theme'), so the suite renders this checkout's templates. The
+# wave theme is also installed as a companion because shop-ce's suite contains
+# EmailWaveTplTest, which forces sTheme='wave' and renders wave's email
+# templates — mirroring shop-ce's own CI, which installs both themes.
 #
 # PHP 8.2 only (per project decision) — shop-ce covers the full 7.4–8.2 matrix
 # on its side, so the theme only needs to prove it works on the current line.
@@ -105,6 +107,9 @@ jobs:
         run: |
           echo "::group::Composer Install"
           composer install --prefer-dist --no-progress
+          echo "::endgroup::"
+          echo "::group::Install Wave companion theme (required by shop-ce EmailWaveTplTest)"
+          composer require o3-shop/wave-theme:dev-main --prefer-dist --no-progress
           echo "::endgroup::"
           echo "::group::Apt Install"
           sudo apt-get update
