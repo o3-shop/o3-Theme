@@ -6,10 +6,11 @@ name: Theme Tests (shop-ce)
 # published dev-main; here the theme under test comes from the pushed/PR commit.
 #
 # o3-theme is shop-ce's DEFAULT active theme (initial_data.sql sets
-# sTheme = 'o3-theme'), so the suite renders this checkout's templates. The
-# wave theme is also installed as a companion because shop-ce's suite contains
-# EmailWaveTplTest, which forces sTheme='wave' and renders wave's email
-# templates — mirroring shop-ce's own CI, which installs both themes.
+# sTheme = 'o3-theme'), so the suite renders THIS checkout's templates and no
+# other theme is installed. shop-ce's one wave-specific test (EmailWaveTplTest,
+# which forces sTheme='wave' and asserts against stored wave fixtures) is
+# excluded — it tests wave, not o3-theme; o3-theme's own email rendering is
+# covered by EmailTest, which uses the default theme.
 #
 # PHP 8.2 only (per project decision) — shop-ce covers the full 7.4–8.2 matrix
 # on its side, so the theme only needs to prove it works on the current line.
@@ -108,9 +109,6 @@ jobs:
           echo "::group::Composer Install"
           composer install --prefer-dist --no-progress
           echo "::endgroup::"
-          echo "::group::Install Wave companion theme (required by shop-ce EmailWaveTplTest)"
-          composer require o3-shop/wave-theme:dev-main --prefer-dist --no-progress
-          echo "::endgroup::"
           echo "::group::Apt Install"
           sudo apt-get update
           sudo apt-get install -y rsync
@@ -129,6 +127,15 @@ jobs:
           rsync -a --exclude '.git' --exclude 'out' o3-theme/ shop/source/Application/views/o3-theme/
           echo "O3 theme installed from checkout (shop-ce's default active theme)"
           echo "::endgroup::"
+
+      - name: 🚫 Drop shop-ce's wave-specific email test (out of scope for o3-theme)
+        working-directory: shop
+        run: |
+          # EmailWaveTplTest forces sTheme='wave' and asserts against stored
+          # wave email fixtures, so it exercises the wave theme, not o3-theme.
+          # o3-theme's email rendering is covered by EmailTest (default theme).
+          rm -f tests/Unit/Core/EmailWaveTplTest.php
+          echo "Removed tests/Unit/Core/EmailWaveTplTest.php"
 
       - name: 🩹 Patch testing library (MariaDB --skip-ssl fix)
         working-directory: shop
