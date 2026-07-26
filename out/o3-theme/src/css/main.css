@@ -16740,7 +16740,7 @@ footer a {
   margin-top: 1rem;
 }
 
-.o3-guarantee-notice {
+.o3-guarantee-notice {width:-webkit-fit-content;width:fit-content;max-width:100%;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;

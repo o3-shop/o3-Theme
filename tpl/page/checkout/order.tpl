@@ -182,15 +182,10 @@
                         </h3>
 
                         [{block name="order_basket"}]
+                            [{* Per-line EU durability-guarantee labels render inside each basket *}]
+                            [{* row (basketcontents_list.tpl, #219) so multi-product baskets with *}]
+                            [{* different durations each get their own label. *}]
                             [{include file="page/checkout/inc/basketcontents.tpl" editable=false}]
-                        [{/block}]
-
-                        [{block name="o3_order_guarantee_labels"}]
-                            [{foreach from=$oxcmp_basket->getContents() item=guaranteeBasketItem}]
-                                [{assign var="oGuaranteeArticle" value=$guaranteeBasketItem->getArticle()}]
-                                [{assign var="sGuaranteeContext" value="o3-guarantee--order"}]
-                                [{include file="page/details/inc/guaranteelabel.tpl"}]
-                            [{/foreach}]
                         [{/block}]
                     </form>
                 [{/if}]
