@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- Remove overly narrow `pattern` from password fields in `forgotpwd_change_pwd.tpl` and `user_password.tpl`; the HTML5 pattern only allowed 7 special characters (`@$!%*?&`) while `validate.js` accepts 29, causing valid passwords to be rejected at submit and the confirm field to falsely show "passwords do not match" (#225)
+
+---
+
 ## [1.6.0] — 2026-07-16
 
 ### Added
