@@ -16718,29 +16718,13 @@ footer a {
   max-width: 170px;
 }
 
-.o3-guarantee-rights__link {
-  display: inline-block;
-  cursor: pointer;
-  list-style: none;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.o3-guarantee-rights__link::-webkit-details-marker {
-  display: none;
-}
-.o3-guarantee-rights__link::marker {
-  content: "";
-}
-.o3-guarantee-rights__link:focus-visible {
-  outline: 2px solid #003399;
-  outline-offset: 3px;
-}
-.o3-guarantee-rights__panel {
-  margin-top: 1rem;
+.o3-guarantee-rights__title {
+  margin-bottom: 0.6rem;
 }
 
-.o3-guarantee-notice {width:-webkit-fit-content;width:fit-content;max-width:100%;
+.o3-guarantee-notice {
+  width: fit-content;
+  max-width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
