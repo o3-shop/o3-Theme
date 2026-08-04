@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     var searchInput = document.getElementById('searchParam');
     var dropdown = document.getElementById('searchSuggestDropdown');
-    var searchForm = document.getElementById('searchForm');
-    var searchSubmit = document.getElementById('searchSubmit');
     var debounceTimer = null;
     var minChars = 2;
     var isActive = false;
 
-    if (!searchInput) {
+    if (!searchInput || !dropdown || !searchInput.dataset.suggestUrl) {
         return;
     }
 
@@ -61,22 +59,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 items[items.length - 1].classList.add('active');
             }
         } else if (e.keyCode === 13) {
-            e.preventDefault();
             var activeLink = dropdown.querySelector('.search-suggest-item.active a');
             if (activeLink) {
+                e.preventDefault();
                 window.location.href = activeLink.getAttribute('href');
             } else {
                 closeDropdown();
-                searchForm.submit();
             }
         } else if (e.keyCode === 27) {
             closeDropdown();
         }
-    });
-
-    searchSubmit.addEventListener('click', function() {
-        closeDropdown();
-        searchForm.submit();
     });
 
     function fetchSuggestions(query) {
