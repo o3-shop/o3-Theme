@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Search suggest dropdown in the header search (`tpl/widget/header/search.tpl`, `build/js/widget/oxsearchsuggest.js`, `build/scss/widget/header/_search.scss`) — debounced JSON lookup against the `searchsuggest` controller, keyboard-navigable result list with thumbnail, title and price. Requires shop-ce with the `searchsuggest` endpoint (shop-ce#219); the form degrades to a plain search submit on older shops, when the suggest endpoint is disabled and without JavaScript.
+
 ### Fixed
 - Remove overly narrow `pattern` from password fields in `forgotpwd_change_pwd.tpl` and `user_password.tpl`; the HTML5 pattern only allowed 7 special characters (`@$!%*?&`) while `validate.js` accepts 29, causing valid passwords to be rejected at submit and the confirm field to falsely show "passwords do not match" (#225)
 
