@@ -7,6 +7,7 @@
 
 ### Fixed
 - Remove overly narrow `pattern` from password fields in `forgotpwd_change_pwd.tpl` and `user_password.tpl`; the HTML5 pattern only allowed 7 special characters (`@$!%*?&`) while `validate.js` accepts 29, causing valid passwords to be rejected at submit and the confirm field to falsely show "passwords do not match" (#225)
+- `forgotpwd_change_pwd.tpl` still referenced the lang ident `O3_FORM_VALIDATION_PASSWORD_LETTERS`, which was split into four separate idents (`..._UPPERCASE_LETTER`, `..._LOWERCASE_LETTER`, `..._NUMBER`, `..._SPECIAL_CHARACTER`) when the password strength meter was added, so resetting a password via the "Forgot password" email link rendered `Translation for O3_FORM_VALIDATION_PASSWORD_LETTERS not found!`. The template now includes the shared `form/fieldset/password_validation.tpl` fieldset, same as `user_password.tpl`, bringing the password reset page the live strength meter/requirement checklist instead of the stale static hint text.
 
 ---
 

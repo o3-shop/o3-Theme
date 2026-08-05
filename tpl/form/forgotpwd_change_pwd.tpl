@@ -17,14 +17,13 @@
 
     <div class="form-floating mb-3">
         [{block name="user_account_password"}]
+            <input type="hidden" data-js="password-length" value="[{$oViewConf->getPasswordLength()}]">
             <input id="userPassword" type="password" name="password_new" placeholder="[{oxmultilang ident="NEW_PASSWORD"}]*" class="form-control" required autocomplete="new-password">
             <label for="userPassword">[{oxmultilang ident="NEW_PASSWORD"}]</label>
             <div class="invalid-feedback">
                 [{oxmultilang ident="O3_FORM_VALIDATION_PASSWORD"}]
             </div>
-            <div class="input-info">
-                [{oxmultilang ident="O3_FORM_VALIDATION_PASSWORD_LENGTH" args=$oViewConf->getPasswordLength()}][{oxmultilang ident="O3_FORM_VALIDATION_PASSWORD_LETTERS"}]
-            </div>
+            [{include file="form/fieldset/password_validation.tpl"}]
         [{/block}]
     </div>
 
