@@ -78,7 +78,13 @@ const postcssProdPlugins = [
             '../../../modules/**/out/src/js/**/*.js',
         ],
         safelist: [
-            /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/
+            /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/,
+            // search-suggest-* classes are created dynamically by
+            // build/js/widget/oxsearchsuggest.js and referenced from the
+            // header search template. Keep them even if a stale/partial
+            // content scan misses one, so productive mode (main.min.css)
+            // never loses the dropdown styling.
+            /^search-suggest/
         ],
         defaultExtractor: content => content.match(/[\w-/:.]+(?<!:)/g) || [],
     })
