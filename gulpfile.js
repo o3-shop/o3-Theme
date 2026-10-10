@@ -16,7 +16,7 @@ const paths = {
     jsEntry: './build/js/main.bundle.js',
     scssEntry: './build/scss/main.bundle.scss',
     widgetJS: './build/js/widget/**/*.js',
-    outDir: `../../../out/${theme}/src`,
+    outDir: path.resolve(__dirname, 'out', theme, 'src'),
     tmpDir: '../../../tmp/**/*',
     watchPaths: {
         themeJS: './build/js/**/*.js',
@@ -78,13 +78,7 @@ const postcssProdPlugins = [
             '../../../modules/**/out/src/js/**/*.js',
         ],
         safelist: [
-            /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/,
-            // search-suggest-* classes are created dynamically by
-            // build/js/widget/oxsearchsuggest.js and referenced from the
-            // header search template. Keep them even if a stale/partial
-            // content scan misses one, so productive mode (main.min.css)
-            // never loses the dropdown styling.
-            /^search-suggest/
+            /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/
         ],
         defaultExtractor: content => content.match(/[\w-/:.]+(?<!:)/g) || [],
     })

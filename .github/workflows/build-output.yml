@@ -1,0 +1,52 @@
+name: Build output up to date
+
+# o3-theme commits its build output (out/o3-theme/**). Nothing else verifies
+# that the committed files actually match the sources in build/ and tpl/.
+# A stale commit — e.g. main.css rebuilt but main.min.css not — ships a broken
+# productive shop, because productive mode loads main.min.css while dev/demo
+# loads main.css. v1.6.6 shipped exactly that: the suggest dropdown had no CSS
+# in main.min.css (see o3-shop/o3-shop#254).
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'build/**'
+      - 'tpl/**'
+      - 'gulpfile.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'out/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-output:
+    name: Verify committed out/ matches a fresh build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production assets
+        run: npx gulp prod
+
+      - name: Fail if committed build output is stale
+        run: |
+          git add -A -- out/
+          if git diff --cached --exit-code -- out/; then
+            echo "Committed out/ matches a fresh 'gulp prod' build."
+          else
+            echo "::error::The committed out/ directory is stale — it does not match a fresh build. Run 'npx gulp prod' locally and commit the changed files under out/."
+            exit 1
+          fi
