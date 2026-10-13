@@ -71,11 +71,14 @@ const postcssDevPlugins = [autoprefixer()];
 const postcssProdPlugins = [
     autoprefixer(),
     purgecss({
+        // Only the theme repo is scanned. The shop-relative ../../../modules/**
+        // globs were removed: they resolve outside the repo in a standalone
+        // build and to whatever modules happen to be installed in a shop, so
+        // the committed main.min.css would depend on the build machine. A
+        // module must ship the CSS it needs. See o3-shop/o3-shop#264.
         content: [
             './tpl/**/*.tpl',
             './build/js/**/*.js',
-            '../../../modules/**/Application/views/**/*.tpl',
-            '../../../modules/**/out/src/js/**/*.js',
         ],
         safelist: [
             /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/

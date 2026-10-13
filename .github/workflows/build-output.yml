@@ -7,16 +7,13 @@ name: Build output up to date
 # loads main.css. v1.6.6 shipped exactly that: the suggest dropdown had no CSS
 # in main.min.css (see o3-shop/o3-shop#254).
 
+# Runs on every PR to main: the job is cheap (npm ci + one gulp run) and a
+# required status check must always report. A `paths:` filter would leave
+# unrelated PRs stuck at "Expected — waiting for status" once this is required
+# (o3-shop/o3-shop#265).
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'build/**'
-      - 'tpl/**'
-      - 'gulpfile.js'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'out/**'
   workflow_dispatch:
 
 permissions:
