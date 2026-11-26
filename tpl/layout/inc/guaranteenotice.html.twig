@@ -1,7 +1,7 @@
 {# EU legal-guarantee notice (Reg. (EU) 2025/1960 Annex I) - shop-global fixed artwork, issue #219. #}
 {# Always rendered in the footer, never behind a click (see tpl/widget/footer/services.tpl). #}
 {# The CMS snippet below is strictly supplementary and must never gate the image. #}
-{% if method_exists($oViewConf, 'getGuaranteeNoticeUrl') %}
+{% if oViewConf.getGuaranteeNoticeUrl is defined %}
     {% set sGuaranteeNoticeUrl = oViewConf.getGuaranteeNoticeUrl() %}
     {% if sGuaranteeNoticeUrl %}
         <div class="o3-guarantee-notice">
@@ -10,7 +10,7 @@
             </a>
             {% ifcontent ident "o3_guarantee_notice_info" set oGuaranteeCont %}
                 <div class="o3-guarantee-notice__side">
-                    <div class="o3-guarantee-notice__info">{{ oGuaranteeCont.oxcontents__oxcontent.value }}</div>
+                    <div class="o3-guarantee-notice__info">{{ oGuaranteeCont.oxcontents__oxcontent.value|raw }}</div>
                 </div>
             {% endifcontent %}
         </div>

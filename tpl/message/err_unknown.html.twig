@@ -1,7 +1,7 @@
 {% capture append = "oxidBlock_pageBody" %}
 
   <div class="errorBox">
-      <div class="errHead">[{oxmultilang ident="{{ translate({ ident: "ERROR_MESSAGE_UNKNOWN_ERROR" }) }} #{{ oView.getErrorNumber() }} !</div>
+      <div class="errHead">{{ translate({ ident: "ERROR_MESSAGE_UNKNOWN_ERROR" }) }} #{{ oView.getErrorNumber() }} !</div>
       <div class="errBody">{{ translate({ ident: "MESSAGE_PLEASE_CONTACT_SUPPORT" }) }}</div>
   </div>
 

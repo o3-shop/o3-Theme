@@ -16,33 +16,33 @@
 >
     <div class="splide__track">
         <div class="splide__list">
-            {% if fixedBanner.fixedBannerSmall1 and not (fixedBanner.fixedBannerSmall1.getBannerPictureUrl()|strstr('nopic')) %}
-                {% if fixedBanner.fixedBannerSmall1.getBannerLink() %}
-                    <a class="splide__slide" href="{{ fixedBanner.fixedBannerSmall1.getBannerLink() }}">
-                        <img class="img-fluid" src="{{ fixedBanner.fixedBannerSmall1.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall1.oxactions__oxtitle.value }}">
+            {% if fixedBanner['fixedBannerSmall1'] and 'nopic' not in fixedBanner['fixedBannerSmall1'].getBannerPictureUrl() %}
+                {% if fixedBanner['fixedBannerSmall1'].getBannerLink() %}
+                    <a class="splide__slide" href="{{ fixedBanner['fixedBannerSmall1'].getBannerLink() }}">
+                        <img class="img-fluid" src="{{ fixedBanner['fixedBannerSmall1'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall1'].oxactions__oxtitle.value }}">
                     </a>
                 {% else %}
-                    <img class="splide__slide img-fluid" src="{{ fixedBanner.fixedBannerSmall1.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall1.oxactions__oxtitle.value }}">
+                    <img class="splide__slide img-fluid" src="{{ fixedBanner['fixedBannerSmall1'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall1'].oxactions__oxtitle.value }}">
                 {% endif %}
             {% endif %}
 
-            {% if fixedBanner.fixedBannerSmall2 and not (fixedBanner.fixedBannerSmall2.getBannerPictureUrl()|strstr('nopic')) %}
-                {% if fixedBanner.fixedBannerSmall2.getBannerLink() %}
-                    <a class="splide__slide" href="{{ fixedBanner.fixedBannerSmall2.getBannerLink() }}">
-                        <img class="img-fluid" src="{{ fixedBanner.fixedBannerSmall2.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall2.oxactions__oxtitle.value }}">
+            {% if fixedBanner['fixedBannerSmall2'] and 'nopic' not in fixedBanner['fixedBannerSmall2'].getBannerPictureUrl() %}
+                {% if fixedBanner['fixedBannerSmall2'].getBannerLink() %}
+                    <a class="splide__slide" href="{{ fixedBanner['fixedBannerSmall2'].getBannerLink() }}">
+                        <img class="img-fluid" src="{{ fixedBanner['fixedBannerSmall2'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall2'].oxactions__oxtitle.value }}">
                     </a>
                 {% else %}
-                    <img class="splide__slide img-fluid" src="{{ fixedBanner.fixedBannerSmall2.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall2.oxactions__oxtitle.value }}">
+                    <img class="splide__slide img-fluid" src="{{ fixedBanner['fixedBannerSmall2'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall2'].oxactions__oxtitle.value }}">
                 {% endif %}
             {% endif %}
 
-            {% if fixedBanner.fixedBannerSmall3 and not (fixedBanner.fixedBannerSmall3.getBannerPictureUrl()|strstr('nopic')) %}
-                {% if fixedBanner.fixedBannerSmall3.getBannerLink() %}
-                    <a class="splide__slide" href="{{ fixedBanner.fixedBannerSmall3.getBannerLink() }}">
-                        <img class="img-fluid" src="{{ fixedBanner.fixedBannerSmall3.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall3.oxactions__oxtitle.value }}">
+            {% if fixedBanner['fixedBannerSmall3'] and 'nopic' not in fixedBanner['fixedBannerSmall3'].getBannerPictureUrl() %}
+                {% if fixedBanner['fixedBannerSmall3'].getBannerLink() %}
+                    <a class="splide__slide" href="{{ fixedBanner['fixedBannerSmall3'].getBannerLink() }}">
+                        <img class="img-fluid" src="{{ fixedBanner['fixedBannerSmall3'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall3'].oxactions__oxtitle.value }}">
                     </a>
                 {% else %}
-                    <img class="splide__slide img-fluid" src="{{ fixedBanner.fixedBannerSmall3.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerSmall3.oxactions__oxtitle.value }}">
+                    <img class="splide__slide img-fluid" src="{{ fixedBanner['fixedBannerSmall3'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerSmall3'].oxactions__oxtitle.value }}">
                 {% endif %}
             {% endif %}
         </div>

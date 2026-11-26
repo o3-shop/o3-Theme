@@ -18,18 +18,18 @@
         {% endif %}
         {% set iColIdent = 12 / iBargainArticlesCount %}
         {% for _product in oView.getBargainArticleList() %}
-            {% set sBargainArtTitle = "`$_product->oxarticles__oxtitle->value` `$_product->oxarticles__oxvarselect->value`" %}
+            {% set sBargainArtTitle = "#{_product.oxarticles__oxtitle.value} #{_product.oxarticles__oxvarselect.value}" %}
 
             {% set aVariantSelections = _product.getVariantSelections("null", "null", 1) %}
             {% set blShowToBasket = true %} {# tobasket or more info ? #}
-            {% if blDisableToCart or _product.isNotBuyable() or (aVariantSelections&&$aVariantSelections.selections) or _product.hasMdVariants() or (oViewConf.showSelectListsInList() and _product.getSelections(1)) or _product.getVariants() %}
+            {% if blDisableToCart or _product.isNotBuyable() or (aVariantSelections and aVariantSelections.selections) or _product.hasMdVariants() or (oViewConf.showSelectListsInList() and _product.getSelections(1)) or _product.getVariants() %}
                 {% set blShowToBasket = false %}
             {% endif %}
 
-            <form name="tobasket{{ testid }}" {% if blShowToBasket %}action="{{ oViewConf.getSelfActionLink() }}" method="post"{% else %}action="{{ _productLink }}" method="get"{% endif %}>
+            <form name="tobasket{{ testid }}" {% if blShowToBasket %}action="{{ oViewConf.getSelfActionLink()|raw }}" method="post"{% else %}action="{{ _productLink }}" method="get"{% endif %}>
                 <div class="d-none">
-                    {{ oViewConf.getNavFormParams() }}
-                    {{ oViewConf.getHiddenSid() }}
+                    {{ oViewConf.getNavFormParams()|raw }}
+                    {{ oViewConf.getHiddenSid()|raw }}
                     <input type="hidden" name="pgNr" value="{{ oView.getActPage() }}">
                     {% if recommid %}
                         <input type="hidden" name="recommid" value="{{ recommid }}">
@@ -50,12 +50,12 @@
 
                 <div class="col-12 col-md-6 col-lg-{{ iColIdent }} component__productbox">
                     <div class="picture text-center">
-                        <a href="{{ _product.getMainLink() }}" title="{{ sBargainArtTitle|striptags }}" class="img-thumbnail">
+                        <a href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags }}" class="img-thumbnail">
                             <img src="{{ _product.getThumbnailUrl() }}" alt="{{ sBargainArtTitle|striptags }}" class="img-fluid">
                         </a>
                     </div>
                     <div class="title">
-                        <a id="titleBargain_{{ loop.index }}" href="{{ _product.getMainLink() }}" title="{{ sBargainArtTitle|striptags }}">{{ sBargainArtTitle|striptags }}</a>
+                        <a id="titleBargain_{{ loop.index }}" href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags }}">{{ sBargainArtTitle|striptags }}</a>
                     </div>
                     <div class="price text-center">
                         {% block widget_product_bargainitem_price %}
@@ -93,7 +93,7 @@
                                     {% endhasrights %}
                                 {% endif %}
 
-                                <a href="{{ _product.getMainLink() }}" class="btn btn-primary">{{ translate({ ident: "MORE_INFO" }) }}</a>
+                                <a href="{{ _product.getMainLink()|raw }}" class="btn btn-primary">{{ translate({ ident: "MORE_INFO" }) }}</a>
                             </div>
                         {% endblock %}
                     </div>

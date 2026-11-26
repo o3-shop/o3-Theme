@@ -1,17 +1,17 @@
 {% block dd_widget_breadcrumb %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% block dd_widget_breadcrumb_list_inner %}
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
                     {% block dd_widget_breadcrumb_list %}
                         <li class="breadcrumb-item" itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
-                            <a href="{{ oViewConf.getHomeLink() }}" itemprop="item"><span itemprop="name">{{ translate({ ident: "HOME" }) }}</span></a>
+                            <a href="{{ oViewConf.getHomeLink()|raw }}" itemprop="item"><span itemprop="name">{{ translate({ ident: "HOME" }) }}</span></a>
                             <meta itemprop="position" content="1" />
                         </li>
                         {% for sCrum in oView.getBreadCrumb() %}
-                            <li class="breadcrumb-item{% if loop.last %} aria-current="page"{% endif %} itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
+                            <li class="breadcrumb-item{% if loop.last %} active{% endif %}"{% if loop.last %} aria-current="page"{% endif %} itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
                                 {% if sCrum.link %}
-                                    <a href="{{ sCrum.link }}" itemprop="item">
+                                    <a href="{{ sCrum.link|raw }}" itemprop="item">
                                         <span itemprop="name">{{ sCrum.title }}</span>
                                     </a>
                                 {% else %}
@@ -24,5 +24,5 @@
                 </ol>
             </nav>
         {% endblock %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

@@ -6,10 +6,10 @@
     {% endfor %}
 {% endcapture %}
 {% if not oxcmp_user.oxuser__oxpassword.value %}
-    <form class="form" id="login" name="login" action="{{ oViewConf.getSslSelfLink() }}" method="post">
+    <form class="form" id="login" name="login" action="{{ oViewConf.getSslSelfLink()|raw }}" method="post">
         <div id="loginBox" class="loginBox" {% if bIsError %}style="display: block;"{% endif %}>
-            {{ oViewConf.getHiddenSid() }}
-            {{ oViewConf.getNavFormParams() }}
+            {{ oViewConf.getHiddenSid()|raw }}
+            {{ oViewConf.getNavFormParams()|raw }}
             <input type="hidden" name="fnc" value="login_noredirect">
             <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
             {% if oViewConf.getTopActiveClassName() == "content" %}

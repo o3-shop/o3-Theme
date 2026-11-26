@@ -1,12 +1,12 @@
 {# Important ! render page head and body to collect scripts and styles #}
 {% capture append = "oxidBlock_pageHead" %}
-    {% spaceless %}
+    {% apply spaceless %}
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset={{ oView.getCharSet() }}">
 
         {% set sPageTitle = oView.getPageTitle() %}
-        <title>{% block head_title %}{{ sPageTitle }}{% endblock %}</title>
+        <title>{% block head_title %}{{ sPageTitle|raw }}{% endblock %}</title>
 
         {% block head_meta_robots %}
             {% if oView.noIndex() == 1 %}
@@ -18,28 +18,28 @@
 
         {% block head_meta_description %}
             {% if oView.getMetaDescription() %}
-                <meta name="description" content="{{ oView.getMetaDescription() }}">
+                <meta name="description" content="{{ oView.getMetaDescription()|raw }}">
             {% endif %}
         {% endblock %}
 
         {% block head_meta_keywords %}
             {% if oView.getMetaKeywords() %}
-                <meta name="keywords" content="{{ oView.getMetaKeywords() }}">
+                <meta name="keywords" content="{{ oView.getMetaKeywords()|raw }}">
             {% endif %}
         {% endblock %}
 
         {% block head_meta_open_graph %}
             <meta property="og:site_name" content="{{ oViewConf.getBaseDir() }}">
-            <meta property="og:title" content="{{ sPageTitle }}">
-            <meta property="og:description" content="{{ oView.getMetaDescription() }}">
+            <meta property="og:title" content="{{ sPageTitle|raw }}">
+            <meta property="og:description" content="{{ oView.getMetaDescription()|raw }}">
             {% if oViewConf.getActiveClassName() == 'details' %}
                 <meta property="og:type" content="product">
                 <meta property="og:image" content="{{ oView.getActPicture() }}">
-                <meta property="og:url" content="{{ oView.getCanonicalUrl() }}">
+                <meta property="og:url" content="{{ oView.getCanonicalUrl()|raw }}">
             {% else %}
                 <meta property="og:type" content="website">
                 <meta property="og:image" content="{{ oViewConf.getImageUrl('basket.png') }}">
-                <meta property="og:url" content="{{ oViewConf.getCurrentHomeDir() }}">
+                <meta property="og:url" content="{{ oViewConf.getCurrentHomeDir()|raw }}">
             {% endif %}
         {% endblock %}
 
@@ -51,7 +51,7 @@
         {% set canonical_url = oView.getCanonicalUrl() %}
         {% block head_link_canonical %}
             {% if canonical_url %}
-                <link rel="canonical" href="{{ canonical_url }}">
+                <link rel="canonical" href="{{ canonical_url|raw }}">
             {% endif %}
         {% endblock %}
 
@@ -60,7 +60,7 @@
                 {% set oConfig = oViewConf.getConfig() %}
                 {% for _lng in oxcmp_lang %}
                     {% if _lng.id == oConfig.getConfigParam('sDefaultLang') %}
-                        <link rel="alternate" hreflang="x-default" href="{{ _lng.link }}"/>
+                        <link rel="alternate" hreflang="x-default" href="{{ _lng.link|raw }}"/>
                     {% endif %}
                     <link rel="alternate" hreflang="{{ _lng.abbr }}" href="{{ _lng.link|add_url_parameters(oView.getDynUrlParams()) }}"/>
                 {% endfor %}
@@ -90,17 +90,17 @@
         {% block head_link_rss %}
             {% if rsslinks %}
                 {% for rssentry in rsslinks %}
-                    <link rel="alternate" type="application/rss+xml" title="{{ rssentry.title|striptags }}" href="{{ rssentry.link }}">
+                    <link rel="alternate" type="application/rss+xml" title="{{ rssentry.title|striptags }}" href="{{ rssentry.link|raw }}">
                 {% endfor %}
             {% endif %}
         {% endblock %}
 
         {% block head_css %}
             {% for _block in oxidBlock_head %}
-                {{ _block }}
+                {{ _block|raw }}
             {% endfor %}
         {% endblock %}
-    {% endspaceless %}
+    {% endapply %}
 {% endcapture %}
 
 {% set blIsCheckout = oView.getIsOrderStep() %}
@@ -110,7 +110,7 @@
     <!--suppress HtmlRequiredTitleElement -->
     <head>
         {% for _block in oxidBlock_pageHead %}
-            {{ _block }}
+            {{ _block|raw }}
         {% endfor %}
         {{ style() }}
         <style>
@@ -138,7 +138,7 @@
             {% set sBgFile = oViewConf.getViewThemeParam('sBackgroundImage') %}
             {% if oViewConf.getViewThemeParam('sShowBackgroundImage') and sBgFile and not get_global_get("plain") %}
             body {
-                background-image: url('{{ oViewConf.getResourceUrl()|cat("img/")|cat("sBgFile") }}');
+                background-image: url('{{ oViewConf.getResourceUrl()|cat("img/")|cat(sBgFile) }}');
                 background-size: cover;
                 background-attachment: fixed;
                 background-position: center center;
@@ -155,7 +155,7 @@
     {% include "page/details/inc/photoswipe.html.twig" %}
 
     {% for _block in oxidBlock_pageBody %}
-        {{ _block }}
+        {{ _block|raw }}
     {% endfor %}
 
     {% if oViewConf.getViewThemeParam('sShowMode') %}
@@ -185,7 +185,7 @@
     {% include_dynamic "widget/dynscript.html.twig" %}
 
     {% for _block in oxidBlock_pageScript %}
-        {{ _block }}
+        {{ _block|raw }}
     {% endfor %}
     </body>
 </html>

@@ -124,9 +124,9 @@
                             {% block footer_deliveryinfo %}
                                 {% ifcontent ident "oxdeliveryinfo" set oCont %}
                                     {% if oView.isVatIncluded() %}
-                                        <span class="vat-info-text">* {{ translate({ ident: "PLUS_SHIPPING" }) }}<a href="{{ oCont.getLink() }}">{{ translate({ ident: "PLUS_SHIPPING2" }) }}</a></span>
+                                        <span class="vat-info-text">* {{ translate({ ident: "PLUS_SHIPPING" }) }}<a href="{{ oCont.getLink()|raw }}">{{ translate({ ident: "PLUS_SHIPPING2" }) }}</a></span>
                                     {% else %}
-                                        <span class="vat-info-text">* {{ translate({ ident: "PLUS" }) }}<a href="{{ oCont.getLink() }}">{{ translate({ ident: "PLUS_SHIPPING2" }) }}</a></span>
+                                        <span class="vat-info-text">* {{ translate({ ident: "PLUS" }) }}<a href="{{ oCont.getLink()|raw }}">{{ translate({ ident: "PLUS_SHIPPING2" }) }}</a></span>
                                     {% endif %}
                                 {% endifcontent %}
                             {% endblock %}
@@ -138,19 +138,19 @@
                     {% ifcontent ident "oxstdfooter" set oCont %}
                         <div class="legal">
                             {% block dd_footer_copyright %}
-                                {{ oCont.oxcontents__oxcontent.value }}
+                                {{ oCont.oxcontents__oxcontent.value|raw }}
                             {% endblock %}
                         </div>
                     {% endifcontent %}
-                    {{ translate({ ident: "DD_FOOTER_O3ShopLink" }) }}
+                    {{ translate({ ident: "DD_FOOTER_O3ShopLink" })|raw }}
                 </div>
 
                 <div class="d-flex gap-5">
                     {% ifcontent ident "oximpressum" set _cont %}
-                        <div><a href="{{ _cont.getLink() }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
+                        <div><a href="{{ _cont.getLink()|raw }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
                     {% endifcontent %}
                     {% ifcontent ident "oxagb" set _cont %}
-                        <div><a href="{{ _cont.getLink() }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
+                        <div><a href="{{ _cont.getLink()|raw }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
                     {% endifcontent %}
                 </div>
 

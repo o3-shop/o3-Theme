@@ -1,7 +1,9 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set template_title = "MY_DOWNLOADS"|translate %}
     <div class="errorBox">
-          {% if Errors|is_array and Errors.default|is_array and not empty(Errors.default) %}
+          {% if Errors|is_array and Errors.default|is_array and Errors.default is not empty %}
           <div class="status error corners">
               {% for key, oEr in Errors.default %}
                   <p>{{ oEr.getOxMessage() }}</p>
@@ -13,9 +15,8 @@
     </div>
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
 
-{% capture append = "oxidBlock_sidebar" %}
-    {% include "page/account/inc/account_menu.html.twig" with {active_link: "downloads"} %}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+    {% capture append = "oxidBlock_sidebar" %}
+        {% include "page/account/inc/account_menu.html.twig" with {active_link: "downloads"} %}
+    {% endcapture %}
+{% endblock %}

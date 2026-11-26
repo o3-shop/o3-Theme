@@ -1,8 +1,8 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     <p>{% ifcontent ident "oxblocked" set oCont %}
-           {{ oCont.oxcontents__oxcontent.value }}
+           {{ oCont.oxcontents__oxcontent.value|raw }}
       {% endifcontent %}</p>
     {{ insert_tracker() }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

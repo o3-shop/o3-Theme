@@ -1,4 +1,7 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+
+{% block content %}
     <div class="err-404">
         <h1 class="page-header">{{ translate({ ident: "ERROR" }) }}</h1>
         <div class="row">
@@ -7,7 +10,7 @@
                     {% if sUrl %}
                         {% set sModifiedUrl = sUrl|escape %}
                         {% set sModifiedUrl = "<i><strong>'"|cat(sModifiedUrl)|cat("'</strong></i>") %}
-                        {{ translate({ ident: "ERROR_404", args: sModifiedUrl }) }}
+                        {{ translate({ ident: "ERROR_404", args: sModifiedUrl })|raw }}
                     {% else %}
                         {{ translate({ ident: "ERROR_404" }) }}
                     {% endif %}
@@ -15,11 +18,11 @@
 
                 <p>
                     {{ translate({ ident: "DD_ERR_404_START_TEXT" }) }}<br>
-                    <a href="{{ oViewConf.getHomeLink() }}" class="btn btn-outline-dark" title="{{ translate({ ident: "DD_ERR_404_START_BUTTON" }) }}">{{ translate({ ident: "DD_ERR_404_START_BUTTON" }) }}</a>
+                    <a href="{{ oViewConf.getHomeLink()|raw }}" class="btn btn-outline-dark" title="{{ translate({ ident: "DD_ERR_404_START_BUTTON" }) }}">{{ translate({ ident: "DD_ERR_404_START_BUTTON" }) }}</a>
                 </p>
 
                 <p>
-                    {{ translate({ ident: "DD_ERR_404_CONTACT_TEXT" }) }}<br>
+                    {{ translate({ ident: "DD_ERR_404_CONTACT_TEXT" })|raw }}<br>
                     <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=contact") }) }}" class="btn btn-outline-dark" title="{{ translate({ ident: "DD_ERR_404_CONTACT_BUTTON" }) }}">{{ translate({ ident: "DD_ERR_404_CONTACT_BUTTON" }) }}</a>
                 </p>
             </div>
@@ -33,5 +36,4 @@
             </div>
         </div>
     </div>
-{% endcapture %}
-{% include "layout/page.html.twig" with {blHideBreadcrumb: true} %}
+{% endblock %}

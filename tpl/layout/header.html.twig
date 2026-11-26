@@ -24,7 +24,7 @@
                     {% block layout_header_topinfo_cms %}
                         {% ifcontent ident "o3headerTopInfo" set oCont %}
                             <div class="flex-grow-1 d-flex justify-content-center align-items-center gap-2 text-truncate">
-                                {{ oCont.oxcontents__oxcontent.value }}
+                                {{ oCont.oxcontents__oxcontent.value|raw }}
                             </div>
                         {% endifcontent %}
                     {% endblock %}
@@ -46,7 +46,7 @@
 
             {% block layout_header_logo %}
                 {% set slogoImg = oViewConf.getViewThemeParam('sLogoFile') %}
-                <a class="header__logo" href="{{ oViewConf.getHomeLink() }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}">
+                <a class="header__logo" href="{{ oViewConf.getHomeLink()|raw }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}">
                     <img class="img-fluid" src="{{ oViewConf.getImageUrl(slogoImg) }}" alt="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}">
                 </a>
             {% endblock %}
@@ -107,12 +107,8 @@
                     <div class="offcanvas-header">
                         {% set slogoImg = oViewConf.getViewThemeParam('sLogoFile') %}
                         <img class="offcanvas__mainnav-logo" src="{{ oViewConf.getImageUrl(slogoImg) }}" alt="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}">
-                        {% block dd_layout_page_header_icon_menu_languages %}
-                            {{ include_widget({ cl: "oxwLanguageList", lang: oViewConf.getActLanguageId(), _parent: oView.getClassName(), nocookie: 1, _navurlparams: oViewConf.getNavUrlParams(), anid: oViewConf.getActArticleId() }) }}
-                        {% endblock %}
-                        {% block dd_layout_page_header_icon_menu_currencies %}
-                            {{ include_widget({ cl: "oxwCurrencyList", cur: oViewConf.getActCurrency(), _parent: oView.getClassName(), nocookie: 1, _navurlparams: oViewConf.getNavUrlParams(), anid: oViewConf.getActArticleId() }) }}
-                        {% endblock %}
+                        {{ block('dd_layout_page_header_icon_menu_languages') }}
+                        {{ block('dd_layout_page_header_icon_menu_currencies') }}
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">

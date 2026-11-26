@@ -1,10 +1,11 @@
 {{ script() }}
 
 {% set oConfig = oViewConf.getConfig() %}
+{# set outside the block: Twig blocks do not share variables, google_analytics_ecommerce needs it too #}
+{% set sGATrackingId = oViewConf.getViewThemeParam('sGATrackingId') %}
 
 {% block google_analytics %}
     {# Google Analytics Page Tracking #}
-    {% set sGATrackingId = oViewConf.getViewThemeParam('sGATrackingId') %}
     {% if oViewConf.getViewThemeParam('blUseGAPageTracker') and sGATrackingId %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -149,7 +150,7 @@
                 <!-- START Google Zertifizierte Händler Order -->
                 <div id="gts-order" style="display:none;" translate="no">
                     {# Zuerst die Artikel der Bestellung iterieren um Informationen für die Bestelldaten zu sammeln #}
-                    {% capture name = "sGtsItems" %}
+                    {% set sGtsItems %}
                         {% for oOrderArticle in oOrder.getOrderArticles() %}
                             {% set oArticle = oOrderArticle.getArticle() %}
                             {% set oOrderArticlePrice = oOrderArticle.getPrice() %}
@@ -174,20 +175,20 @@
                                 {% endif %}
                             </span>
                         {% endfor %}
-                    {% endcapture %}
+                    {% endset %}
 
                     {# voraussichtliches Versanddatum berechnen #}
                     {% if blHasPreOrder %}
-                        {% set sShipDate = "`$sShippingDaysNotOnStock` weekdays"|strtotime %}
+                        {% set sShipDate = "#{sShippingDaysNotOnStock} weekdays"|strtotime %}
                     {% else %}
-                        {% set sShipDate = "`$sShippingDaysOnStock` weekdays"|strtotime %}
+                        {% set sShipDate = "#{sShippingDaysOnStock} weekdays"|strtotime %}
                     {% endif %}
 
                     {# voraussichtliches Lieferdatum berechnen #}
                     {% if blHasPreOrder %}
-                        {% set sDeliveryDate = "`$sDeliveryDaysNotOnStock` weekdays"|strtotime %}
+                        {% set sDeliveryDate = "#{sDeliveryDaysNotOnStock} weekdays"|strtotime %}
                     {% else %}
-                        {% set sDeliveryDate = "`$sDeliveryDaysOnStock` weekdays"|strtotime %}
+                        {% set sDeliveryDate = "#{sDeliveryDaysOnStock} weekdays"|strtotime %}
                     {% endif %}
 
                     <span id="gts-o-id">{{ oOrder.oxorder__oxordernr.value }}</span>
@@ -204,8 +205,8 @@
                     <span id="gts-o-has-preorder">{% if blHasPreOrder %}Y{% else %}N{% endif %}</span>
                     <span id="gts-o-has-digital">{% if oBasket.hasDownloadableProducts() %}Y{% else %}N{% endif %}</span>
 
-                    {% if smarty.capture.sGtsItems %}
-                        {{ smarty.capture.sGtsItems }}
+                    {% if sGtsItems %}
+                        {{ sGtsItems }}
                     {% endif %}
                 </div>
             {% endif %}

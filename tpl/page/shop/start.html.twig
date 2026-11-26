@@ -1,9 +1,11 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
 
     {% set oConfig = oViewConf.getConfig() %}
     {% set rsslinks = oView.getRssLinks() %}
 
-    {% if oView.getBanners() and not empty(oView.getBanners()) %}
+    {% if oView.getBanners() %}
         {% include "widget/promoslider.html.twig" %}
     {% endif %}
 
@@ -33,22 +35,22 @@
             <div class="start__benefits">
                 {% ifcontent ident "o3benefit1" set oCont %}
                     <div class="start__benefits-box">
-                        {{ oCont.oxcontents__oxcontent.value }}
+                        {{ oCont.oxcontents__oxcontent.value|raw }}
                     </div>
                 {% endifcontent %}
                 {% ifcontent ident "o3benefit2" set oCont %}
                     <div class="start__benefits-box">
-                        {{ oCont.oxcontents__oxcontent.value }}
+                        {{ oCont.oxcontents__oxcontent.value|raw }}
                     </div>
                 {% endifcontent %}
                 {% ifcontent ident "o3benefit3" set oCont %}
                     <div class="start__benefits-box">
-                        {{ oCont.oxcontents__oxcontent.value }}
+                        {{ oCont.oxcontents__oxcontent.value|raw }}
                     </div>
                 {% endifcontent %}
                 {% ifcontent ident "o3benefit4" set oCont %}
                     <div class="start__benefits-box">
-                        {{ oCont.oxcontents__oxcontent.value }}
+                        {{ oCont.oxcontents__oxcontent.value|raw }}
                     </div>
                 {% endifcontent %}
             </div>
@@ -58,7 +60,7 @@
 
     {% set fixedBanner = oView.getBanners() %}
 
-    {% if fixedBanner.fixedBannerSmall1 or fixedBanner.fixedBannerSmall2 or fixedBanner.fixedBannerSmall3 %}
+    {% if fixedBanner['fixedBannerSmall1'] or fixedBanner['fixedBannerSmall2'] or fixedBanner['fixedBannerSmall3'] %}
         {% include "widget/fixedbanner.html.twig" with {fixedBanner: fixedBanner} %}
     {% endif %}
 
@@ -75,13 +77,13 @@
         {% endif %}
     {% endblock %}
 
-    {% if fixedBanner.fixedBannerBig and not (fixedBanner.fixedBannerBig.getBannerPictureUrl()|strstr('nopic')) %}
-        {% if fixedBanner.fixedBannerBig.getBannerLink() %}
-            <a class="start__fixedbanner d-block" href="{{ fixedBanner.fixedBannerBig.getBannerLink() }}">
-                <img class="img-fluid" src="{{ fixedBanner.fixedBannerBig.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerBig.oxactions__oxtitle.value }}">
+    {% if fixedBanner['fixedBannerBig'] and 'nopic' not in fixedBanner['fixedBannerBig'].getBannerPictureUrl() %}
+        {% if fixedBanner['fixedBannerBig'].getBannerLink() %}
+            <a class="start__fixedbanner d-block" href="{{ fixedBanner['fixedBannerBig'].getBannerLink() }}">
+                <img class="img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value }}">
             </a>
         {% else %}
-            <img class="start__fixedbanner img-fluid" src="{{ fixedBanner.fixedBannerBig.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerBig.oxactions__oxtitle.value }}">
+            <img class="start__fixedbanner img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value }}">
         {% endif %}
     {% endif %}
 
@@ -113,5 +115,5 @@
     {% endblock %}
 
     {{ insert_tracker() }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}
+

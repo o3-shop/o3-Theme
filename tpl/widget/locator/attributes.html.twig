@@ -2,10 +2,10 @@
     {% if attributes %}
         {% set allActiveValue = sActiveValue %}
 
-        <form method="get" action="{{ oViewConf.getSelfActionLink() }}" name="_filterlist" class="alist__filter-form" data-js="listing:filter">
+        <form method="get" action="{{ oViewConf.getSelfActionLink()|raw }}" name="_filterlist" class="alist__filter-form" data-js="listing:filter">
             <div class="d-none">
-                {{ oViewConf.getHiddenSid() }}
-                {{ oViewConf.getNavFormParams() }}
+                {{ oViewConf.getHiddenSid()|raw }}
+                {{ oViewConf.getNavFormParams()|raw }}
                 <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                 <input type="hidden" name="tpl" value="{{ oViewConf.getActTplName() }}">
                 <input type="hidden" name="oxloadid" value="{{ oViewConf.getActContentLoadId() }}">
@@ -13,6 +13,10 @@
                 <input type="hidden" name="fname" value="">
             </div>
 
+            {# initialised outside the loops: Twig drops variables first created inside a for loop #}
+            {% set activeValuesClose = [] %}
+            {% set hasActiveValue = false %}
+            {% set allActiveValues = "" %}
             {% for sAttrID, oFilterAttr in attributes %}
                 {% set sActiveValue = oFilterAttr.getActiveValue() %}
 
@@ -72,16 +76,16 @@
 
             <div class="alist__filter-active">
                 {% for activeValueClose in activeValuesClose %}
-                    {{ activeValueClose }}
+                    {{ activeValueClose|raw }}
                 {% endfor %}
             </div>
             <button data-js="listing:filter-apply" type="submit" class="alist__filter-apply btn btn-primary btn-lg d-md-none">{{ translate({ ident: "APPLY" }) }}</button>
         </form>
 
         {% if hasActiveValue %}
-            <form method="get" action="{{ oViewConf.getSelfActionLink() }}" name="_resetFilter" id="resetFilter" class="order-first">
-                {{ oViewConf.getHiddenSid() }}
-                {{ oViewConf.getNavFormParams() }}
+            <form method="get" action="{{ oViewConf.getSelfActionLink()|raw }}" name="_resetFilter" id="resetFilter" class="order-first">
+                {{ oViewConf.getHiddenSid()|raw }}
+                {{ oViewConf.getNavFormParams()|raw }}
                 <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                 <input type="hidden" name="fnc" value="resetFilter">
 

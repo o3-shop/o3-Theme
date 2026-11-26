@@ -8,7 +8,7 @@
         {% set iValidBanners = 0 %}
         {% for oBannerCheck in oBanners %}
             {% set sCheckUrl = oBannerCheck.getBannerPictureUrl() %}
-            {% if sCheckUrl and not (sCheckUrl|strstr('nopic')) and not oBannerCheck.oxactions__oxid.value|strstr("fixedBanner") %}
+            {% if sCheckUrl and 'nopic' not in sCheckUrl and "fixedBanner" not in oBannerCheck.oxactions__oxid.value %}
                 {% set iValidBanners = iValidBanners+1 %}
             {% endif %}
         {% endfor %}
@@ -58,7 +58,7 @@
                         {% for iPicNr, oBanner in oBanners %}
                             {% set oArticle = oBanner.getBannerArticle() %}
                             {% set sBannerPictureUrl = oBanner.getBannerPictureUrl() %}
-                            {% if sBannerPictureUrl and not (sBannerPictureUrl|strstr('nopic')) and not oBanner.oxactions__oxid.value|strstr("fixedBanner") %}
+                            {% if sBannerPictureUrl and 'nopic' not in sBannerPictureUrl and "fixedBanner" not in oBanner.oxactions__oxid.value %}
                                 {% set sBannerLink = oBanner.getBannerLink() %}
                                 {% if sBannerLink %}
                                     <a class="splide__slide" href="{{ sBannerLink }}" title="{{ oBanner.oxactions__oxtitle.value }}">

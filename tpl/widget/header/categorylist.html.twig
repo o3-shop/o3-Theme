@@ -14,7 +14,7 @@
                             {% block dd_widget_header_categorylist_navbar_list %}
                                 {% if oViewConf.getViewThemeParam('blHomeLink') %}
                                     <li data-level="is-level-1" class="nav-item{% if homeSelected == 'true' %} active{% endif %}">
-                                        <a class="nav-link" href="{{ oViewConf.getHomeLink() }}" itemprop="url"><span itemprop="name">{{ translate({ ident: "HOME" }) }}</span></a>
+                                        <a class="nav-link" href="{{ oViewConf.getHomeLink()|raw }}" itemprop="url"><span itemprop="name">{{ translate({ ident: "HOME" }) }}</span></a>
                                     </li>
                                 {% endif %}
 
@@ -22,12 +22,12 @@
                                     {% if ocat.getIsVisible() %}
                                         {% for oTopCont in ocat.getContentCats() %}
                                             <li data-level="is-level-1" class="nav-item">
-                                                <a class="nav-link{% if oContent.oxcontents__oxloadid.value is same as(oTopCont.oxcontents__oxloadid.value) %} active{% endif %}" href="{{ oTopCont.getLink() }}" itemprop="url"><span itemprop="name">{{ oTopCont.oxcontents__oxtitle.value }}</span></a>
+                                                <a class="nav-link{% if oContent.oxcontents__oxloadid.value is same as(oTopCont.oxcontents__oxloadid.value) %} active{% endif %}" href="{{ oTopCont.getLink()|raw }}" itemprop="url"><span itemprop="name">{{ oTopCont.oxcontents__oxtitle.value }}</span></a>
                                             </li>
                                         {% endfor %}
 
                                         <li data-level="is-level-1" class="nav-item{% if homeSelected == 'false' and ocat.expanded %} active{% endif %}{% if ocat.getSubCats() %} mega-dropdown{% endif %}">
-                                            <a class="nav-link" href="{{ ocat.getLink() }}"{% if ocat.getSubCats() %} data-toggle="dropdown"{% endif %} itemprop="url">
+                                            <a class="nav-link" href="{{ ocat.getLink()|raw }}"{% if ocat.getSubCats() %} data-toggle="dropdown"{% endif %} itemprop="url">
                                                 <span itemprop="name">{{ ocat.oxcategories__oxtitle.value }}</span>
                                                 {% if ocat.getSubCats() %}
                                                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,13 +43,13 @@
                                                             {% if osubcat.getIsVisible() %}
                                                                 {% for ocont in osubcat.getContentCats() %}
                                                                     <div class="col-3">
-                                                                        <a {% if oViewConf.getContentId() == ocont.getId() %}class="current"{% endif %} href="{{ ocont.getLink() }}" itemprop="url"><span itemprop="name">{{ ocont.oxcontents__oxtitle.value }}</span></a>
+                                                                        <a {% if oViewConf.getContentId() == ocont.getId() %}class="current"{% endif %} href="{{ ocont.getLink()|raw }}" itemprop="url"><span itemprop="name">{{ ocont.oxcontents__oxtitle.value }}</span></a>
                                                                     </div>
                                                                 {% endfor %}
 
                                                                 {% if osubcat.getIsVisible() %}
                                                                     <div class="col-3 mb-4">
-                                                                        <a data-level="is-level-2"{% if homeSelected == 'false' and osubcat.expanded %} class="current"{% endif %} href="{{ osubcat.getLink() }}" itemprop="url"><span itemprop="name">{{ osubcat.oxcategories__oxtitle.value }}</span></a>
+                                                                        <a data-level="is-level-2"{% if homeSelected == 'false' and osubcat.expanded %} class="current"{% endif %} href="{{ osubcat.getLink()|raw }}" itemprop="url"><span itemprop="name">{{ osubcat.oxcategories__oxtitle.value }}</span></a>
                                                                     </div>
                                                                 {% endif %}
                                                             {% endif %}

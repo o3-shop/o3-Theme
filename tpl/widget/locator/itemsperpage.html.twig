@@ -11,7 +11,7 @@
             {% for iItemsPerPage in nrCatArticles %}
                 <li>
                     <a class="dropdown-item{% if oViewConf.getArtPerPageCount() == iItemsPerPage %} active{% endif %}"
-                       href="{{ oView.getLink()|add_url_parameters("ldtype=$listType&amp;_artperpage=$iItemsPerPage&amp;pgNr=0&amp;$_additionalParams") }}">
+                       href="{{ oView.getLink()|add_url_parameters("ldtype=#{listType}&_artperpage=#{iItemsPerPage}&pgNr=0&#{_additionalParams}") }}">
                         {{ iItemsPerPage }}
                     </a>
                 </li>

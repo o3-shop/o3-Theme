@@ -4,13 +4,14 @@
     <div class="grid gap-3">
         {% for oManufacturer in oView.getManufacturerForSlider() %}
             {% if oManufacturer.oxmanufacturers__oxicon.value and loop.index0 < 12 %}
-                <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="{{ oManufacturer.getLink() }}" title="{{ translate({ ident: "VIEW_ALL_PRODUCTS" }) }}">
+                <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="{{ oManufacturer.getLink()|raw }}" title="{{ translate({ ident: "VIEW_ALL_PRODUCTS" }) }}">
                     <img src="{{ oManufacturer.getIconUrl() }}" alt="{{ oManufacturer.oxmanufacturers__oxtitle.value }}">
                 </a>
             {% endif %}
         {% endfor %}
     </div>
-    {% if loop.index0 > 11 %}
+    {# 1.x read the finished loop's last index ($smarty.foreach.amount.index > 11) #}
+    {% if oView.getManufacturerForSlider()|length > 12 %}
         <a class="btn btn-outline-primary mt-3 start__manufacturer-allbrands" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=manufacturerlist&mnid=root") }) }}" title="{{ translate({ ident: "VIEW_ALL_PRODUCTS" }) }}">
             {{ translate({ ident: "ALL_BRANDS" }) }}
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">

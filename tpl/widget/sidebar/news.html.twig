@@ -7,7 +7,7 @@
                     {% block dd_widget_sidebar_news_list %}
                         {% for _oNewsItem in oNews %}
                             <li>
-                                {{ _oNewsItem.getLongDesc()|striptags|truncate(100) }}<br>
+                                {{ _oNewsItem.getLongDesc()|striptags|truncate(100)|raw }}<br>
                                 <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=news") }) }}#{{ _oNewsItem.oxnews__oxid.value }}" class="readMore">{{ translate({ ident: "NEXT" }) }}</a>
                             </li>
                         {% endfor %}

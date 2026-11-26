@@ -1,8 +1,8 @@
-{% capture name = "cartTable" %}
+{% set cartTable %}
     {% set oConfig = oViewConf.getConfig() %}
 
-    <form name="basket{{ basketindex }}" action="{{ oViewConf.getSelfActionLink() }}" method="post" class="offcanvas__basket-articles">
-        {{ oViewConf.getHiddenSid() }}
+    <form name="basket{{ basketindex }}" action="{{ oViewConf.getSelfActionLink()|raw }}" method="post" class="offcanvas__basket-articles">
+        {{ oViewConf.getHiddenSid()|raw }}
         <input type="hidden" name="cl" value="basket">
         <input type="hidden" name="fnc" value="changebasket">
         <input type="hidden" name="CustomError" value="basket">
@@ -12,12 +12,12 @@
                 {% set minibasketItemTitle = _product.getTitle() %}
                 <div class="component__basketarticle">
 
-                    <a href="{{ _product.getLink() }}" title="{{ minibasketItemTitle|striptags }}">
+                    <a href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags }}">
                         <img src="{{ _product.getIconUrl() }}" alt="{{ minibasketItemTitle|striptags }}"/>
                     </a>
 
                     <div class="component__basketarticle-info">
-                        <a class="component__basketarticle-title" href="{{ _product.getLink() }}" title="{{ minibasketItemTitle|striptags }}">{{ _product.getAmount() }} x {{ minibasketItemTitle|striptags }}</a>
+                        <a class="component__basketarticle-title" href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags }}">{{ _product.getAmount() }} x {{ minibasketItemTitle|striptags }}</a>
 
                         <input type="hidden" name="aproducts[{{ basketindex }}][remove]" value="0">
                         <button type="submit" name="removeBtn" class="component__basketarticle-remove btn" data-remove-id="aproducts[{{ basketindex }}][remove]" data-js="remove-from-basket">
@@ -33,7 +33,7 @@
                             <input type="hidden" name="aproducts[{{ basketindex }}][bundle]" value="1">
                         {% endif %}
 
-                        {% set tobasket_name = "aproducts[`$basketindex`][am]" %}
+                        {% set tobasket_name = "aproducts[#{basketindex}][am]" %}
                         {% set getStock = _product.getArticle() %}
                         {# include file="widget/product/tobasket.tpl" blCanBuy=true name=$tobasket_name value=$_product->getAmount() stockflag=$getStock->oxarticles__oxstockflag->value stock=$getStock->oxarticles__oxstock->value #}
 
@@ -57,7 +57,7 @@
             {% endif %}
         </div>
     </div>
-{% endcapture %}
+{% endset %}
 
 {% block widget_minibasket %}
     {% if oxcmp_basket.getProductsCount() %}
@@ -87,7 +87,7 @@
                 {% endif %}
 
                 {% block dd_layout_page_header_icon_menu_minibasket_table %}
-                    {{ smarty.capture.cartTable }}
+                    {{ cartTable }}
                     {% block widget_minibasket_total %}{% endblock %}
                 {% endblock %}
 

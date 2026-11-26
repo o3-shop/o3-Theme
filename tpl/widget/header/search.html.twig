@@ -1,6 +1,6 @@
 {% block widget_header_search_form %}
-    <form class="form search" id="searchForm" role="search" action="{{ oViewConf.getSelfActionLink() }}" method="get" name="search">
-        {{ oViewConf.getHiddenSid() }}
+    <form class="form search" id="searchForm" role="search" action="{{ oViewConf.getSelfActionLink()|raw }}" method="get" name="search">
+        {{ oViewConf.getHiddenSid()|raw }}
         <input type="hidden" name="cl" value="search">
 
         {% block dd_widget_header_search_form_inner %}
@@ -15,7 +15,7 @@
                     </button>
                 {% endblock %}
                 {% block header_search_field %}
-                    <input class="form-control" type="search" id="searchParam" name="searchparam" value="{{ oView.getSearchParamForHtml() }}" placeholder="{{ translate({ ident: "SEARCH" }) }}" autocomplete="off" data-suggest-url="{{ oViewConf.getSelfLink() }}">
+                    <input class="form-control" type="search" id="searchParam" name="searchparam" value="{{ oView.getSearchParamForHtml()|raw }}" placeholder="{{ translate({ ident: "SEARCH" }) }}" autocomplete="off" data-suggest-url="{{ oViewConf.getSelfLink()|raw }}">
                 {% endblock %}
 
                 {% block dd_header_search_button %}

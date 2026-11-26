@@ -1,9 +1,11 @@
+{# 1.x saw oxcmp_shop leaked from the page's Smarty assigns; this widget does not load the shop component #}
+{% set oxcmp_shop = oxcmp_shop ?? oViewConf.getConfig().getActiveShop() %}
 {% block footer_information %}
     {% ifcontent ident "oxsecurityinfo" set _cont %}
-        <div><a href="{{ _cont.getLink() }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
+        <div><a href="{{ _cont.getLink()|raw }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
     {% endifcontent %}
     {% ifcontent ident "oxrightofwithdrawal" set _cont %}
-        <div><a href="{{ _cont.getLink() }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
+        <div><a href="{{ _cont.getLink()|raw }}">{{ _cont.oxcontents__oxtitle.value }}</a></div>
     {% endifcontent %}
 
     {% if 0 %}

@@ -5,6 +5,8 @@
 ### Changed
 - **Twig port.** All storefront templates (including e-mails) are now Twig (`tpl/**/*.html.twig`); the Smarty `.tpl` files are removed. Requires shop-ce 2.x (`o3-shop/shop-ce: ^2.0`). Theme id, package name and block names are unchanged. For the upgrade from 1.x and the rules for module/theme authors see `docs/twig.md` in shop-ce.
 - Initial conversion is the automated `smarty-to-twig-converter` baseline; templates are reworked by hand in follow-up commits.
+- **Page layout via inheritance (forced block change).** Pages `{% extends "layout/page.html.twig" %}` and fill the new block `content` (inside `content_main`) instead of `[{capture append="oxidBlock_content"}]` + `[{include file="layout/page.tpl"}]`. `content` is the only block without a 1.x counterpart; its default still prints `oxidBlock_content`. Variables the layout reads (`blHideBreadcrumb`) are set at the page's top level. See the comment at the top of `tpl/layout/page.html.twig`.
+- `layout/header.html.twig`: `dd_layout_page_header_icon_menu_languages` and `dd_layout_page_header_icon_menu_currencies` were defined twice in 1.x (top bar and off-canvas menu); Twig allows one definition per name, so the off-canvas menu renders them with `{{ block('…') }}`. An override of either block still applies to both places.
 
 ## [Unreleased]
 
