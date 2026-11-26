@@ -24,11 +24,15 @@
         {% set listId = oView.getViewParameter('listId') %}
     {% endif %}
     {# 1.x (Smarty) saw these from the scope of the list template that included the widget; a Twig widget only gets its
-       own view data, so read the widget parameters (oxwArticleBox getters) #}
+       own view data, so read the widget parameters (oxwArticleBox getters). Every oxwArticleBox include passes these four
+       keys ('' when unset): for a missing key the getter would fall back to the request parameter. #}
     {% set removeFunction = removeFunction|default(oView.getRemoveFunction()) %}
     {% set owishid = owishid|default(oView.getWishId()) %}
     {% set recommid = recommid|default(oView.getRecommId()) %}
     {% set toBasketFunction = toBasketFunction|default(oView.getToBasketFunction()) %}
+    {# 1.x: oDetailsProduct came from page/details/details (the details page's product) through the same scope leak #}
+    {% set _topView = oConfig.getTopActiveView() %}
+    {% set oDetailsProduct = oDetailsProduct|default(_topView and _topView.getClassName() == "details" ? _topView.getProduct() : null) %}
 
     {# Should items in the listing be able to be added to the shopping cart? YOU NEED THIS! #}
     {# 
