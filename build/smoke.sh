@@ -9,7 +9,7 @@
 #   - new ERROR/CRITICAL/ALERT/EMERGENCY lines in source/log/oxideshop.log
 # Fails (exit 1) on any of it, exit 2 on setup problems (no container, log not written, login failed, 0 URLs).
 # Env: SHOP_CONTAINER, DB_CONTAINER, MAILPIT (default http://localhost:8025), SHOP_LOG, SMOKE_ONLY (regex on labels),
-#      SMOKE_DUMP=<dir> (save every body there).
+#      SMOKE_DUMP=<dir> (save every body there), SMOKE_CONTINUE_ON_LOGIN_FAIL=1 (red-list mode: keep going when login fails).
 set -u
 BASE="${1:-http://localhost:8080}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -115,7 +115,8 @@ fetch user GET "$BASE/index.php?cl=account" >/dev/null; cp "$TMP/body" "$TMP/las
 fetch user POST "$BASE/index.php" "cl=account&actcontrol=account&fnc=login_noredirect&lgn_usr=$EMAIL&lgn_pwd=${SMOKE_PASS:-$PASS}&stoken=$(stoken "$TMP/last-user")" >/dev/null
 fetch user GET "$BASE/index.php?cl=account" >/dev/null; cp "$TMP/body" "$TMP/last-user"
 if ! grep -q 'fnc=logout' "$TMP/last-user"; then
-  echo "login of the test customer failed (no logout link on the account page) - aborting"; RC=2; exit 2
+  echo "login of the test customer failed (no logout link on the account page)"
+  [ -n "${SMOKE_CONTINUE_ON_LOGIN_FAIL:-}" ] || { echo "aborting (set SMOKE_CONTINUE_ON_LOGIN_FAIL=1 to list every URL anyway; user URLs then fail on is-logged)"; RC=2; exit 2; }
 fi
 
 FAILS="$TMP/fails"; : > "$FAILS"
@@ -150,6 +151,7 @@ while read -r auth want label expect method path post; do
   if [ -z "$first" ] && { [ "$auth" = user ] || [ "$method" = POST ]; } && grep -q 'class="alert alert-danger"' "$TMP/body"; then
     first="shop error box: $(perl -0ne 'print $1 if /class="alert alert-danger"[^>]*>\s*(.*?)\s*</s' "$TMP/body" | tr -s ' \n' ' ' | cut -c1-150)"
   fi
+  if [ -z "$first" ] && [ "$auth" = user ] && ! grep -q '<body class="[^"]*is-logged' "$TMP/body"; then first="not logged in (no is-logged body class): login lost or redirect to login"; fi
   if [ -z "$first" ] && [ "$expect" != - ]; then
     IFS='~' read -r -a pats <<< "$expect"
     for p in "${pats[@]}"; do grep -q -E -i -- "$p" "$TMP/body" || { first="expected page marker not found: '$p' (wrong page or redirect?)"; break; }; done
