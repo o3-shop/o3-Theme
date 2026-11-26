@@ -22,6 +22,7 @@ EMAIL="smoke-test@example.invalid"
 PASS="Smoke-Test-1234"
 TMP="$(mktemp -d)"
 RC=0
+LOGIN_FAILED=""
 UID_NEW=""; ART=""; ART_STOCK=""; ART_SOLD=""
 
 sql() { docker exec "$DB" sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -N -e "$0"' "$1" 2>/dev/null; }
@@ -115,7 +116,7 @@ fetch user GET "$BASE/index.php?cl=account" >/dev/null; cp "$TMP/body" "$TMP/las
 fetch user POST "$BASE/index.php" "cl=account&actcontrol=account&fnc=login_noredirect&lgn_usr=$EMAIL&lgn_pwd=${SMOKE_PASS:-$PASS}&stoken=$(stoken "$TMP/last-user")" >/dev/null
 fetch user GET "$BASE/index.php?cl=account" >/dev/null; cp "$TMP/body" "$TMP/last-user"
 if ! grep -q 'fnc=logout' "$TMP/last-user"; then
-  echo "login of the test customer failed (no logout link on the account page)"
+  echo "login of the test customer failed (no logout link on the account page)"; LOGIN_FAILED=1
   [ -n "${SMOKE_CONTINUE_ON_LOGIN_FAIL:-}" ] || { echo "aborting (set SMOKE_CONTINUE_ON_LOGIN_FAIL=1 to list every URL anyway; user URLs then fail on is-logged)"; RC=2; exit 2; }
 fi
 
@@ -141,7 +142,7 @@ while read -r auth want label expect method path post; do
   perl -0pe 's#<script\b.*?</script>##gis; s#<style\b.*?</style>##gis' "$TMP/body" > "$TMP/stripped"
   first=""
   if m="$(grep -m1 -o -E '.{0,60}(Twig\\Error|Fatal|Uncaught|exception\.tpl|Stack trace).{0,100}' "$TMP/body")" && [ -n "$m" ]; then first="body marker: $(printf '%s' "$m" | tr -s ' \n' ' ')"
-  elif m="$(grep -m1 -o -E '(Warning|Notice|Deprecated)(</b>)?: .{0,120} on line [0-9]+' "$TMP/body")" && [ -n "$m" ]; then first="PHP message in body: $m"
+  elif m="$(grep -m1 -o -E '(Warning|Notice|Deprecated)(</b>)?: .{0,120} on line (<b>)?[0-9]+' "$TMP/body")" && [ -n "$m" ]; then first="PHP message in body: $m"
   elif m="$(grep -m1 -o -E 'ERROR: Translation.{0,80}' "$TMP/body")" && [ -n "$m" ]; then first="missing translation: $m"
   elif m="$(grep -m1 -o -E '.{0,40}(\{%|\{\{|\[\{|\{#).{0,60}' "$TMP/stripped")" && [ -n "$m" ]; then first="leftover template syntax: $(printf '%s' "$m" | tr -s ' \n' ' ')"
   elif ! grep -q '</html>' "$TMP/body"; then first="truncated or empty page (no </html>)"
@@ -169,6 +170,7 @@ fi
 echo
 if [ "$N" -eq 0 ]; then echo "no URLs were run (SMOKE_ONLY='${SMOKE_ONLY:-}' matched nothing?)"; RC=2; exit 2; fi
 echo "$((N-BAD))/$N green, $BAD failing"
+if [ -n "$LOGIN_FAILED" ]; then echo "login failed (continue mode): run is never green"; [ "$RC" = 0 ] && RC=1; fi
 if [ "$BAD" -gt 0 ]; then
   echo "--- failures (first error per URL) ---"
   while IFS=$'\t' read -r l e; do printf '%-26s %s\n' "$l" "$e"; done < "$FAILS"
