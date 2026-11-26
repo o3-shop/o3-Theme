@@ -566,6 +566,22 @@
 
 {% block email_html_order_cust_orderemailend %}
     <p>{{ include_content('oxuserorderemailend') }}</p>
+    {# EU legal-guarantee notice (Reg. (EU) 2025/1960 Annex I) - shop-global fixed artwork, issue #219. #}
+    {# Always rendered in the footer, never behind a click (see tpl/widget/footer/services.html.twig). #}
+    {# The CMS snippet below is strictly supplementary and must never gate the image. #}
+    {% if oViewConf.getGuaranteeNoticeUrl is defined %}
+    {% set sGuaranteeNoticeUrl = oViewConf.getGuaranteeNoticeUrl() %}
+    {% if sGuaranteeNoticeUrl %}
+    <div style="margin:8px 0;">
+        <img src="{{ sGuaranteeNoticeUrl }}" alt="{{ translate({ ident: "O3_GUARANTEE_NOTICE_IMG_ALT" }) }}" width="220" style="width:220px;max-width:100%;height:auto;border:0;">
+        {% ifcontent ident "o3_guarantee_notice_info" set oGuaranteeCont %}
+        <div style="margin:8px 0;font-size:12px;">
+            <div>{{ oGuaranteeCont.oxcontents__oxcontent.value|raw }}</div>
+        </div>
+        {% endifcontent %}
+    </div>
+    {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% include "email/html/footer.html.twig" %}

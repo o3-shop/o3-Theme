@@ -7,8 +7,8 @@
             {% if paymentmethod.getPrice() %}
                 {% set oPaymentPrice = paymentmethod.getPrice() %}
                 {% if oViewConf.isFunctionalityEnabled('blShowVATForPayCharge')  %}
-                    {# 1.x [{strip}]: lines joined without whitespace #}
-                    ({{ format_price(oPaymentPrice.getNettoPrice(), { currency: currency }) }}{% if oPaymentPrice.getVatValue() > 0 %}{{ translate({ ident: "PLUS_VAT" }) }} {{ format_price(oPaymentPrice.getVatValue(), { currency: currency }) }}{% endif %})
+                    {# 1.x [{strip}]: lines joined without whitespace; one space before the VAT label (1.6.9) #}
+                    ({{ format_price(oPaymentPrice.getNettoPrice(), { currency: currency }) }}{% if oPaymentPrice.getVatValue() > 0 %} {{ translate({ ident: "PLUS_VAT" }) }} {{ format_price(oPaymentPrice.getVatValue(), { currency: currency }) }}{% endif %})
                 {% else %}
                     ({{ format_price(oPaymentPrice.getBruttoPrice(), { currency: currency }) }})
                 {% endif %}

@@ -1,0 +1,59 @@
+name: Build output up to date
+
+# out/ is committed; productive mode loads main.min.css, so a stale build
+# breaks the shop (o3-shop/o3-shop#254).
+
+# PR: required check, so no paths filter — it must always report (#265).
+# Push: post-merge alarm for direct pushes that bypass the PR gate.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      # Keep in sync if gulpfile.js starts reading new paths.
+      - 'build/**'          # SCSS/JS sources
+      - 'tpl/**'            # opt-in PurgeCSS
+      - 'gulpfile.js'
+      - 'package.json'      # deps + browserslist
+      - 'package-lock.json'
+      - 'out/**'
+      - '.github/workflows/build-output.yml'
+  workflow_dispatch:
+
+concurrency:
+  # Separate PR/push/manual runs; cancel older runs in the same group.
+  group: build-output-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-output:
+    name: Verify committed out/ matches a fresh build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production assets
+        run: npx gulp prod
+
+      - name: Fail if committed build output is stale
+        run: |
+          git add -A -- out/
+          if git diff --cached --exit-code -- out/; then
+            echo "Committed out/ matches a fresh 'gulp prod' build."
+          else
+            echo "::error::The committed out/ directory is stale — it does not match a fresh build. Run 'npx gulp prod' locally and commit the changed files under out/."
+            exit 1
+          fi

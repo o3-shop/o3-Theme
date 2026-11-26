@@ -5,9 +5,9 @@ const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
-const purgecss = require('@fullhuman/postcss-purgecss').default;
+const purgecss = require('@fullhuman/postcss-purgecss');
 const { deleteAsync } = require('del');
-const glob = require('glob');
+const { globSync } = require('glob');
 const path = require('path');
 
 const theme = 'o3-theme';
@@ -16,7 +16,7 @@ const paths = {
     jsEntry: './build/js/main.bundle.js',
     scssEntry: './build/scss/main.bundle.scss',
     widgetJS: './build/js/widget/**/*.js',
-    outDir: `../../../out/${theme}/src`,
+    outDir: path.resolve(__dirname, 'out', theme, 'src'),
     tmpDir: '../../../tmp/**/*',
     watchPaths: {
         themeJS: './build/js/**/*.js',
@@ -43,7 +43,11 @@ function copyWidgetJS() {
 // Widget JS: Minify (nur für prod)
 async function minifyWidgetJS() {
     try {
-        const files = glob.sync(paths.widgetJS);
+        const files = globSync(paths.widgetJS);
+
+        if (files.length === 0) {
+            throw new Error(`No widget JS files matched ${paths.widgetJS}`);
+        }
 
         for (const file of files) {
             const relativePath = path.relative('./build/js/widget', file);
@@ -67,22 +71,38 @@ async function minifyWidgetJS() {
 
 // ─────────────────────────────────────────────
 // PostCSS Plugins
+// PurgeCSS is opt-in. The default production build ships the full, unpurged
+// stylesheet: o3-theme is a base for child themes, modules and CMS content,
+// which add classes at runtime that a static scan cannot see. A purged build
+// silently drops those classes in productive mode (dev loads the unpurged
+// main.css, so it still looks fine there). Enable with --purge or PURGE=1
+// (see README).
+const usePurge = process.env.PURGE === '1'
+    || process.env.PURGE === 'true'
+    || process.argv.includes('--purge');
+
 const postcssDevPlugins = [autoprefixer()];
-const postcssProdPlugins = [
-    autoprefixer(),
-    purgecss({
-        content: [
-            './tpl/**/*.html.twig',
-            './build/js/**/*.js',
-            '../../../modules/**/Application/views/**/*.html.twig',
-            '../../../modules/**/out/src/js/**/*.js',
-        ],
-        safelist: [
-            /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/
-        ],
-        defaultExtractor: content => content.match(/[\w-/:.]+(?<!:)/g) || [],
-    })
-];
+const postcssProdPlugins = [autoprefixer()];
+
+if (usePurge) {
+    postcssProdPlugins.push(
+        purgecss({
+            // Only the theme repo is scanned. The shop-relative ../../../modules/**
+            // globs were removed: they resolve outside the repo in a standalone
+            // build and to whatever modules happen to be installed in a shop, so
+            // the committed main.min.css would depend on the build machine. A
+            // module must ship the CSS it needs. See o3-shop/o3-shop#264.
+            content: [
+                './tpl/**/*.html.twig',
+                './build/js/**/*.js',
+            ],
+            safelist: [
+                /^splide/, /^is-/, /^cl-/, /^mode__/, /backdrop/, /grid-view/, /line-view/, /btn-light/, /^video-container/
+            ],
+            defaultExtractor: content => content.match(/[\w-/:.]+(?<!:)/g) || [],
+        })
+    );
+}
 
 // ─────────────────────────────────────────────
 // JS: Dev (.js + .map)
@@ -136,7 +156,7 @@ function buildDevCSS() {
         });
 }
 
-// CSS: Prod (.min.css + Purge)
+// CSS: Prod (.min.css + optional Purge)
 function buildProdCSS() {
     return src(paths.scssEntry)
         .pipe(sass.sync().on('error', sass.logError))
@@ -145,7 +165,9 @@ function buildProdCSS() {
         .pipe(rename({ basename: 'main', suffix: '.min' }))
         .pipe(dest(`${paths.outDir}/css`))
         .on('end', () => {
-            console.log('✅ main.min.css (prod) erstellt');
+            console.log(usePurge
+                ? '✅ main.min.css (prod, mit PurgeCSS) erstellt'
+                : '✅ main.min.css (prod, ohne PurgeCSS) erstellt');
         });
 }
 

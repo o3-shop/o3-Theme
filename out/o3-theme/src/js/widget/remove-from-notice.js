@@ -11,7 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const targetForm = document.getElementById(formId);
 
             // submit the form if found, otherwise log an error
-            targetForm?.submit() || console.error(`Form with id "${formId}" not found.`);
+            if (targetForm) {
+                targetForm.submit();
+            } else {
+                console.error(`Form with id "${formId}" not found.`);
+            }
         });
     });
 });

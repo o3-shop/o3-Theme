@@ -49,9 +49,22 @@ The build toolchain requires Node.js ≥ 22.13 and Gulp CLI ≥ 3.
 
 ```bash
 npm install          # install dependencies once
-gulp                 # production build (minified, PurgeCSS)
+gulp                 # production build (minified; PurgeCSS disabled by default)
 gulp dev             # watcher for day-to-day development
 ```
+
+PurgeCSS is **disabled by default**. O3-Theme is a base for child themes,
+modules and CMS content, which add classes at runtime that a static scan cannot
+see; purging would silently drop them in productive mode while dev shops (which
+load the unpurged `main.css`) look fine. To opt in:
+
+```bash
+npx gulp prod --purge    # or: npm run build:purge — works on Windows, macOS and Linux
+```
+
+If you enable it, review the safelist in `gulpfile.js` (runtime classes such as
+`collapsing`, `tooltip`, `popover`, `bs-*`, `col-*`, plus anything your child
+theme, modules or CMS templates generate).
 
 `gulp dev` also clears the shop's `tmp/` (compiled templates) on template and translation changes.
 Run the shop in dev mode (admin → Theme settings → disable production mode) while

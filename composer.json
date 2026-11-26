@@ -32,7 +32,7 @@
         "postcss-preset-env 10.0.0",
         "sass 1.77.8"
       ],
-      "description": "Verwendet Gulp für Build-Prozesse (CSS, JS-Optimierung, PostCSS, Sass, PurgeCSS)"
+      "description": "Verwendet Gulp für Build-Prozesse (CSS, JS-Optimierung, PostCSS, Sass, optional PurgeCSS)"
     },
     "oxideshop": {
       "target-directory": "o3-theme",

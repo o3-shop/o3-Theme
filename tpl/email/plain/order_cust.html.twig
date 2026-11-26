@@ -313,6 +313,13 @@
 {% block email_plain_order_cust_orderemailend %}
 
 {{ include_content('oxuserorderemailendplain') }}
+{% if oViewConf.getGuaranteeNoticeUrl is defined and oViewConf.getGuaranteeNoticeUrl() %}
+
+{{ translate({ ident: "O3_GUARANTEE_NOTICE_IMG_ALT" }) }}
+{% ifcontent ident "o3_guarantee_notice_info" set oGuaranteeCont %}
+{{ oGuaranteeCont.oxcontents__oxcontent.value|regex_replace('!<[^>]*?>!', ' ') }}
+{% endifcontent %}
+{% endif %}
 {% endblock %}
 
 
