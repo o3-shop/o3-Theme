@@ -1,6 +1,6 @@
 <div class="form-floating mb-3">
     {% block user_account_username %}
-        <input type="email" class="form-control" id="userLoginName" name="lgn_usr" value="{{ oView.getActiveUsername() }}" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}*" autocomplete="username" required>
+        <input type="email" class="form-control" id="userLoginName" name="lgn_usr" value="{{ oView.getActiveUsername()|raw }}" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}*" autocomplete="username" required>
         <label for="userLoginName">{{ translate({ ident: "EMAIL_ADDRESS" }) }}*</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}

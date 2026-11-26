@@ -11,6 +11,9 @@
 - `page/details/inc/productmain.html.twig`: `blCanBuy` is computed before the blocks instead of inside `details_productmain_variantselections` (same logic; a block cannot change the variable `details_productmain_tobasket` reads).
 - Long descriptions (`details_tabs_longdescription`, category description on the list page) are printed from `getLongDesc()` (CMS text rendered through Smarty by the core, as `[{oxeval}]` did) instead of being evaluated in the template.
 - `page/details/details.html.twig` and `page/privatesales/invite.html.twig` keep the 1.x `capture append` + include shape (details is also included as a partial by `widget/product/details`; invite prints the cookie-note widget before the page).
+- `form/fieldset/user_shipping.html.twig`: `form_user_shipping_country` was defined three times in 1.x with different bodies (edit form of the selected address, form for a new address, form when the user has no address). Twig allows one definition per name, so it is defined once and rendered with `{{ block('form_user_shipping_country') }}` at the other two places; `sShippingCountryForm` names the variant (unset = edit, `'new'`, `'register'`). An override of the block applies to all three places, as in 1.x; check `sShippingCountryForm` to keep the variants apart.
+- Checkout pages (`basket`, `order`, `payment`): variables 1.x assigned inside one block and read in a sibling block (`currency`, `payment`) are set at the start of the page's `content` block, because a Twig block only gets a copy of the context.
+- `page/checkout/inc/basketcontents_list.html.twig`: the unit name after the amount stepper is gone. 1.x printed `$basketitem->oxarticles__oxunitname->value`, which a basket item never has (always empty); in Twig the access would reach `BasketItem::__call` and throw.
 
 ## [Unreleased]
 

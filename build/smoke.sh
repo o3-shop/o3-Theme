@@ -135,7 +135,9 @@ while read -r auth want label expect method path post; do
   N=$((N+1))
   before="$(wc -c < "$LOG")"
   code="$(fetch "$auth" "$method" "$BASE$path" "$post")"
-  cp "$TMP/body" "$TMP/last-$auth"
+  # the next POST takes its stoken/MD5 from the last page of this jar that has a form token, so one broken page
+  # (e.g. a 500 from another area) does not cascade into the checkout POSTs after it
+  grep -q 'name="stoken"' "$TMP/body" && cp "$TMP/body" "$TMP/last-$auth"
   [ -n "${SMOKE_DUMP:-}" ] && { mkdir -p "$SMOKE_DUMP"; cp "$TMP/body" "$SMOKE_DUMP/$label.html"; }
   errs="$(tail -c +$((before+1)) "$LOG" | grep -E '\.(ERROR|CRITICAL|ALERT|EMERGENCY):')"
   nerr=0; [ -n "$errs" ] && nerr="$(printf '%s\n' "$errs" | wc -l | tr -d ' ')"

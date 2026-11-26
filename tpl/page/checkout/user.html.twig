@@ -1,5 +1,8 @@
-{% capture append = "oxidBlock_content" %}
-    {% set template_title = "" %}
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+{% set template_title = "" %}
+
+{% block content %}
 
     <h1 class="title-big">
         {{ translate({ ident: "O3_CHECKOUT" }) }}
@@ -31,6 +34,4 @@
         {% endblock %}
     {% endblock %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" with {blHideBreadcrumb: true} %}
+{% endblock %}

@@ -15,13 +15,15 @@
  * |escape (|e) — the explicit marker for a `.value` that is not a core-escaped Field (raw DB/array values).
  * Output: "escape: <file>:<line>: <expression>", exit 1 on findings, else "OK <n> files".
  *
- * Usage: php build/lint-twig.php [dir …]   (default scope: the areas converted so far; widen it per task)
+ * Usage: php build/lint-twig.php [dir|file …]   (default scope: the areas converted so far; widen it per task)
  */
 
 $scope = array_slice($argv, 1) ?: [
     'tpl/layout', 'tpl/widget', 'tpl/message', 'tpl/page/shop',
     'tpl/page/list', 'tpl/page/details', 'tpl/page/search', 'tpl/page/compare', 'tpl/page/recommendations',
     'tpl/page/review', 'tpl/page/privatesales', 'tpl/rdfa',
+    'tpl/page/checkout', 'tpl/form/fieldset', 'tpl/form/login.html.twig', 'tpl/form/user_checkout_change.html.twig',
+    'tpl/form/user_checkout_noregistration.html.twig', 'tpl/form/user_checkout_registration.html.twig',
 ];
 
 $urlGetters = [
@@ -45,7 +47,8 @@ $base = dirname(__DIR__);
 $findings = [];
 $count = 0;
 foreach ($scope as $dir) {
-    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator("$base/$dir", FilesystemIterator::SKIP_DOTS));
+    $it = is_file("$base/$dir") ? [new SplFileInfo("$base/$dir")]
+        : new RecursiveIteratorIterator(new RecursiveDirectoryIterator("$base/$dir", FilesystemIterator::SKIP_DOTS));
     foreach ($it as $file) {
         if (substr($file, -10) !== '.html.twig') {
             continue;

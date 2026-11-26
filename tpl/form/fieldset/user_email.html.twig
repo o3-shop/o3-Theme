@@ -1,5 +1,5 @@
 <div class="form-floating mb-3">
-    <input class="form-control" type="email" name="invadr[oxuser__oxusername]" value="{% if isset( invadr.oxuser__oxusername ) %}{{ invadr.oxuser__oxusername }}{% else %}{{ oxcmp_user.oxuser__oxusername.value }}{% endif %}" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}" autocomplete="username">
+    <input class="form-control" type="email" name="invadr[oxuser__oxusername]" value="{% if invadr.oxuser__oxusername is not null %}{{ invadr.oxuser__oxusername|raw }}{% else %}{{ oxcmp_user.oxuser__oxusername.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}" autocomplete="username">
     <label for="email">{{ translate({ ident: "EMAIL_ADDRESS" }) }}</label>
     <div class="invalid-feedback">
         {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}
@@ -10,7 +10,7 @@
 <div class="form-group{% if aErrors.oxuser__oxusername %} oxInValid{% endif %}">
  <label class="req control-label col-lg-3">{{ translate({ ident: "EMAIL_ADDRESS" }) }}</label>
  <div class="col-lg-9">
- <input class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email oxValidate_enterPass oxValidate_enterPassTarget[oxValidate_pwd] form-control" type="text" name="invadr[oxuser__oxusername]" value="{% if isset( invadr.oxuser__oxusername ) %}{{ invadr.oxuser__oxusername }}{% else %}{{ oxcmp_user.oxuser__oxusername.value }}{% endif %}" size="37" autocomplete="username">
+ <input class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email oxValidate_enterPass oxValidate_enterPassTarget[oxValidate_pwd] form-control" type="text" name="invadr[oxuser__oxusername]" value="{% if invadr.oxuser__oxusername is not null %}{{ invadr.oxuser__oxusername|raw }}{% else %}{{ oxcmp_user.oxuser__oxusername.value|raw }}{% endif %}" size="37" autocomplete="username">
  {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxusername} %}
  <div class="help-block"></div>
  </div>

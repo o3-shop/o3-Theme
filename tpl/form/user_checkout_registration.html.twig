@@ -14,11 +14,11 @@
 
     {% set aErrors = oView.getFieldValidationErrors() %}
 
-    <form action="{{ oViewConf.getSslSelfLink() }}" name="order" method="post" class="needs-validation" novalidate>
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post" class="needs-validation" novalidate>
         {% block user_checkout_registration_form %}
             <div class="d-none">
-                {{ oViewConf.getHiddenSid() }}
-                {{ oViewConf.getNavFormParams() }}
+                {{ oViewConf.getHiddenSid()|raw }}
+                {{ oViewConf.getNavFormParams()|raw }}
                 <input type="hidden" name="cl" value="user">
                 <input type="hidden" name="option" value="3">
                 {% if not oxcmp_user.oxuser__oxpassword.value %}

@@ -3,7 +3,7 @@
         {% if id %}id="{{ id }}"{% endif %}
         {% if required %}required{% endif %}>
     {% block salutation_options %}
-        <option value="" {% if empty(value) %}selected {% endif %}>{{ translate({ ident: "DD_SELECT_SALUTATION", suffix: "ELLIPSIS" }) }}</option>
+        <option value="" {% if value is empty %}selected {% endif %}>{{ translate({ ident: "DD_SELECT_SALUTATION", suffix: "ELLIPSIS" }) }}</option>
         <option value="MRS" {% if value|lower  == "mrs" or value2|lower == "mrs" %}SELECTED{% endif %}>{{ translate({ ident: "MRS" }) }}</option>
         <option value="MR"  {% if value|lower  == "mr"  or value2|lower == "mr" %}SELECTED{% endif %}>{{ translate({ ident: "MR" }) }}</option>
     {% endblock %}

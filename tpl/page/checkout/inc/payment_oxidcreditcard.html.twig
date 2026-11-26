@@ -1,8 +1,10 @@
 {% set dynvalue = oView.getDynValue() %}
+{# dynvalue holds request values the core already HTML-escaped (getRequestEscapedParameter, kept in the session) or core-escaped
+   oxuserpayments field values: printed |raw, like 1.x, so they are encoded once #}
 <dl>
     <dt>
         <input id="payment_{{ sPaymentID }}" type="radio" name="paymentid" value="{{ sPaymentID }}" {% if oView.getCheckedPaymentId() == paymentmethod.oxpayments__oxid.value %}checked{% endif %}>
-        <label for="payment_{{ sPaymentID }}"><b>{{ paymentmethod.oxpayments__oxdesc.value }}</b></label>
+        <label for="payment_{{ sPaymentID }}"><b>{{ paymentmethod.oxpayments__oxdesc.value|raw }}</b></label>
     </dt>
     <dd class="payment-option{% if oView.getCheckedPaymentId() == paymentmethod.oxpayments__oxid.value %} activePayment{% endif %}">
 
@@ -28,14 +30,14 @@
         <div class="form-group">
             <label class="req control-label col-lg-3">{{ translate({ ident: "NUMBER" }) }}</label>
             <div class="col-lg-9">
-                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kknumber]" value="{{ dynvalue.kknumber }}" required="required">
+                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kknumber]" value="{{ dynvalue.kknumber|raw }}" required="required">
             </div>
         </div>
 
         <div class="form-group">
             <label class="req control-label col-lg-3">{{ translate({ ident: "BANK_ACCOUNT_HOLDER" }) }}</label>
             <div class="col-lg-9">
-                <input type="text" size="20" class="form-control js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[kkname]" value="{% if dynvalue.kkname %}{{ dynvalue.kkname }}{% else %}{{ oxcmp_user.oxuser__oxfname.value }} {{ oxcmp_user.oxuser__oxlname.value }}{% endif %}" required="required">
+                <input type="text" size="20" class="form-control js-oxValidate js-oxValidate_notEmpty" maxlength="64" name="dynvalue[kkname]" value="{% if dynvalue.kkname %}{{ dynvalue.kkname|raw }}{% else %}{{ oxcmp_user.oxuser__oxfname.value|raw }} {{ oxcmp_user.oxuser__oxlname.value|raw }}{% endif %}" required="required">
                 <span class="help-block">{{ translate({ ident: "IF_DIFFERENT_FROM_BILLING_ADDRESS" }) }}</span>
             </div>
         </div>
@@ -71,7 +73,7 @@
         <div class="form-group">
             <label class="req control-label col-lg-3">{{ translate({ ident: "CARD_SECURITY_CODE" }) }}</label>
             <div class="col-lg-9">
-                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kkpruef]" value="{{ dynvalue.kkpruef }}" required="required">
+                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[kkpruef]" value="{{ dynvalue.kkpruef|raw }}" required="required">
                 <span class="help-block">{{ translate({ ident: "CARD_SECURITY_CODE_DESCRIPTION" }) }}</span>
             </div>
         </div>
@@ -83,7 +85,8 @@
                 <div class="row">
                     <div class="col-12 col-lg-9 offset-lg-3">
                         <div class="alert alert-info desc">
-                            {{ paymentmethod.oxpayments__oxlongdesc.getRawValue() }}
+                            {# admin-maintained HTML description, printed as HTML like in 1.x #}
+                    {{ paymentmethod.oxpayments__oxlongdesc.getRawValue()|raw }}
                         </div>
                     </div>
                 </div>

@@ -1,30 +1,30 @@
 {% set invadr = oView.getInvoiceAddress() %}
 {% set blBirthdayRequired = oView.isFieldRequired("oxuser__oxbirthdate") %}
 
-{% if isset( invadr.oxuser__oxbirthdate.month ) %}
+{% if invadr.oxuser__oxbirthdate.month is not null %}
     {% set iBirthdayMonth = invadr.oxuser__oxbirthdate.month %}
 {% elseif oxcmp_user.oxuser__oxbirthdate.value and oxcmp_user.oxuser__oxbirthdate.value != "0000-00-00" %}
-    {% set iBirthdayMonth = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/^([0-9]{4})[-]/", "")|regex_replace("/[-]([0-9]{1, 2})$/", "") %}
+    {% set iBirthdayMonth = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/^([0-9]{4})[-]/", "")|regex_replace("/[-]([0-9]{1,2})$/", "") %}
 {% else %}
     {% set iBirthdayMonth = 0 %}
 {% endif %}
 
-{% if isset( invadr.oxuser__oxbirthdate.day ) %}
+{% if invadr.oxuser__oxbirthdate.day is not null %}
     {% set iBirthdayDay = invadr.oxuser__oxbirthdate.day %}
 {% elseif oxcmp_user.oxuser__oxbirthdate.value and oxcmp_user.oxuser__oxbirthdate.value != "0000-00-00" %}
-    {% set iBirthdayDay = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/^([0-9]{4})[-]([0-9]{1, 2})[-]/", "") %}
+    {% set iBirthdayDay = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/^([0-9]{4})[-]([0-9]{1,2})[-]/", "") %}
 {% else %}
     {% set iBirthdayDay = 0 %}
 {% endif %}
 
-{% if isset( invadr.oxuser__oxbirthdate.year ) %}
+{% if invadr.oxuser__oxbirthdate.year is not null %}
     {% set iBirthdayYear = invadr.oxuser__oxbirthdate.year %}
 {% elseif oxcmp_user.oxuser__oxbirthdate.value and oxcmp_user.oxuser__oxbirthdate.value != "0000-00-00" %}
-    {% set iBirthdayYear = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/[-]([0-9]{1, 2})[-]([0-9]{1, 2})$/", "") %}
+    {% set iBirthdayYear = oxcmp_user.oxuser__oxbirthdate.value|regex_replace("/[-]([0-9]{1,2})[-]([0-9]{1,2})$/", "") %}
 {% else %}
     {% set iBirthdayYear = 0 %}
 {% endif %}
-{% if isset( invadr.oxuser__oxsal ) %}
+{% if invadr.oxuser__oxsal is not null %}
     {% set oxuser__oxsal = invadr.oxuser__oxsal %}
 {% else %}
     {% set oxuser__oxsal = oxcmp_user.oxuser__oxsal.value %}
@@ -39,7 +39,7 @@
 </div>
 
 <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="invadr_oxuser__oxfname" name="invadr[oxuser__oxfname]" value="{% if isset( invadr.oxuser__oxfname ) %}{{ invadr.oxuser__oxfname }}{% else %}{{ oxcmp_user.oxuser__oxfname.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxfname") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfname") %} required{% endif %} autocomplete="billing given-name">
+    <input type="text" class="form-control" id="invadr_oxuser__oxfname" name="invadr[oxuser__oxfname]" value="{% if invadr.oxuser__oxfname is not null %}{{ invadr.oxuser__oxfname|raw }}{% else %}{{ oxcmp_user.oxuser__oxfname.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxfname") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfname") %} required{% endif %} autocomplete="billing given-name">
     <label for="invadr_oxuser__oxfname">{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxfname") %}*{% endif %}</label>
     <div class="invalid-feedback">
         {{ translate({ ident: "DD_FORM_VALIDATION_FIRST_NAME" }) }}
@@ -48,7 +48,7 @@
 </div>
 
 <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="invadr_oxuser__oxlname" name="invadr[oxuser__oxlname]" value="{% if isset( invadr.oxuser__oxlname ) %}{{ invadr.oxuser__oxlname }}{% else %}{{ oxcmp_user.oxuser__oxlname.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxlname") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxlname") %} required{% endif %} autocomplete="billing family-name">
+    <input type="text" class="form-control" id="invadr_oxuser__oxlname" name="invadr[oxuser__oxlname]" value="{% if invadr.oxuser__oxlname is not null %}{{ invadr.oxuser__oxlname|raw }}{% else %}{{ oxcmp_user.oxuser__oxlname.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxlname") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxlname") %} required{% endif %} autocomplete="billing family-name">
     <label for="invadr_oxuser__oxlname">{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxuser__oxlname") %}*{% endif %}</label>
     <div class="invalid-feedback">
         {{ translate({ ident: "DD_FORM_VALIDATION_LAST_NAME" }) }}
@@ -58,7 +58,7 @@
 
 {% if oViewConf.getViewThemeParam('bInputCompany') or oView.isFieldRequired("oxuser__oxcompany") %}
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxcompany" name="invadr[oxuser__oxcompany]" value="{% if isset( invadr.oxuser__oxcompany ) %}{{ invadr.oxuser__oxcompany }}{% else %}{{ oxcmp_user.oxuser__oxcompany.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxuser__oxcompany") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxcompany") %} required{% endif %} autocomplete="billing organization">
+        <input type="text" class="form-control" id="invadr_oxuser__oxcompany" name="invadr[oxuser__oxcompany]" value="{% if invadr.oxuser__oxcompany is not null %}{{ invadr.oxuser__oxcompany|raw }}{% else %}{{ oxcmp_user.oxuser__oxcompany.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxuser__oxcompany") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxcompany") %} required{% endif %} autocomplete="billing organization">
         <label for="invadr_oxuser__oxcompany">{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxuser__oxcompany") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_COMPANY" }) }}
@@ -68,7 +68,7 @@
 {% endif %}
 
 <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="invadr_oxuser__oxaddinfo" name="invadr[oxuser__oxaddinfo]" value="{% if isset( invadr.oxuser__oxaddinfo ) %}{{ invadr.oxuser__oxaddinfo }}{% else %}{{ oxcmp_user.oxuser__oxaddinfo.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxuser__oxaddinfo") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxaddinfo") %} required{% endif %}>
+    <input type="text" class="form-control" id="invadr_oxuser__oxaddinfo" name="invadr[oxuser__oxaddinfo]" value="{% if invadr.oxuser__oxaddinfo is not null %}{{ invadr.oxuser__oxaddinfo|raw }}{% else %}{{ oxcmp_user.oxuser__oxaddinfo.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxuser__oxaddinfo") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxaddinfo") %} required{% endif %}>
     <label for="invadr_oxuser__oxaddinfo">{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxuser__oxaddinfo") %}*{% endif %}</label>
     <div class="invalid-feedback">
         {{ translate({ ident: "DD_FORM_VALIDATION_ADDITIONAL_INFO" }) }}
@@ -78,7 +78,7 @@
 
 <div class="row">
     <div class="form-floating mb-3 col-lg-9 pe-xl-0">
-        <input type="text" class="form-control" id="invadr_oxuser__oxstreet" name="invadr[oxuser__oxstreet]" value="{% if isset( invadr.oxuser__oxstreet ) %}{{ invadr.oxuser__oxstreet }}{% else %}{{ oxcmp_user.oxuser__oxstreet.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxstreet") %} required{% endif %} autocomplete="billing street-address">
+        <input type="text" class="form-control" id="invadr_oxuser__oxstreet" name="invadr[oxuser__oxstreet]" value="{% if invadr.oxuser__oxstreet is not null %}{{ invadr.oxuser__oxstreet|raw }}{% else %}{{ oxcmp_user.oxuser__oxstreet.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxstreet") %} required{% endif %} autocomplete="billing street-address">
         <label for="invadr_oxuser__oxstreet">{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_STREET" }) }}
@@ -86,7 +86,7 @@
         {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxstreet} %}
     </div>
     <div class="form-floating mb-3 col-lg-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxstreetnr" name="invadr[oxuser__oxstreetnr]" value="{% if isset( invadr.oxuser__oxstreetnr ) %}{{ invadr.oxuser__oxstreetnr }}{% else %}{{ oxcmp_user.oxuser__oxstreetnr.value }}{% endif %}" maxlength="16" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxstreetnr") %} required{% endif %}>
+        <input type="text" class="form-control" id="invadr_oxuser__oxstreetnr" name="invadr[oxuser__oxstreetnr]" value="{% if invadr.oxuser__oxstreetnr is not null %}{{ invadr.oxuser__oxstreetnr|raw }}{% else %}{{ oxcmp_user.oxuser__oxstreetnr.value|raw }}{% endif %}" maxlength="16" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxstreetnr") %} required{% endif %}>
         <label for="invadr_oxuser__oxstreetnr">{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxuser__oxstreet") or oView.isFieldRequired("oxuser__oxstreetnr") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_STREETNO" }) }}
@@ -97,7 +97,7 @@
 
 <div class="row">
     <div class="form-floating mb-3 col-lg-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxzip" name="invadr[oxuser__oxzip]" value="{% if isset( invadr.oxuser__oxzip ) %}{{ invadr.oxuser__oxzip }}{% else %}{{ oxcmp_user.oxuser__oxzip.value }}{% endif %}" maxlength="16" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxzip") %} required{% endif %} autocomplete="billing postal-code">
+        <input type="text" class="form-control" id="invadr_oxuser__oxzip" name="invadr[oxuser__oxzip]" value="{% if invadr.oxuser__oxzip is not null %}{{ invadr.oxuser__oxzip|raw }}{% else %}{{ oxcmp_user.oxuser__oxzip.value|raw }}{% endif %}" maxlength="16" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxzip") %} required{% endif %} autocomplete="billing postal-code">
         <label for="invadr_oxuser__oxzip">{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_POSTAL_CODE" }) }}
@@ -105,7 +105,7 @@
         {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxzip} %}
     </div>
     <div class="form-floating mb-3 col-lg-9 ps-xl-0">
-        <input type="text" class="form-control" id="invadr_oxuser__oxcity" name="invadr[oxuser__oxcity]" value="{% if isset( invadr.oxuser__oxcity ) %}{{ invadr.oxuser__oxcity }}{% else %}{{ oxcmp_user.oxuser__oxcity.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxcity") %} required{% endif %} autocomplete="billing locality">
+        <input type="text" class="form-control" id="invadr_oxuser__oxcity" name="invadr[oxuser__oxcity]" value="{% if invadr.oxuser__oxcity is not null %}{{ invadr.oxuser__oxcity|raw }}{% else %}{{ oxcmp_user.oxuser__oxcity.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxcity") %} required{% endif %} autocomplete="billing locality">
         <label for="invadr_oxuser__oxcity">{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxuser__oxzip") or oView.isFieldRequired("oxuser__oxcity") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_CITY" }) }}
@@ -116,7 +116,7 @@
 
 {% if oViewConf.getViewThemeParam('bInputUstid') or oView.isFieldRequired("oxuser__oxustid") %}
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxustid" name="invadr[oxuser__oxustid]" value="{% if isset( invadr.oxuser__oxustid ) %}{{ invadr.oxuser__oxustid }}{% else %}{{ oxcmp_user.oxuser__oxustid.value }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "VAT_ID_NUMBER" }) }}{% if oView.isFieldRequired("oxuser__oxustid") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxustid") %} required{% endif %}>
+        <input type="text" class="form-control" id="invadr_oxuser__oxustid" name="invadr[oxuser__oxustid]" value="{% if invadr.oxuser__oxustid is not null %}{{ invadr.oxuser__oxustid|raw }}{% else %}{{ oxcmp_user.oxuser__oxustid.value|raw }}{% endif %}" maxlength="255" placeholder="{{ translate({ ident: "VAT_ID_NUMBER" }) }}{% if oView.isFieldRequired("oxuser__oxustid") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxustid") %} required{% endif %}>
         <label for="invadr_oxuser__oxustid">{{ translate({ ident: "VAT_ID_NUMBER" }) }}{% if oView.isFieldRequired("oxuser__oxustid") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_VAT_ID_NUMBER" }) }}
@@ -133,12 +133,12 @@
             {% for country_id, country in oViewConf.getCountryList() %}
                 {% set sCountrySelect = "" %}
                 {% if not blCountrySelected %}
-                    {% if (isset(invadr.oxuser__oxcountryid) and invadr.oxuser__oxcountryid == country.oxcountry__oxid.value) or                    (not isset(invadr.oxuser__oxcountryid) and oxcmp_user.oxuser__oxcountryid.value == country.oxcountry__oxid.value) %}
+                    {% if (invadr.oxuser__oxcountryid is not null and invadr.oxuser__oxcountryid == country.oxcountry__oxid.value) or                    (invadr.oxuser__oxcountryid is null and oxcmp_user.oxuser__oxcountryid.value == country.oxcountry__oxid.value) %}
                         {% set blCountrySelected = true %}
                         {% set sCountrySelect = "selected" %}
                     {% endif %}
                 {% endif %}
-                <option value="{{ country.oxcountry__oxid.value }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value }}</option>
+                <option value="{{ country.oxcountry__oxid.value|raw }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value|raw }}</option>
             {% endfor %}
         </select>
         <label for="invCountrySelect">{{ translate({ ident: "COUNTRY" }) }}{% if oView.isFieldRequired("oxuser__oxcountryid") %}*{% endif %}</label>
@@ -160,7 +160,7 @@
 {% endblock %}
 
 <div class="form-floating mb-3">
-    <input type="text" class="form-control" id="invadr_oxuser__oxfon" name="invadr[oxuser__oxfon]" value="{% if isset( invadr.oxuser__oxfon ) %}{{ invadr.oxuser__oxfon }}{% else %}{{ oxcmp_user.oxuser__oxfon.value }}{% endif %}" maxlength="128" placeholder="{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfon") %} required{% endif %} autocomplete="billing tel">
+    <input type="text" class="form-control" id="invadr_oxuser__oxfon" name="invadr[oxuser__oxfon]" value="{% if invadr.oxuser__oxfon is not null %}{{ invadr.oxuser__oxfon|raw }}{% else %}{{ oxcmp_user.oxuser__oxfon.value|raw }}{% endif %}" maxlength="128" placeholder="{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfon") %} required{% endif %} autocomplete="billing tel">
     <label for="invadr_oxuser__oxfon">{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxfon") %}*{% endif %}</label>
     <div class="invalid-feedback">
         {{ translate({ ident: "DD_FORM_VALIDATION_PHONE" }) }}
@@ -170,7 +170,7 @@
 
 {% if oViewConf.getViewThemeParam('bInputFax') or oView.isFieldRequired("oxuser__oxfax") %}
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxfax" name="invadr[oxuser__oxfax]" value="{% if isset( invadr.oxuser__oxfax ) %}{{ invadr.oxuser__oxfax }}{% else %}{{ oxcmp_user.oxuser__oxfax.value }}{% endif %}" maxlength="128" placeholder="{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxuser__oxfax") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfax") %} required{% endif %} autocomplete="billing fax">
+        <input type="text" class="form-control" id="invadr_oxuser__oxfax" name="invadr[oxuser__oxfax]" value="{% if invadr.oxuser__oxfax is not null %}{{ invadr.oxuser__oxfax|raw }}{% else %}{{ oxcmp_user.oxuser__oxfax.value|raw }}{% endif %}" maxlength="128" placeholder="{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxuser__oxfax") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxfax") %} required{% endif %} autocomplete="billing fax">
         <label for="invadr_oxuser__oxfax">{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxuser__oxfax") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_FAX" }) }}
@@ -181,7 +181,7 @@
 
 {% if oViewConf.getViewThemeParam('bInputMobilePhone') or oView.isFieldRequired("oxuser__oxmobfon") %}
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxmobfon" name="invadr[oxuser__oxmobfon]" value="{% if isset( invadr.oxuser__oxmobfon ) %}{{ invadr.oxuser__oxmobfon }}{% else %}{{ oxcmp_user.oxuser__oxmobfon.value }}{% endif %}" maxlength="64" placeholder="{{ translate({ ident: "CELLUAR_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxmobfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxmobfon") %} required{% endif %}>
+        <input type="text" class="form-control" id="invadr_oxuser__oxmobfon" name="invadr[oxuser__oxmobfon]" value="{% if invadr.oxuser__oxmobfon is not null %}{{ invadr.oxuser__oxmobfon|raw }}{% else %}{{ oxcmp_user.oxuser__oxmobfon.value|raw }}{% endif %}" maxlength="64" placeholder="{{ translate({ ident: "CELLUAR_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxmobfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxmobfon") %} required{% endif %}>
         <label for="invadr_oxuser__oxfon">{{ translate({ ident: "CELLUAR_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxmobfon") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_CELLUAR_PHONE" }) }}
@@ -192,7 +192,7 @@
 
 {% if oViewConf.getViewThemeParam('bInputPrivatPhone') or oView.isFieldRequired("oxuser__oxprivfon") %}
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="invadr_oxuser__oxprivfon" name="invadr[oxuser__oxprivfon]" value="{% if isset( invadr.oxuser__oxprivfon ) %}{{ invadr.oxuser__oxprivfon }}{% else %}{{ oxcmp_user.oxuser__oxprivfon.value }}{% endif %}" maxlength="64" placeholder="{{ translate({ ident: "PERSONAL_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxprivfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxprivfon") %} required{% endif %}>
+        <input type="text" class="form-control" id="invadr_oxuser__oxprivfon" name="invadr[oxuser__oxprivfon]" value="{% if invadr.oxuser__oxprivfon is not null %}{{ invadr.oxuser__oxprivfon|raw }}{% else %}{{ oxcmp_user.oxuser__oxprivfon.value|raw }}{% endif %}" maxlength="64" placeholder="{{ translate({ ident: "PERSONAL_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxprivfon") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxprivfon") %} required{% endif %}>
         <label for="invadr_oxuser__oxprivfon">{{ translate({ ident: "PERSONAL_PHONE" }) }}{% if oView.isFieldRequired("oxuser__oxprivfon") %}*{% endif %}</label>
         <div class="invalid-feedback">
             {{ translate({ ident: "DD_FORM_VALIDATION_PERSONAL_PHONE" }) }}
@@ -210,26 +210,27 @@
             {{ script({ include: "js/widget/birthdate.js", priority: 10 }) }}
         {% endif %}
 
-        {% set birthdate_complete = "`$iBirthdayYear`-`$iBirthdayMonth`-`$iBirthdayDay`" %}
+        {% set birthdate_complete = iBirthdayYear ~ "-" ~ iBirthdayMonth ~ "-" ~ iBirthdayDay %}
 
         <div class="form-floating mb-3">
-            <input data-js="birthdate" id="invadr_oxuser__oxbirthdate" class="form-control" type="date" {% if birthdate_complete %}value="{{ birthdate_complete }}"{% endif %} placeholder="{{ translate({ ident: "BIRTHDATE" }) }}{% if oView.isFieldRequired("oxuser__oxbirthdate") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxbirthdate") %} required{% endif %}>
+            <input data-js="birthdate" id="invadr_oxuser__oxbirthdate" class="form-control" type="date" {% if birthdate_complete %}value="{{ birthdate_complete|raw }}"{% endif %} placeholder="{{ translate({ ident: "BIRTHDATE" }) }}{% if oView.isFieldRequired("oxuser__oxbirthdate") %}*{% endif %}"{% if oView.isFieldRequired("oxuser__oxbirthdate") %} required{% endif %}>
             <label for="invadr_oxuser__oxbirthdate">{{ translate({ ident: "BIRTHDATE" }) }}{% if oView.isFieldRequired("oxuser__oxbirthdate") %}*{% endif %}</label>
             <div class="invalid-feedback">
                 {{ translate({ ident: "O3_FORM_VALIDATION_BIRTHDATE" }) }}
             </div>
             {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxbirthdate} %}
 
-            <input type="hidden" data-js="birthdate-day" name="invadr[oxuser__oxbirthdate][day]" value="{% if iBirthdayDay %}{{ iBirthdayDay }}{% endif %}">
-            <input type="hidden" data-js="birthdate-month" name="invadr[oxuser__oxbirthdate][month]" value="{% if iBirthdayMonth %}{{ iBirthdayMonth }}{% endif %}">
-            <input type="hidden" data-js="birthdate-year" name="invadr[oxuser__oxbirthdate][year]" value="{% if iBirthdayYear %}{{ iBirthdayYear }}{% endif %}">
+            <input type="hidden" data-js="birthdate-day" name="invadr[oxuser__oxbirthdate][day]" value="{% if iBirthdayDay %}{{ iBirthdayDay|raw }}{% endif %}">
+            <input type="hidden" data-js="birthdate-month" name="invadr[oxuser__oxbirthdate][month]" value="{% if iBirthdayMonth %}{{ iBirthdayMonth|raw }}{% endif %}">
+            <input type="hidden" data-js="birthdate-year" name="invadr[oxuser__oxbirthdate][year]" value="{% if iBirthdayYear %}{{ iBirthdayYear|raw }}{% endif %}">
 
         </div>
 
     {% endif %}
 {% endblock %}
 
-{% block captcha_form %}{% if not oxcmp_user.oxuser__oxpassword.value and method_exists($oViewConf, 'getCaptchaWidget') %}{{ oViewConf.getCaptchaWidget('register') }}{% endif %}{% endblock %}
+{# 1.x guarded with method_exists(); the 2.x core always has ViewConfig::getCaptchaWidget() (returns markup or '') #}
+{% block captcha_form %}{% if not oxcmp_user.oxuser__oxpassword.value %}{{ oViewConf.getCaptchaWidget('register')|raw }}{% endif %}{% endblock %}
 
 <p class="alert alert-info">{{ translate({ ident: "COMPLETE_MARKED_FIELDS" }) }}</p>
 

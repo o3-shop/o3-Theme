@@ -18,14 +18,14 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <form name="delete_shipping_address_modal_form_{{ shippingAddressNumber }}"
-                                          action="{{ oViewConf.getSelfActionLink() }}"
+                                          action="{{ oViewConf.getSelfActionLink()|raw }}"
                                           method="post">
                                         <div class="d-none">
-                                            {{ oViewConf.getHiddenSid() }}
+                                            {{ oViewConf.getHiddenSid()|raw }}
                                             <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                                             <input type="hidden" name="fnc" value="deleteShippingAddress">
                                             <input type="hidden" name="oxaddressid"
-                                                   value="{{ shippingAddress.oxaddress__oxid.value }}">
+                                                   value="{{ shippingAddress.oxaddress__oxid.value|raw }}">
                                         </div>
                                         {% include "widget/address/shipping_address.html.twig" with {delivadr: shippingAddress} %}
                                     </form>

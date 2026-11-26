@@ -1,4 +1,12 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+{% set template_title = "REVIEW_YOUR_ORDER"|translate %}
+
+{% block content %}
+    {# 1.x assigned these inside sibling blocks; Twig blocks get a copy of the context, so they are set here for all of them
+       (payment: inc/agb under checkout_order_agb, currency: checkout_order_loworderprice_bottom) #}
+    {% set currency = oView.getActCurrency() %}
+    {% set payment = oView.getPayment() %}
 
     {% if oxcmp_shop.oxshops__oxproductive.value %}
         {{ script({ include: "js/widget/check-agb.min.js", priority: 10 }) }}
@@ -51,7 +59,7 @@
                             {% for key, oEr in Errors.basket %}
                                 {% if oEr.getErrorClassType() == 'oxVoucherException' %}
                                     <div class="alert alert-danger">
-                                        {{ translate({ ident: "PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED1" }) }} {{ oEr.getValue('voucherNr') }} {{ translate({ ident: "PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED2" }) }}<br>
+                                        {{ translate({ ident: "PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED1" }) }} {{ oEr.getValue('voucherNr')|raw }} {{ translate({ ident: "PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED2" }) }}<br>
                                         {{ translate({ ident: "REASON" }) }}
                                         {{ oEr.getOxMessage() }}
                                     </div>
@@ -59,16 +67,16 @@
                             {% endfor %}
                             <div class="alert alert-info">
                                 {% for key, sVoucher in oxcmp_basket.getVouchers() %}
-                                    {{ sVoucher.sVoucherNr }}<br>
+                                    {{ sVoucher.sVoucherNr|raw }}<br>
                                 {% endfor %}
                             </div>
                         {% endif %}
                     {% endblock %}
 
                     {% block checkout_order_address %}
-                        <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__billingaddress">
+                        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__billingaddress">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="user">
                                 <input type="hidden" name="fnc" value="">
                             </div>
@@ -83,9 +91,9 @@
                             {% include "widget/address/billing_address.html.twig" %}
                         </form>
 
-                        <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__shippingaddress">
+                        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__shippingaddress">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="user">
                                 <input type="hidden" name="fnc" value="">
                             </div>
@@ -109,9 +117,9 @@
                     {% endblock %}
 
                     {% block shippingAndPayment %}
-                        <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__delivery">
+                        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__delivery">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="payment">
                                 <input type="hidden" name="fnc" value="">
                             </div>
@@ -124,12 +132,12 @@
                             </h3>
 
                             {% set oShipSet = oView.getShipSet() %}
-                            {{ oShipSet.oxdeliveryset__oxtitle.value }}
+                            {{ oShipSet.oxdeliveryset__oxtitle.value|raw }}
                         </form>
 
-                        <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__payment">
+                        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__payment">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="payment">
                                 <input type="hidden" name="fnc" value="">
                             </div>
@@ -142,15 +150,15 @@
                             </h3>
 
                             {% set payment = oView.getPayment() %}
-                            {{ payment.oxpayments__oxdesc.value }}
+                            {{ payment.oxpayments__oxdesc.value|raw }}
                         </form>
                     {% endblock %}
 
                     {% block checkout_order_remark %}
                         {% if oView.getOrderRemark() %}
-                            <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__message">
+                            <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__message">
                                 <div class="d-none">
-                                    {{ oViewConf.getHiddenSid() }}
+                                    {{ oViewConf.getHiddenSid()|raw }}
                                     <input type="hidden" name="cl" value="user">
                                     <input type="hidden" name="fnc" value="">
                                 </div>
@@ -162,14 +170,15 @@
                                     </button>
                                 </h3>
 
-                                {{ oView.getOrderRemark()|nl2br }}
+                                {# getOrderRemark() is HTML-escaped by the core (checkParamSpecialChars); |raw before |nl2br stops its pre-escaping #}
+                                {{ oView.getOrderRemark()|raw|nl2br }}
                             </form>
                         {% endif %}
                     {% endblock %}
 
-                    <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__articles">
+                    <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__articles">
                         <div class="d-none">
-                            {{ oViewConf.getHiddenSid() }}
+                            {{ oViewConf.getHiddenSid()|raw }}
                             <input type="hidden" name="cl" value="basket">
                             <input type="hidden" name="fnc" value="">
                         </div>
@@ -193,9 +202,9 @@
                 {% block checkout_order_agb %}
                     {% if not oView.isLowOrderPrice() %}
 
-                        <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__agb" id="orderConfirmAgbTop">
-                            {{ oViewConf.getHiddenSid() }}
-                            {{ oViewConf.getNavFormParams() }}
+                        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__agb" id="orderConfirmAgbTop">
+                            {{ oViewConf.getHiddenSid()|raw }}
+                            {{ oViewConf.getNavFormParams()|raw }}
                             <input type="hidden" name="cl" value="order">
                             <input type="hidden" name="fnc" value="{{ oView.getExecuteFnc() }}">
                             <input type="hidden" name="challenge" value="{{ challenge }}">
@@ -215,10 +224,10 @@
                         {% endblock %}
                     {% else %}
                         {% block checkout_order_btn_confirm_bottom %}
-                            <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="order__navi">
+                            <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="order__navi">
                                 <div class="d-none">
-                                    {{ oViewConf.getHiddenSid() }}
-                                    {{ oViewConf.getNavFormParams() }}
+                                    {{ oViewConf.getHiddenSid()|raw }}
+                                    {{ oViewConf.getNavFormParams()|raw }}
                                     <input type="hidden" name="cl" value="order">
                                     <input type="hidden" name="fnc" value="{{ oView.getExecuteFnc() }}">
                                     <input type="hidden" name="challenge" value="{{ challenge }}">
@@ -246,7 +255,5 @@
         {% endblock %}
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
+{% endblock %}
 
-{% set template_title = "REVIEW_YOUR_ORDER"|translate %}
-{% include "layout/page.html.twig" with {title: template_title, location: template_title, blHideBreadcrumb: true} %}

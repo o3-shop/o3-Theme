@@ -18,7 +18,7 @@
 {% set oConfig = oViewConf.getConfig() %}
 {% for basketindex, basketitem in oxcmp_basket.getContents() %}
     {% block checkout_basketcontents_basketitem %}
-        {% set basketproduct = basketitemlist.$basketindex %}
+        {% set basketproduct = basketitemlist[basketindex] %}
         {% set oArticle = basketitem.getArticle() %}
         {% set oAttributes = oArticle.getAttributesDisplayableInBasket() %}
 
@@ -27,11 +27,11 @@
             {% block checkout_basketcontents_basketitem_image %}
                 {# product image #}
                 {% if editable %}
-                    <a href="{{ basketitem.getLink() }}">
-                        <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags }}">
+                    <a href="{{ basketitem.getLink()|raw }}">
+                        <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags|raw }}">
                     </a>
                 {% else %}
-                    <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags }}">
+                    <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags|raw }}">
                 {% endif %}
             {% endblock %}
 
@@ -39,11 +39,11 @@
                 {% block checkout_basketcontents_basketitem_titlenumber %}
                     {% block checkout_basketcontents_basketitem_title %}
                         {% if editable %}
-                            <a class="component__basketarticle-title" rel="nofllow" href="{{ basketitem.getLink() }}">
-                                {{ basketitem.getTitle() }}
+                            <a class="component__basketarticle-title" rel="nofllow" href="{{ basketitem.getLink()|raw }}">
+                                {{ basketitem.getTitle()|raw }}
                             </a>
                         {% else %}
-                            <div class="component__basketarticle-title">{{ basketitem.getTitle() }}</div>
+                            <div class="component__basketarticle-title">{{ basketitem.getTitle()|raw }}</div>
                         {% endif %}
                         {% if basketitem.isSkipDiscount() %} <sup><a href="#SkipDiscounts_link" >**</a></sup>{% endif %}
                     {% endblock %}
@@ -151,9 +151,9 @@
                             {% else %}
                                 {% set oWrap = basketitem.getWrapping() %}
                                 {% if editable %}
-                                    <small>{{ translate({ ident: "WRAPPING" }) }}:</small> <a class="btn btn-outline-dark btn-sm" href="#" title="{{ translate({ ident: "ADD" }) }}" data-toggle="modal" data-target="#giftoptions"><i class="fas fa-pencil-alt"></i> {{ oWrap.oxwrapping__oxname.value }}</a>
+                                    <small>{{ translate({ ident: "WRAPPING" }) }}:</small> <a class="btn btn-outline-dark btn-sm" href="#" title="{{ translate({ ident: "ADD" }) }}" data-toggle="modal" data-target="#giftoptions"><i class="fas fa-pencil-alt"></i> {{ oWrap.oxwrapping__oxname.value|raw }}</a>
                                 {% else %}
-                                    <small>{{ translate({ ident: "WRAPPING" }) }}: {{ oWrap.oxwrapping__oxname.value }}</small>
+                                    <small>{{ translate({ ident: "WRAPPING" }) }}: {{ oWrap.oxwrapping__oxname.value|raw }}</small>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -199,12 +199,11 @@
 
                         {% if not basketitem.isBundle() or not basketitem.isDiscountArticle() %}
 
-                            {% set tobasket_name = "aproducts[`$basketindex`][am]" %}
+                            {% set tobasket_name = "aproducts[" ~ basketindex ~ "][am]" %}
                             {% set getStock = basketitem.getArticle() %}
                             {% include "widget/product/tobasket.html.twig" with {blCanBuy: true, name: tobasket_name, value: basketitem.getAmount(), stockflag: getStock.oxarticles__oxstockflag.value, stock: getStock.oxarticles__oxstock.value} %}
-                            {% if basketitem.oxarticles__oxunitname.value %}
-                                {{ basketitem.oxarticles__oxunitname.value }}
-                            {% endif %}
+                            {# 1.x printed $basketitem->oxarticles__oxunitname->value here, which BasketItem never has (always empty);
+                               in Twig the access would go to BasketItem::__call and throw, so it is left out #}
 
                         {% endif %}
 
@@ -272,11 +271,12 @@
         {% if oCard %}
             <tr>
                 {% if editable %}<td></td>{% endif %}
-                <td id="orderCardTitle" colspan="3">{{ translate({ ident: "GREETING_CARD" }) }} "{{ oCard.oxwrapping__oxname.value }}"
+                <td id="orderCardTitle" colspan="3">{{ translate({ ident: "GREETING_CARD" }) }} "{{ oCard.oxwrapping__oxname.value|raw }}"
                     <br>
                     <b>{{ translate({ ident: "YOUR_MESSAGE" }) }}</b>
                     <br>
-                    <div id="orderCardText">{{ oxcmp_basket.getCardMessage()|nl2br }}</div>
+                    {# getCardMessage(): request value escaped by the core (getRequestEscapedParameter giftmessage); |raw stops |nl2br pre-escaping #}
+                    <div id="orderCardText">{{ oxcmp_basket.getCardMessage()|raw|nl2br }}</div>
                 </td>
                 <td id="orderCardPrice">{{ oCard.getFPrice() }}&nbsp;{{ currency.sign }}</td>
                 <td>

@@ -26,9 +26,9 @@
                     {% if not oxcmp_basket.getProductsCount() %}
                         <div class="alert alert-danger">{{ translate({ ident: "BASKET_EMPTY" }) }}</div>
                     {% else %}
-                        <form name="basket" action="{{ oViewConf.getSelfActionLink() }}" method="post" role="form" id="giftoptions_modal_form">
+                        <form name="basket" action="{{ oViewConf.getSelfActionLink()|raw }}" method="post" role="form" id="giftoptions_modal_form">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="basket">
                                 <input type="hidden" name="fnc" value="changewrapping">
                             </div>
@@ -36,21 +36,21 @@
                             {% set oWrapList = oView.getWrappingList() %}
                             {% if oWrapList.count() %}
                                 {# basket items #}
-                                {% set icounter = "0" %}
+                                {% set icounter = 0 %}
                                 {% set basketitemlist = oView.getBasketArticles() %}
                                 {% for basketindex, basketitem in oxcmp_basket.getContents() %}
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
                                             {% block checkout_wrapping_item %}
-                                                {% set basketproduct = basketitemlist.$basketindex %}
+                                                {% set basketproduct = basketitemlist[basketindex] %}
 
                                                 <div class="col-4">
-                                                    <img src="{{ basketproduct.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags }}" class="img-thumbnail img-fluid">
+                                                    <img src="{{ basketproduct.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags|raw }}" class="img-thumbnail img-fluid">
                                                 </div>
 
                                                 <div class="col-8">
-                                                    <p class="lead">{{ basketitem.getTitle() }}</p>
+                                                    <p class="lead">{{ basketitem.getTitle()|raw }}</p>
                                                 </div>
 
                                         </div>
@@ -72,13 +72,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {% set ictr = "1" %}
+                                            {% set ictr = 1 %}
                                             {% for wrapping in oView.getWrappingList() %}
                                                 <div class="col-md-12">
                                                     {% if wrapping.oxwrapping__oxpic.value %}
                                                     <div class="row">
                                                         <div class="col-3">
-                                                            <img src="{{ wrapping.getPictureUrl() }}" alt="{{ wrapping.oxwrapping__oxname.value }}" class="img-thumbnail">
+                                                            <img src="{{ wrapping.getPictureUrl() }}" alt="{{ wrapping.oxwrapping__oxname.value|raw }}" class="img-thumbnail">
                                                         </div>
                                                         <div class="col-9">
                                                     {% else %}
@@ -87,20 +87,20 @@
                                                             <div class="form-group">
                                                                 <div class="radio">
                                                                     <label>
-                                                                        <input class="radiobox" type="radio" name="wrapping[{{ basketindex }}]" id="wrapping_{{ wrapping.oxwrapping__oxid.value }}" value="{{ wrapping.oxwrapping__oxid.value }}" {% if basketitem.getWrappingId() == wrapping.oxwrapping__oxid.value %}CHECKED{% endif %}>
-                                                                        {{ wrapping.oxwrapping__oxname.value }} <strong>{{ wrapping.getFPrice() }} {{ currency.sign }}</strong>
+                                                                        <input class="radiobox" type="radio" name="wrapping[{{ basketindex }}]" id="wrapping_{{ wrapping.oxwrapping__oxid.value|raw }}" value="{{ wrapping.oxwrapping__oxid.value|raw }}" {% if basketitem.getWrappingId() == wrapping.oxwrapping__oxid.value %}CHECKED{% endif %}>
+                                                                        {{ wrapping.oxwrapping__oxname.value|raw }} <strong>{{ wrapping.getFPrice() }} {{ currency.sign }}</strong>
                                                                     </label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {% set ictr = "`$ictr+1`" %}
+                                                {% set ictr = ictr + 1 %}
                                             {% endfor %}
-                                            {{ script({ add: "$( '#wrapp_`$loop.index` img' ).click(function(){ $(this).parent().parent().find('input').click(); });" }) }}
+                                            {{ script({ add: "$( '#wrapp_" ~ loop.index ~ " img' ).click(function(){ $(this).parent().parent().find('input').click(); });" }) }}
                                         </div>
 
-                                                {% set icounter = "`$icounter+1`" %}
+                                                {% set icounter = icounter + 1 %}
                                             {% endblock %}
                                         </div>
                                         </div>
@@ -127,16 +127,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {% set icounter = "0" %}
+                                        {% set icounter = 0 %}
                                         {% set defaultCounter = ( defaultCounter | default(-1) ) + 1 %}
-                                        {% set icounter = "0" %}
+                                        {% set icounter = 0 %}
                                         {% for card in oCardList %}
                                             <div class="card">
                                                 <div class="card-header">
                                                     <div class="row">
                                                     {% if card.oxwrapping__oxpic.value %}
                                                         <div class="col-3">
-                                                            <img src="{{ card.getPictureUrl() }}" alt="{{ card.oxwrapping__oxname.value }}" class="img-thumbnail">
+                                                            <img src="{{ card.getPictureUrl() }}" alt="{{ card.oxwrapping__oxname.value|raw }}" class="img-thumbnail">
                                                         </div>
                                                         <div class="col-9">
                                                     {% else %}
@@ -145,7 +145,7 @@
                                                         <div class="form-group">
                                                             <div class="radio">
                                                                 <label>
-                                                                    <input class="radiobox" type="radio" name="chosencard" id="chosen_{{ card.oxwrapping__oxid.value }}" value="{{ card.oxwrapping__oxid.value }}" {% if oxcmp_basket.getCardId() == card.oxwrapping__oxid.value %}CHECKED{% endif %}> {{ card.oxwrapping__oxname.value }} <strong>{{ card.getFPrice() }} {{ currency.sign }}</strong>
+                                                                    <input class="radiobox" type="radio" name="chosencard" id="chosen_{{ card.oxwrapping__oxid.value|raw }}" value="{{ card.oxwrapping__oxid.value|raw }}" {% if oxcmp_basket.getCardId() == card.oxwrapping__oxid.value %}CHECKED{% endif %}> {{ card.oxwrapping__oxname.value|raw }} <strong>{{ card.getFPrice() }} {{ currency.sign }}</strong>
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -153,7 +153,7 @@
                                                 </div>
                                             </div>
                                                 </div>
-                                            {% set icounter = "`$icounter+1`" %}
+                                            {% set icounter = icounter + 1 %}
                                         {% endfor %}
                                         {{ script({ add: "$( '#wrappCard img' ).click(function(){ $(this).parent().siblings().find('input').click(); });" }) }}
                                     </div>
@@ -162,7 +162,7 @@
                                 {% block checkout_wrapping_comment %}
                                     <div class="form-group wrappingComment">
                                         <label for="giftmessage" class="control-label">{{ translate({ ident: "GREETING_MESSAGE" }) }}</label>
-                                        <textarea cols="102" rows="5" name="giftmessage" id="giftmessage" class="form-control">{{ oxcmp_basket.getCardMessage() }}</textarea>
+                                        <textarea cols="102" rows="5" name="giftmessage" id="giftmessage" class="form-control">{{ oxcmp_basket.getCardMessage()|raw }}</textarea>
                                     </div>
                                 {% endblock %}
                             {% endif %}

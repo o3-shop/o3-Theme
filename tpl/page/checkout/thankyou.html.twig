@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
 
     {% block checkout_thankyou_main %}
 
@@ -89,5 +91,5 @@
 
     {% endblock %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}
+

@@ -23,19 +23,19 @@
             {% for address in aUserAddresses %}
 
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="oxaddressid" value="{{ address.oxaddress__oxid.value }}" id="address_{{ address.oxaddress__oxid.value }}"{% if address.isSelected() %} checked{% endif %}>
-                    <label class="form-check-label" for="address_{{ address.oxaddress__oxid.value }}">
+                    <input class="form-check-input" type="radio" name="oxaddressid" value="{{ address.oxaddress__oxid.value|raw }}" id="address_{{ address.oxaddress__oxid.value|raw }}"{% if address.isSelected() %} checked{% endif %}>
+                    <label class="form-check-label" for="address_{{ address.oxaddress__oxid.value|raw }}">
                         {% block form_user_shipping_address_actions %}
                             {% if address.isSelected() %}
                                 {% block form_user_shipping_address_edit_action %}
-                                    <button class="btn btn-edit" type="button" data-bs-toggle="collapse" data-bs-target="#user_shipppingaddress-address_{{ address.oxaddress__oxid.value }}, #user__shippingaddress-form_{{ address.oxaddress__oxid.value }}, #delete_{{ address.oxaddress__oxid.value }}" aria-controls="user_shipppingaddress-address_{{ address.oxaddress__oxid.value }}, user__shippingaddress-form_{{ address.oxaddress__oxid.value }}, delete_{{ address.oxaddress__oxid.value }}">
+                                    <button class="btn btn-edit" type="button" data-bs-toggle="collapse" data-bs-target="#user_shipppingaddress-address_{{ address.oxaddress__oxid.value|raw }}, #user__shippingaddress-form_{{ address.oxaddress__oxid.value|raw }}, #delete_{{ address.oxaddress__oxid.value|raw }}" aria-controls="user_shipppingaddress-address_{{ address.oxaddress__oxid.value|raw }}, user__shippingaddress-form_{{ address.oxaddress__oxid.value|raw }}, delete_{{ address.oxaddress__oxid.value|raw }}">
                                         {{ translate({ ident: "CHANGE" }) }}
                                     </button>
                                 {% endblock %}
                                 {% block form_user_shipping_address_delete_action %}
                                     <button class="btn btn-delete collapse show"
                                             type="button"
-                                            id="delete_{{ address.oxaddress__oxid.value }}"
+                                            id="delete_{{ address.oxaddress__oxid.value|raw }}"
                                             title="{{ translate({ ident: "DD_DELETE" }) }}"
                                             data-bs-toggle="modal"
                                             data-bs-target="#delete_shipping_address_{{ loop.index }}"
@@ -51,7 +51,7 @@
                         {% include "widget/address/shipping_address.html.twig" with {delivadr: address, oxid: address.oxaddress__oxid.value} %}
 
                         {% if address.isSelected() %}
-                            <div class="user__shippingaddress-form collapse" id="user__shippingaddress-form_{{ address.oxaddress__oxid.value }}">
+                            <div class="user__shippingaddress-form collapse" id="user__shippingaddress-form_{{ address.oxaddress__oxid.value|raw }}">
                                 {# Anrede #}
                                 {% if oView.isFieldRequired("oxaddress__oxsal") %}
                                     {% set salRequired = true %}
@@ -66,7 +66,7 @@
 
                                 {# Vorname #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxfname]" id="deladr_oxaddress__oxfname" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}" autocomplete="shipping given-name" value="{% if isset( delivadr.oxaddress__oxfname.value ) %}{{ delivadr.oxaddress__oxfname.value }}{% else %}{{ deladr.oxaddress__oxfname }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfname") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxfname]" id="deladr_oxaddress__oxfname" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}" autocomplete="shipping given-name" value="{% if delivadr.oxaddress__oxfname.value is not null %}{{ delivadr.oxaddress__oxfname.value|raw }}{% else %}{{ deladr.oxaddress__oxfname|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfname") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxfname">{{ translate({ ident: "FIRST_NAME" }) }}</label>
                                     <div class="invalid-feedback">
                                         {{ translate({ ident: "DD_FORM_VALIDATION_FIRST_NAME" }) }}
@@ -75,7 +75,7 @@
 
                                 {# Nachname #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxlname]" id="deladr_oxaddress__oxlname" placeholder="{{ translate({ ident: "LAST_NAME" }) }}" autocomplete="shipping family-name" value="{% if isset( delivadr.oxaddress__oxlname.value ) %}{{ delivadr.oxaddress__oxlname.value }}{% else %}{{ deladr.oxaddress__oxlname }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxlname") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxlname]" id="deladr_oxaddress__oxlname" placeholder="{{ translate({ ident: "LAST_NAME" }) }}" autocomplete="shipping family-name" value="{% if delivadr.oxaddress__oxlname.value is not null %}{{ delivadr.oxaddress__oxlname.value|raw }}{% else %}{{ deladr.oxaddress__oxlname|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxlname") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxlname">{{ translate({ ident: "LAST_NAME" }) }}</label>
                                     <div class="invalid-feedback">
                                         {{ translate({ ident: "DD_FORM_VALIDATION_LAST_NAME" }) }}
@@ -84,7 +84,7 @@
 
                                 {# Firma #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcompany]" id="deladr_oxaddress__oxcompany" placeholder="{{ translate({ ident: "COMPANY" }) }}" autocomplete="shipping organization" value="{% if isset( delivadr.oxaddress__oxcompany.value ) %}{{ delivadr.oxaddress__oxcompany.value }}{% else %}{{ deladr.oxaddress__oxcompany }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcompany") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcompany]" id="deladr_oxaddress__oxcompany" placeholder="{{ translate({ ident: "COMPANY" }) }}" autocomplete="shipping organization" value="{% if delivadr.oxaddress__oxcompany.value is not null %}{{ delivadr.oxaddress__oxcompany.value|raw }}{% else %}{{ deladr.oxaddress__oxcompany|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcompany") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxcompany">{{ translate({ ident: "COMPANY" }) }}</label>
                                     <div class="invalid-feedback">
                                         {{ translate({ ident: "DD_FORM_VALIDATION_COMPANY" }) }}
@@ -93,21 +93,21 @@
 
                                 {# Zusätzliche Informationen #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxaddinfo]" id="deladr_oxaddress__oxaddinfo" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}" value="{% if isset( delivadr.oxaddress__oxaddinfo.value ) %}{{ delivadr.oxaddress__oxaddinfo.value }}{% else %}{{ deladr.oxaddress__oxaddinfo }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxaddinfo") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxaddinfo]" id="deladr_oxaddress__oxaddinfo" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}" value="{% if delivadr.oxaddress__oxaddinfo.value is not null %}{{ delivadr.oxaddress__oxaddinfo.value|raw }}{% else %}{{ deladr.oxaddress__oxaddinfo|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxaddinfo") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxaddinfo">{{ translate({ ident: "ADDITIONAL_INFO" }) }}</label>
                                 </div>
 
                                 {# Straße und Hausnummer #}
                                 <div class="row">
                                     <div class="form-floating mb-3 col-xl-8 pe-xl-0">
-                                        <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxstreet]" id="deladr_oxaddress__oxstreet" placeholder="{{ translate({ ident: "O3_STREET" }) }}" autocomplete="shipping street-address" value="{% if isset( delivadr.oxaddress__oxstreet.value ) %}{{ delivadr.oxaddress__oxstreet.value }}{% else %}{{ deladr.oxaddress__oxstreet }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxstreet") %} required{% endif %}>
+                                        <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxstreet]" id="deladr_oxaddress__oxstreet" placeholder="{{ translate({ ident: "O3_STREET" }) }}" autocomplete="shipping street-address" value="{% if delivadr.oxaddress__oxstreet.value is not null %}{{ delivadr.oxaddress__oxstreet.value|raw }}{% else %}{{ deladr.oxaddress__oxstreet|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxstreet") %} required{% endif %}>
                                         <label for="deladr_oxaddress__oxstreet">{{ translate({ ident: "O3_STREET" }) }}</label>
                                         <div class="invalid-feedback">
                                             {{ translate({ ident: "DD_FORM_VALIDATION_STREET" }) }}
                                         </div>
                                     </div>
                                     <div class="form-floating mb-3 col-xl-4">
-                                        <input class="form-control" type="text" maxlength="16" name="deladr[oxaddress__oxstreetnr]" id="deladr_oxaddress__oxstreetnr" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}" value="{% if isset( delivadr.oxaddress__oxstreetnr.value ) %}{{ delivadr.oxaddress__oxstreetnr.value }}{% else %}{{ deladr.oxaddress__oxstreetnr }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxstreetnr") %} required{% endif %}>
+                                        <input class="form-control" type="text" maxlength="16" name="deladr[oxaddress__oxstreetnr]" id="deladr_oxaddress__oxstreetnr" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}" value="{% if delivadr.oxaddress__oxstreetnr.value is not null %}{{ delivadr.oxaddress__oxstreetnr.value|raw }}{% else %}{{ deladr.oxaddress__oxstreetnr|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxstreetnr") %} required{% endif %}>
                                         <label for="deladr_oxaddress__oxstreetnr">{{ translate({ ident: "O3_STREETNO" }) }}</label>
                                         <div class="invalid-feedback">
                                             {{ translate({ ident: "DD_FORM_VALIDATION_STREETNO" }) }}
@@ -118,14 +118,14 @@
                                 {# PLZ und Ort #}
                                 <div class="row">
                                     <div class="form-floating mb-3 col-xl-4">
-                                        <input class="form-control" type="text" maxlength="50" name="deladr[oxaddress__oxzip]" id="deladr_oxaddress__oxzip" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}" autocomplete="shipping postal-code" value="{% if isset( delivadr.oxaddress__oxzip.value ) %}{{ delivadr.oxaddress__oxzip.value }}{% else %}{{ deladr.oxaddress__oxzip }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxzip") %} required{% endif %}>
+                                        <input class="form-control" type="text" maxlength="50" name="deladr[oxaddress__oxzip]" id="deladr_oxaddress__oxzip" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}" autocomplete="shipping postal-code" value="{% if delivadr.oxaddress__oxzip.value is not null %}{{ delivadr.oxaddress__oxzip.value|raw }}{% else %}{{ deladr.oxaddress__oxzip|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxzip") %} required{% endif %}>
                                         <label for="deladr_oxaddress__oxzip">{{ translate({ ident: "O3_POSTAL_CODE" }) }}</label>
                                         <div class="invalid-feedback">
                                             {{ translate({ ident: "DD_FORM_VALIDATION_POSTAL_CODE" }) }}
                                         </div>
                                     </div>
                                     <div class="form-floating mb-3 col-xl-8 ps-xl-0">
-                                        <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcity]" id="deladr_oxaddress__oxcity" placeholder="{{ translate({ ident: "O3_CITY" }) }}" autocomplete="shipping locality" value="{% if isset( delivadr.oxaddress__oxcity.value ) %}{{ delivadr.oxaddress__oxcity.value }}{% else %}{{ deladr.oxaddress__oxcity }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcity") %} required{% endif %}>
+                                        <input class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcity]" id="deladr_oxaddress__oxcity" placeholder="{{ translate({ ident: "O3_CITY" }) }}" autocomplete="shipping locality" value="{% if delivadr.oxaddress__oxcity.value is not null %}{{ delivadr.oxaddress__oxcity.value|raw }}{% else %}{{ deladr.oxaddress__oxcity|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcity") %} required{% endif %}>
                                         <label for="deladr_oxaddress__oxcity">{{ translate({ ident: "O3_CITY" }) }}</label>
                                         <div class="invalid-feedback">
                                             {{ translate({ ident: "DD_FORM_VALIDATION_CITY" }) }}
@@ -133,7 +133,68 @@
                                     </div>
                                 </div>
 
+                                {# 1.x has this block three times with different bodies (edit form of the selected address, form for a new address,
+                                   form when the user has no address); Twig allows one definition per template, so it is defined once here and
+                                   rendered with block() at the other two places. sShippingCountryForm tells the variant: unset = edit, 'new', 'register'. #}
                                 {% block form_user_shipping_country %}
+                                {% if sShippingCountryForm|default('') == 'new' %}
+                                    <div class="form-floating mb-3">
+                                        <select disabled class="form-select" id="delCountrySelect" name="deladr[oxaddress__oxcountryid]"{% if oView.isFieldRequired("oxaddress__oxcountryid") %} required{% endif %} autocomplete="shipping country">
+                                            <option value="">-</option>
+                                            {% set blCountrySelected = false %}
+                                            {% for country_id, country in oViewConf.getCountryList() %}
+                                                {% set sCountrySelect = "" %}
+                                                {% if not blCountrySelected %}
+                                                    {% if (deladr.oxaddress__oxcountryid is not null and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                                        (deladr.oxaddress__oxcountryid is null and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
+                                                    {% set blCountrySelected = true %}
+                                                    {% set sCountrySelect = "selected" %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                <option value="{{ country.oxcountry__oxid.value|raw }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value|raw }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="delCountrySelect">{{ translate({ ident: "COUNTRY" }) }}{% if oView.isFieldRequired("oxaddress__oxcountryid") %}*{% endif %}</label>
+                                        <div class="invalid-feedback">
+                                            {{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                            {% include "form/fieldset/state.html.twig" with {countrySelectId: "delCountrySelect", stateSelectName: "deladr[oxaddress__oxstateid]", selectedStateIdPrim: deladr.oxaddress__oxstateid, selectedStateId: delivadr.oxaddress__oxstateid.value, class: "form-select", disabled: true} %}
+                                        <label for="{{ countrySelectId }}">{{ translate({ ident: "DD_USER_LABEL_STATE" }) }}</label>
+                                        <div class="invalid-feedback">
+                                            {{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}
+                                        </div>
+                                    </div>
+                                {% elseif sShippingCountryForm|default('') == 'register' %}
+                                    <div class="form-floating mb-3">
+                                        <select disabled class="form-select" id="delCountrySelect" name="deladr[oxaddress__oxcountryid]" autocomplete="shipping country"{% if oView.isFieldRequired("oxaddress__oxcountryid") %} required{% endif %}>
+                                            <option value="">-</option>
+                                            {% set blCountrySelected = false %}
+                                            {% for country_id, country in oViewConf.getCountryList() %}
+                                                {% set sCountrySelect = "" %}
+                                                {% if not blCountrySelected %}
+                                                    {% if (deladr.oxaddress__oxcountryid is not null and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                        (deladr.oxaddress__oxcountryid is null and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
+                                                    {% set blCountrySelected = true %}
+                                                    {% set sCountrySelect = "selected" %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                <option value="{{ country.oxcountry__oxid.value|raw }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value|raw }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="delCountrySelect">{{ translate({ ident: "COUNTRY" }) }}{% if oView.isFieldRequired("oxaddress__oxcountryid") %}*{% endif %}</label>
+                                        {% if oView.isFieldRequired("oxaddress__oxcountryid") %}
+                                            <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}</div>
+                                            {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxaddress__oxcountryid} %}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        {% include "form/fieldset/state.html.twig" with {countrySelectId: "delCountrySelect", stateSelectName: "deladr[oxaddress__oxstateid]", selectedStateIdPrim: deladr.oxaddress__oxstateid, selectedStateId: delivadr.oxaddress__oxstateid.value, class: "form-select", disabled: true} %}
+                                        <label for="{{ countrySelectId }}">{{ translate({ ident: "DD_USER_LABEL_STATE" }) }}</label>
+                                        <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_STATE" }) }}</div>
+                                    </div>
+                                {% else %}
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="delCountrySelect" name="deladr[oxaddress__oxcountryid]"{% if oView.isFieldRequired("oxaddress__oxcountryid") %} required{% endif %} autocomplete="shipping country">
                                             <option value="">-</option>
@@ -141,12 +202,12 @@
                                             {% for country_id, country in oViewConf.getCountryList() %}
                                             {% set sCountrySelect = "" %}
                                             {% if not blCountrySelected %}
-                                            {% if (isset(deladr.oxaddress__oxcountryid) and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                                        (not isset(deladr.oxaddress__oxcountryid) and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
+                                            {% if (deladr.oxaddress__oxcountryid is not null and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                                        (deladr.oxaddress__oxcountryid is null and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
                                             {% set blCountrySelected = true %}
                                             {% set sCountrySelect = "selected" %}
                                             {% endif %}
                                             {% endif %}
-                                            <option value="{{ country.oxcountry__oxid.value }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value }}</option>
+                                            <option value="{{ country.oxcountry__oxid.value|raw }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value|raw }}</option>
                                             {% endfor %}
                                         </select>
                                         <label for="delCountrySelect">{{ translate({ ident: "COUNTRY" }) }}</label>
@@ -162,11 +223,12 @@
                                             {{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}
                                         </div>
                                     </div>
+                                {% endif %}
                                 {% endblock %}
 
                                 {# Telefon #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="128" name="deladr[oxaddress__oxfon]" id="deladr_oxaddress__oxfon" placeholder="{{ translate({ ident: "PHONE" }) }}" autocomplete="shipping tel" value="{% if isset( delivadr.oxaddress__oxfon.value ) %}{{ delivadr.oxaddress__oxfon.value }}{% else %}{{ deladr.oxaddress__oxfon }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfon") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="128" name="deladr[oxaddress__oxfon]" id="deladr_oxaddress__oxfon" placeholder="{{ translate({ ident: "PHONE" }) }}" autocomplete="shipping tel" value="{% if delivadr.oxaddress__oxfon.value is not null %}{{ delivadr.oxaddress__oxfon.value|raw }}{% else %}{{ deladr.oxaddress__oxfon|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfon") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxfon">{{ translate({ ident: "PHONE" }) }}</label>
                                     <div class="invalid-feedback">
                                         {{ translate({ ident: "DD_FORM_VALIDATION_PHONE" }) }}
@@ -175,7 +237,7 @@
 
                                 {# Telefax #}
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" type="text" maxlength="128" name="deladr[oxaddress__oxfax]" id="deladr_oxaddress__oxfax" placeholder="{{ translate({ ident: "FAX" }) }}" value="{% if isset( delivadr.oxaddress__oxfax.value ) %}{{ delivadr.oxaddress__oxfax.value }}{% else %}{{ deladr.oxaddress__oxfax }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfax") %} required{% endif %}>
+                                    <input class="form-control" type="text" maxlength="128" name="deladr[oxaddress__oxfax]" id="deladr_oxaddress__oxfax" placeholder="{{ translate({ ident: "FAX" }) }}" value="{% if delivadr.oxaddress__oxfax.value is not null %}{{ delivadr.oxaddress__oxfax.value|raw }}{% else %}{{ deladr.oxaddress__oxfax|raw }}{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfax") %} required{% endif %}>
                                     <label for="deladr_oxaddress__oxfax">{{ translate({ ident: "FAX" }) }}</label>
                                 </div>
                                 <div class="invalid-feedback">
@@ -291,36 +353,8 @@
                             </div>
                         </div>
 
-                        {% block form_user_shipping_country %}
-                            <div class="form-floating mb-3">
-                                <select disabled class="form-select" id="delCountrySelect" name="deladr[oxaddress__oxcountryid]"{% if oView.isFieldRequired("oxaddress__oxcountryid") %} required{% endif %} autocomplete="shipping country">
-                                    <option value="">-</option>
-                                    {% set blCountrySelected = false %}
-                                    {% for country_id, country in oViewConf.getCountryList() %}
-                                        {% set sCountrySelect = "" %}
-                                        {% if not blCountrySelected %}
-                                            {% if (isset(deladr.oxaddress__oxcountryid) and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                                        (not isset(deladr.oxaddress__oxcountryid) and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
-                                            {% set blCountrySelected = true %}
-                                            {% set sCountrySelect = "selected" %}
-                                            {% endif %}
-                                        {% endif %}
-                                        <option value="{{ country.oxcountry__oxid.value }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value }}</option>
-                                    {% endfor %}
-                                </select>
-                                <label for="delCountrySelect">{{ translate({ ident: "COUNTRY" }) }}{% if oView.isFieldRequired("oxaddress__oxcountryid") %}*{% endif %}</label>
-                                <div class="invalid-feedback">
-                                    {{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}
-                                </div>
-                            </div>
-
-                            <div class="form-floating mb-3">
-                                    {% include "form/fieldset/state.html.twig" with {countrySelectId: "delCountrySelect", stateSelectName: "deladr[oxaddress__oxstateid]", selectedStateIdPrim: deladr.oxaddress__oxstateid, selectedStateId: delivadr.oxaddress__oxstateid.value, class: "form-select", disabled: true} %}
-                                <label for="{{ countrySelectId }}">{{ translate({ ident: "DD_USER_LABEL_STATE" }) }}</label>
-                                <div class="invalid-feedback">
-                                    {{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}
-                                </div>
-                            </div>
-                        {% endblock %}
+                        {% set sShippingCountryForm = 'new' %}
+                        {{ block('form_user_shipping_country') }}
 
                         {# Telefon #}
                         <div class="form-floating mb-3">
@@ -373,7 +407,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfname" name="deladr[oxaddress__oxfname]" maxlength="255" autocomplete="shipping given-name" value="{% if isset( deladr.oxaddress__oxfname ) %}{{ deladr.oxaddress__oxfname }}{% else %}{{ delivadr.oxaddress__oxfname.value }}{% endif %}" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxfname") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfname") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfname" name="deladr[oxaddress__oxfname]" maxlength="255" autocomplete="shipping given-name" value="{% if deladr.oxaddress__oxfname is not null %}{{ deladr.oxaddress__oxfname|raw }}{% else %}{{ delivadr.oxaddress__oxfname.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxfname") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfname") %} required{% endif %}>
             <label for="deladr_oxaddress__oxfname">{{ translate({ ident: "FIRST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxfname") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxfname") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_FIRST_NAME" }) }}</div>
@@ -382,7 +416,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxlname" name="deladr[oxaddress__oxlname]" maxlength="255" autocomplete="shipping family-name" value="{% if isset( deladr.oxaddress__oxlname ) %}{{ deladr.oxaddress__oxlname }}{% else %}{{ delivadr.oxaddress__oxlname.value }}{% endif %}" placeholder="{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxlname") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxlname") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxlname" name="deladr[oxaddress__oxlname]" maxlength="255" autocomplete="shipping family-name" value="{% if deladr.oxaddress__oxlname is not null %}{{ deladr.oxaddress__oxlname|raw }}{% else %}{{ delivadr.oxaddress__oxlname.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxlname") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxlname") %} required{% endif %}>
             <label for="deladr_oxaddress__oxlname">{{ translate({ ident: "LAST_NAME" }) }}{% if oView.isFieldRequired("oxaddress__oxlname") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxlname") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_LAST_NAME" }) }}</div>
@@ -391,7 +425,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxcompany" name="deladr[oxaddress__oxcompany]" maxlength="255" autocomplete="shipping organization" value="{% if isset( deladr.oxaddress__oxcompany ) %}{{ deladr.oxaddress__oxcompany }}{% else %}{{ delivadr.oxaddress__oxcompany.value }}{% endif %}" placeholder="{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxaddress__oxcompany") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcompany") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxcompany" name="deladr[oxaddress__oxcompany]" maxlength="255" autocomplete="shipping organization" value="{% if deladr.oxaddress__oxcompany is not null %}{{ deladr.oxaddress__oxcompany|raw }}{% else %}{{ delivadr.oxaddress__oxcompany.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxaddress__oxcompany") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxcompany") %} required{% endif %}>
             <label for="deladr_oxaddress__oxcompany">{{ translate({ ident: "COMPANY" }) }}{% if oView.isFieldRequired("oxaddress__oxcompany") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxcompany") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_COMPANY" }) }}</div>
@@ -400,7 +434,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxaddinfo" name="deladr[oxaddress__oxaddinfo]" maxlength="255" value="{% if isset( deladr.oxaddress__oxaddinfo ) %}{{ deladr.oxaddress__oxaddinfo }}{% else %}{{ delivadr.oxaddress__oxaddinfo.value }}{% endif %}" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxaddress__oxaddinfo") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxaddinfo") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxaddinfo" name="deladr[oxaddress__oxaddinfo]" maxlength="255" value="{% if deladr.oxaddress__oxaddinfo is not null %}{{ deladr.oxaddress__oxaddinfo|raw }}{% else %}{{ delivadr.oxaddress__oxaddinfo.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxaddress__oxaddinfo") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxaddinfo") %} required{% endif %}>
             <label for="deladr_oxaddress__oxaddinfo">{{ translate({ ident: "ADDITIONAL_INFO" }) }}{% if oView.isFieldRequired("oxaddress__oxaddinfo") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxaddinfo") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_ADDITIONAL_INFO" }) }}</div>
@@ -410,7 +444,7 @@
 
         <div class="row">
             <div class="form-floating mb-3 col-xl-8 pe-xl-0">
-                <input disabled class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxstreet]" id="deladr_oxaddress__oxstreet" value="{% if isset( deladr.oxaddress__oxstreet ) %}{{ deladr.oxaddress__oxstreet }}{% else %}{{ delivadr.oxaddress__oxstreet.value }}{% endif %}" placeholder="{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxaddress__oxstreet") %}*{% endif %}" autocomplete="shipping street-address" value=""{% if oView.isFieldRequired("oxaddress__oxstreet") %} required{% endif %}>
+                <input disabled class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxstreet]" id="deladr_oxaddress__oxstreet" value="{% if deladr.oxaddress__oxstreet is not null %}{{ deladr.oxaddress__oxstreet|raw }}{% else %}{{ delivadr.oxaddress__oxstreet.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxaddress__oxstreet") %}*{% endif %}" autocomplete="shipping street-address" value=""{% if oView.isFieldRequired("oxaddress__oxstreet") %} required{% endif %}>
                 <label for="deladr_oxaddress__oxstreet">{{ translate({ ident: "O3_STREET" }) }}{% if oView.isFieldRequired("oxaddress__oxstreet") %}*{% endif %}</label>
                 {% if oView.isFieldRequired("oxaddress__oxstreet") %}
                     <div class="invalid-feedback">
@@ -420,7 +454,7 @@
                 {% endif %}
             </div>
             <div class="form-floating mb-3 col-xl-4">
-                <input disabled class="form-control" type="text" maxlength="16" name="deladr[oxaddress__oxstreetnr]" id="deladr_oxaddress__oxstreetnr" value="{% if isset( deladr.oxaddress__oxstreetnr ) %}{{ deladr.oxaddress__oxstreetnr }}{% else %}{{ delivadr.oxaddress__oxstreetnr.value }}{% endif %}" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxaddress__oxstreetnr") %}*{% endif %}" value=""{% if oView.isFieldRequired("oxaddress__oxstreetnr") %} required{% endif %}>
+                <input disabled class="form-control" type="text" maxlength="16" name="deladr[oxaddress__oxstreetnr]" id="deladr_oxaddress__oxstreetnr" value="{% if deladr.oxaddress__oxstreetnr is not null %}{{ deladr.oxaddress__oxstreetnr|raw }}{% else %}{{ delivadr.oxaddress__oxstreetnr.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxaddress__oxstreetnr") %}*{% endif %}" value=""{% if oView.isFieldRequired("oxaddress__oxstreetnr") %} required{% endif %}>
                 <label for="deladr_oxaddress__oxstreetnr">{{ translate({ ident: "O3_STREETNO" }) }}{% if oView.isFieldRequired("oxaddress__oxstreetnr") %}*{% endif %}</label>
                 {% if oView.isFieldRequired("oxaddress__oxstreetnr") %}
                     <div class="invalid-feedback">
@@ -432,7 +466,7 @@
 
         <div class="row">
             <div class="form-floating mb-3 col-xl-4">
-                <input disabled class="form-control" type="text" maxlength="50" name="deladr[oxaddress__oxzip]" id="deladr_oxaddress__oxzip" value="{% if isset( deladr.oxaddress__oxzip ) %}{{ deladr.oxaddress__oxzip }}{% else %}{{ delivadr.oxaddress__oxzip.value }}{% endif %}" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxaddress__oxzip") %}*{% endif %}" autocomplete="shipping postal-code"{% if oView.isFieldRequired("oxaddress__oxzip") %} required{% endif %}>
+                <input disabled class="form-control" type="text" maxlength="50" name="deladr[oxaddress__oxzip]" id="deladr_oxaddress__oxzip" value="{% if deladr.oxaddress__oxzip is not null %}{{ deladr.oxaddress__oxzip|raw }}{% else %}{{ delivadr.oxaddress__oxzip.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxaddress__oxzip") %}*{% endif %}" autocomplete="shipping postal-code"{% if oView.isFieldRequired("oxaddress__oxzip") %} required{% endif %}>
                 <label for="deladr_oxaddress__oxzip">{{ translate({ ident: "O3_POSTAL_CODE" }) }}{% if oView.isFieldRequired("oxaddress__oxzip") %}*{% endif %}</label>
                 {% if oView.isFieldRequired("oxaddress__oxzip") %}
                     <div class="invalid-feedback">
@@ -442,7 +476,7 @@
                 {% endif %}
             </div>
             <div class="form-floating mb-3 col-xl-8 ps-xl-0">
-                <input disabled class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcity]" id="deladr_oxaddress__oxcity" value="{% if isset( deladr.oxaddress__oxcity ) %}{{ deladr.oxaddress__oxcity }}{% else %}{{ delivadr.oxaddress__oxcity.value }}{% endif %}" placeholder="{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxaddress__oxcity") %}*{% endif %}" autocomplete="shipping locality"{% if oView.isFieldRequired("oxaddress__oxcity") %} required{% endif %}>
+                <input disabled class="form-control" type="text" maxlength="255" name="deladr[oxaddress__oxcity]" id="deladr_oxaddress__oxcity" value="{% if deladr.oxaddress__oxcity is not null %}{{ deladr.oxaddress__oxcity|raw }}{% else %}{{ delivadr.oxaddress__oxcity.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxaddress__oxcity") %}*{% endif %}" autocomplete="shipping locality"{% if oView.isFieldRequired("oxaddress__oxcity") %} required{% endif %}>
                 <label for="deladr_oxaddress__oxcity">{{ translate({ ident: "O3_CITY" }) }}{% if oView.isFieldRequired("oxaddress__oxcity") %}*{% endif %}</label>
                 {% if oView.isFieldRequired("oxaddress__oxcity") %}
                     <div class="invalid-feedback">
@@ -453,38 +487,11 @@
             </div>
         </div>
 
-        {% block form_user_shipping_country %}
-            <div class="form-floating mb-3">
-                <select disabled class="form-select" id="delCountrySelect" name="deladr[oxaddress__oxcountryid]" autocomplete="shipping country"{% if oView.isFieldRequired("oxaddress__oxcountryid") %} required{% endif %}>
-                    <option value="">-</option>
-                    {% set blCountrySelected = false %}
-                    {% for country_id, country in oViewConf.getCountryList() %}
-                        {% set sCountrySelect = "" %}
-                        {% if not blCountrySelected %}
-                            {% if (isset(deladr.oxaddress__oxcountryid) and deladr.oxaddress__oxcountryid == country.oxcountry__oxid.value) or                        (not isset(deladr.oxaddress__oxcountryid) and (delivadr.oxaddress__oxcountry.value == country.oxcountry__oxtitle.value or                        delivadr.oxaddress__oxcountry.value == country.oxcountry__oxid.value or                        delivadr.oxaddress__oxcountryid.value == country.oxcountry__oxid.value)) %}
-                            {% set blCountrySelected = true %}
-                            {% set sCountrySelect = "selected" %}
-                            {% endif %}
-                        {% endif %}
-                        <option value="{{ country.oxcountry__oxid.value }}" {{ sCountrySelect }}>{{ country.oxcountry__oxtitle.value }}</option>
-                    {% endfor %}
-                </select>
-                <label for="delCountrySelect">{{ translate({ ident: "COUNTRY" }) }}{% if oView.isFieldRequired("oxaddress__oxcountryid") %}*{% endif %}</label>
-                {% if oView.isFieldRequired("oxaddress__oxcountryid") %}
-                    <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_COUNTRY" }) }}</div>
-                    {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxaddress__oxcountryid} %}
-                {% endif %}
-            </div>
-
-            <div class="form-floating mb-3">
-                {% include "form/fieldset/state.html.twig" with {countrySelectId: "delCountrySelect", stateSelectName: "deladr[oxaddress__oxstateid]", selectedStateIdPrim: deladr.oxaddress__oxstateid, selectedStateId: delivadr.oxaddress__oxstateid.value, class: "form-select", disabled: true} %}
-                <label for="{{ countrySelectId }}">{{ translate({ ident: "DD_USER_LABEL_STATE" }) }}</label>
-                <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_STATE" }) }}</div>
-            </div>
-        {% endblock %}
+        {% set sShippingCountryForm = 'register' %}
+        {{ block('form_user_shipping_country') }}
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfon" name="deladr[oxaddress__oxfon]" maxlength="128" value="{% if isset( deladr.oxaddress__oxfon ) %}{{ deladr.oxaddress__oxfon }}{% else %}{{ delivadr.oxaddress__oxfon.value }}{% endif %}" autocomplete="shipping tel" placeholder="{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxaddress__oxfon") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfon") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfon" name="deladr[oxaddress__oxfon]" maxlength="128" value="{% if deladr.oxaddress__oxfon is not null %}{{ deladr.oxaddress__oxfon|raw }}{% else %}{{ delivadr.oxaddress__oxfon.value|raw }}{% endif %}" autocomplete="shipping tel" placeholder="{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxaddress__oxfon") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfon") %} required{% endif %}>
             <label for="deladr_oxaddress__oxfon">{{ translate({ ident: "PHONE" }) }}{% if oView.isFieldRequired("oxaddress__oxfon") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxfon") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_PHONE" }) }}</div>
@@ -493,7 +500,7 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfax" name="deladr[oxaddress__oxfax]" maxlength="128" value="{% if isset( deladr.oxaddress__oxfax ) %}{{ deladr.oxaddress__oxfax }}{% else %}{{ delivadr.oxaddress__oxfax.value }}{% endif %}" placeholder="{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxaddress__oxfax") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfax") %} required{% endif %}>
+            <input disabled type="text" class="form-control" id="deladr_oxaddress__oxfax" name="deladr[oxaddress__oxfax]" maxlength="128" value="{% if deladr.oxaddress__oxfax is not null %}{{ deladr.oxaddress__oxfax|raw }}{% else %}{{ delivadr.oxaddress__oxfax.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxaddress__oxfax") %}*{% endif %}"{% if oView.isFieldRequired("oxaddress__oxfax") %} required{% endif %}>
             <label for="deladr_oxaddress__oxfax">{{ translate({ ident: "FAX" }) }}{% if oView.isFieldRequired("oxaddress__oxfax") %}*{% endif %}</label>
             {% if oView.isFieldRequired("oxaddress__oxfax") %}
                 <div class="invalid-feedback">{{ translate({ ident: "DD_FORM_VALIDATION_FAX" }) }}</div>

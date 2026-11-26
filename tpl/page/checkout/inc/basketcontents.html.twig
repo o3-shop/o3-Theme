@@ -8,8 +8,8 @@
 
 {% set currency = oView.getActCurrency() %}
 
-<form name="basket{{ basketindex }}" action="{{ oViewConf.getSelfActionLink() }}" method="post" class="basket__articles" data-js="tobasket-change">
-    {{ oViewConf.getHiddenSid() }}
+<form name="basket{{ basketindex }}" action="{{ oViewConf.getSelfActionLink()|raw }}" method="post" class="basket__articles" data-js="tobasket-change">
+    {{ oViewConf.getHiddenSid()|raw }}
     <input type="hidden" name="cl" value="basket">
     <input type="hidden" name="fnc" value="changebasket">
     <input type="hidden" name="CustomError" value="basket">
@@ -76,7 +76,7 @@
                                     {% else %}
                                         {{ translate({ ident: "DISCOUNT" }) }}
                                     {% endif %}
-                                    {{ oDiscount.sDiscount }}
+                                    {{ oDiscount.sDiscount|raw }}
                                 </th>
                                 <td class="text-end text-primary">
                                     {{ format_price(oDiscount.dDiscount*-1, { currency: currency }) }}
@@ -118,9 +118,9 @@
                 {% if oViewConf.getShowVouchers() and oxcmp_basket.getVoucherDiscValue() %}
                     {% for key, sVoucher in oxcmp_basket.getVouchers() %}
                         <tr class="couponData">
-                            <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr }})</span>
+                            <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr|raw }})</span>
                             {% if editable %}
-                                <a href="{{ oViewConf.getSelfLink() }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
+                                <a href="{{ oViewConf.getSelfLink()|raw }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
                             {% endif %}
                             </th>
                             <td class="lead text-end">{{ format_price(sVoucher.dVoucherdiscount*-1, { currency: currency }) }}</td>
@@ -252,10 +252,10 @@
 {% if oViewConf.getShowVouchers() and oViewConf.getActiveClassName() == 'basket' %}
     {% block checkout_basket_vouchers %}
         <div class="basket__voucher">
-            <form name="voucher" action="{{ oViewConf.getSelfActionLink() }}" method="post">
+            <form name="voucher" action="{{ oViewConf.getSelfActionLink()|raw }}" method="post">
 
                 <div class="d-none">
-                    {{ oViewConf.getHiddenSid() }}
+                    {{ oViewConf.getHiddenSid()|raw }}
                     <input type="hidden" name="cl" value="basket">
                     <input type="hidden" name="fnc" value="addVoucher">
                     <input type="hidden" name="CustomError" value="basket">
@@ -273,7 +273,8 @@
                 {% for key, oEr in Errors.basket %}
                     {% if oEr.getErrorClassType() == 'oxVoucherException' %}
                         <div class="alert alert-danger">
-                            {{ translate({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') }) }}
+                            {# voucherNr is HTML-escaped by the core (getRequestEscapedParameter / voucher field value); the lang text has no markup #}
+                            {{ translate({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') })|raw }}
                             <strong>{{ translate({ ident: "REASON", suffix: "COLON" }) }}</strong>
                             {{ oEr.getOxMessage() }}
                         </div>

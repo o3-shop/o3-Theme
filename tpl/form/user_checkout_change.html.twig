@@ -12,11 +12,11 @@
         {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
     {% endif %}
 
-    <form action="{{ oViewConf.getSslSelfLink() }}" name="order" method="post" class="user needs-validation" novalidate>
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post" class="user needs-validation" novalidate>
         {% block user_checkout_change_form %}
             {% set aErrors = oView.getFieldValidationErrors() %}
-            {{ oViewConf.getHiddenSid() }}
-            {{ oViewConf.getNavFormParams() }}
+            {{ oViewConf.getHiddenSid()|raw }}
+            {{ oViewConf.getNavFormParams()|raw }}
             <input type="hidden" name="cl" value="user">
             <input type="hidden" name="option" value="{{ oView.getLoginOption() }}">
             <input type="hidden" name="fnc" value="changeuser">
@@ -153,7 +153,7 @@
                                                 {% else %}
                                                 {{ translate({ ident: "DISCOUNT" }) }}
                                                 {% endif %}
-                                                {{ oDiscount.sDiscount }}
+                                                {{ oDiscount.sDiscount|raw }}
                                             </th>
                                             <td class="text-end text-primary">
                                                 {{ format_price(oDiscount.dDiscount*-1, { currency: currency }) }}
@@ -195,9 +195,9 @@
                             {% if oViewConf.getShowVouchers() and oxcmp_basket.getVoucherDiscValue() %}
                                 {% for key, sVoucher in oxcmp_basket.getVouchers() %}
                                     <tr class="couponData">
-                                        <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr }})</span>
+                                        <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr|raw }})</span>
                                             {% if editable %}
-                                                <a href="{{ oViewConf.getSelfLink() }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
+                                                <a href="{{ oViewConf.getSelfLink()|raw }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
                                             {% endif %}
                                         </th>
                                         <td class="lead text-end">{{ format_price(sVoucher.dVoucherdiscount*-1, { currency: currency }) }}</td>

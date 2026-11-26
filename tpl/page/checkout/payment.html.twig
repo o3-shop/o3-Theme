@@ -1,4 +1,10 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+
+{% block content %}
+    {# 1.x assigned currency inside checkout_payment_main; Twig blocks get a copy of the context, so it is set here
+       for checkout_basketcontents_summary as well #}
+    {% set currency = oView.getActCurrency() %}
 
     <h1 class="title-big">
         {{ translate({ ident: "O3_CHECKOUT" }) }}
@@ -14,10 +20,10 @@
             {% block change_shipping %}
                 {% if oView.getAllSets() %}
                     {% set aErrors = oView.getFieldValidationErrors() %}
-                    <form class="payment__delivery" action="{{ oViewConf.getSslSelfLink() }}" name="shipping" method="post">
+                    <form class="payment__delivery" action="{{ oViewConf.getSslSelfLink()|raw }}" name="shipping" method="post">
                         <div class="d-none">
-                            {{ oViewConf.getHiddenSid() }}
-                            {{ oViewConf.getNavFormParams() }}
+                            {{ oViewConf.getHiddenSid()|raw }}
+                            {{ oViewConf.getNavFormParams()|raw }}
                             <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                             <input type="hidden" name="fnc" value="changeshipping">
                         </div>
@@ -45,7 +51,7 @@
                                 <div class="form-check">
                                     <input value="{{ sShipID }}" class="form-check-input" type="radio" name="sShipSet" id="{{ sShipID }}" {% if oShippingSet.blSelected %}checked{% endif %} onchange="this.form.submit();">
                                     <label class="form-check-label" for="{{ sShipID }}">
-                                        <span>{{ oShippingSet.oxdeliveryset__oxtitle.value }}</span>
+                                        <span>{{ oShippingSet.oxdeliveryset__oxtitle.value|raw }}</span>
                                     </label>
                                 </div>
                             {% endfor %}
@@ -74,7 +80,7 @@
                     <!--Add custom error message here-->
                     <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_PAYMENT_AUTHORIZATION_FAILED" }) }}</div>
                 {% elseif iPayError == -1 %}
-                    <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT_ERROR" }) }} "{{ oView.getPaymentErrorText() }}").</div>
+                    <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT_ERROR" }) }} "{{ oView.getPaymentErrorText()|raw }}").</div>
                 {% elseif iPayError == -2 %}
                     <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_NO_SHIPPING_METHOD_FOUND" }) }}</div>
                 {% elseif iPayError == -3 %}
@@ -87,10 +93,10 @@
             {% endblock %}
 
             {% block change_payment %}
-                <form class="payment__payments" action="{{ oViewConf.getSslSelfLink() }}" name="order" method="post">
+                <form class="payment__payments" action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post">
                     <div class="d-none">
-                        {{ oViewConf.getHiddenSid() }}
-                        {{ oViewConf.getNavFormParams() }}
+                        {{ oViewConf.getHiddenSid()|raw }}
+                        {{ oViewConf.getNavFormParams()|raw }}
                         <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                         <input type="hidden" name="fnc" value="validatepayment">
                     </div>
@@ -99,9 +105,9 @@
 
                         <h3 class="title-small">{{ translate({ ident: "PAYMENT_METHOD" }) }}</h3>
 
-                        {% set inptcounter = "-1" %}
+                        {% set inptcounter = -1 %}
                         {% for sPaymentID, paymentmethod in oView.getPaymentList() %}
-                            {% set inptcounter = "`$inptcounter+1`" %}
+                            {% set inptcounter = inptcounter + 1 %}
                             {% block select_payment %}
 
                                 {% if sPaymentID == "oxidcashondel" %}
@@ -145,7 +151,7 @@
                             <div class="lineBlock"></div>
                             <h3 id="paymentHeader" class="blockHead">{{ translate({ ident: "PAYMENT_INFORMATION" }) }}</h3>
                             {% ifcontent ident "oxnopaymentmethod" set oCont %}
-                                {{ oCont.oxcontents__oxcontent.value }}
+                                {{ oCont.oxcontents__oxcontent.value|raw }}
                             {% endifcontent %}
                             <input type="hidden" name="paymentid" value="oxempty">
                             <div class="lineBox clear">
@@ -227,7 +233,7 @@
                                             {% else %}
                                                 {{ translate({ ident: "DISCOUNT" }) }}
                                             {% endif %}
-                                            {{ oDiscount.sDiscount }}
+                                            {{ oDiscount.sDiscount|raw }}
                                         </th>
                                         <td class="text-end text-primary">
                                             {{ format_price(oDiscount.dDiscount*-1, { currency: currency }) }}
@@ -269,9 +275,9 @@
                         {% if oViewConf.getShowVouchers() and oxcmp_basket.getVoucherDiscValue() %}
                             {% for key, sVoucher in oxcmp_basket.getVouchers() %}
                                 <tr class="couponData">
-                                    <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr }})</span>
+                                    <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr|raw }})</span>
                                         {% if editable %}
-                                        <a href="{{ oViewConf.getSelfLink() }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
+                                        <a href="{{ oViewConf.getSelfLink()|raw }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
                                         {% endif %}
                                     </th>
                                     <td class="lead text-end">{{ format_price(sVoucher.dVoucherdiscount*-1, { currency: currency }) }}</td>
@@ -401,6 +407,5 @@
         {% endblock %}
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
+{% endblock %}
 
-{% include "layout/page.html.twig" with {blHideBreadcrumb: true} %}

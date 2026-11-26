@@ -4,7 +4,7 @@
             {{ translate({ ident: "MESSAGE" }) }}
         </h3>
         <div class="form-floating mb-3">
-            <textarea class="form-control" name="order_remark" placeholder="{{ translate({ ident: "HERE_YOU_CAN_ENETER_MESSAGE" }) }}">{{ oView.getOrderRemark() }}</textarea>
+            <textarea class="form-control" name="order_remark" placeholder="{{ translate({ ident: "HERE_YOU_CAN_ENETER_MESSAGE" }) }}">{{ oView.getOrderRemark()|raw }}</textarea>
             <label for="orderRemark">{{ translate({ ident: "HERE_YOU_CAN_ENETER_MESSAGE" }) }}</label>
             <div class="invalid-feedback">
                 {{ translate({ ident: "DD_FORM_VALIDATION_MESSAGE" }) }}

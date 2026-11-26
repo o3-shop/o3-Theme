@@ -2,8 +2,8 @@
   {% set selectedStateId = selectedStateIdPrim %}
 {% endif %}
 
-{% set divId = oxStateDiv_$stateSelectName %}
-{% set stateSelectId = oxStateSelect_$stateSelectName %}
+{% set divId = "oxStateDiv_" ~ stateSelectName %}
+{% set stateSelectId = "oxStateSelect_" ~ stateSelectName %}
 
 {% if currCountry %}
   {% set showDiv = 'true' %}
@@ -27,8 +27,8 @@
 
         {% set countryStates = country.getStates() %}
         {% for state_id, state in countryStates %}
-            states[i] = '{{ state.oxstates__oxtitle.value }}';
-            ids[i] = '{{ state.oxstates__oxid.value }}';
+            states[i] = '{{ state.oxstates__oxtitle.value|raw }}';
+            ids[i] = '{{ state.oxstates__oxid.value|raw }}';
             i++;
         {% endfor %}
         allStates[++cCount] = states;

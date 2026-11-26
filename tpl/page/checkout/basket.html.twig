@@ -1,4 +1,17 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+
+{# 1.x registered validate.js (in page/checkout/inc/basketcontents) before the header's scripts; registering it here, at
+   the top level, keeps that order (the second registration in basketcontents is deduplicated by the core) #}
+{% if oxcmp_basket.getProductsCount() %}
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+    {% else %}
+        {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+    {% endif %}
+{% endif %}
+
+{% block content %}
 
     {% block checkout_basket_main %}
         {% set currency = oView.getActCurrency() %}
@@ -24,7 +37,7 @@
 
             {% block checkout_basket_emptyshippingcart %}
                 <div class="alert alert-danger" id="empty-basket-warning">
-                    <a href="{{ oViewConf.getHomeLink() }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}" class="btn btn-outline-dark"><i class="fa fa-caret-left"></i> {{ translate({ ident: "DD_BASKET_BACK_TO_SHOP" }) }}</a>
+                    <a href="{{ oViewConf.getHomeLink()|raw }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}" class="btn btn-outline-dark"><i class="fa fa-caret-left"></i> {{ translate({ ident: "DD_BASKET_BACK_TO_SHOP" }) }}</a>
                     {{ translate({ ident: "BASKET_EMPTY" }) }}
                 </div>
             {% endblock %}
@@ -50,9 +63,9 @@
 
                     {% if not oView.isLowOrderPrice() %}
                         {% block basket_btn_next_bottom %}
-                            <form action="{{ oViewConf.getSslSelfLink() }}" method="post" class="basket__proceed">
+                            <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="basket__proceed">
                                 <div class="d-none">
-                                    {{ oViewConf.getHiddenSid() }}
+                                    {{ oViewConf.getHiddenSid()|raw }}
                                     <input type="hidden" name="cl" value="user">
                                 </div>
                                 <button type="submit" class="btn btn-primary">
@@ -72,6 +85,4 @@
     {% endblock %}
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" with {blHideBreadcrumb: true} %}
+{% endblock %}
