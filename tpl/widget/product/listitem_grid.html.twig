@@ -1,0 +1,207 @@
+{% block widget_product_listitem_grid %}
+    {% set product = oView.getProduct() %}
+    {% set blDisableToCart = oView.getDisableToCart() %}
+    {% set iIndex = oView.getIndex() %}
+    {% set showMainLink = oView.getShowMainLink() %}
+    {% set oConfig = oViewConf.getConfig() %}
+
+    {% set currency = oView.getActCurrency() %}
+    {% if showMainLink %}
+        {% set _productLink = product.getMainLink() %}
+    {% else %}
+        {% set _productLink = product.getLink() %}
+    {% endif %}
+    {% set aVariantSelections = product.getVariantSelections("null", "null", 1) %}
+    {% set blShowToBasket = true %} {# tobasket or more info ? #}
+    {% if blDisableToCart or product.isNotBuyable() or (aVariantSelections and aVariantSelections.selections) or product.hasMdVariants() or (oViewConf.showSelectListsInList() and product.getSelections(1)) or product.getVariants() %}
+        {% set blShowToBasket = false %}
+    {% endif %}
+
+    {% if not testid  %}
+        {% set testid = oView.getViewParameter('testid') %}
+    {% endif %}
+    {% if not listId  %}
+        {% set listId = oView.getViewParameter('listId') %}
+    {% endif %}
+
+    {# YOU NEED THIS IF: Should items in listing be able to be added to the shopping cart? #}
+    {# 
+ <form name="tobasket{{ testid }}" {% if blShowToBasket %}action="{{ oViewConf.getSelfActionLink() }}" method="post"{% else %}action="{{ _productLink }}" method="get"{% endif %}>
+ <div class="d-none">
+ {{ oViewConf.getNavFormParams() }}
+ {{ oViewConf.getHiddenSid() }}
+ <input type="hidden" name="pgNr" value="{{ oView.getActPage() }}">
+ {% if recommid %}
+ <input type="hidden" name="recommid" value="{{ recommid }}">
+ {% endif %}
+ {% if blShowToBasket %}
+ {% hasrights { ident: "TOBASKET" } %}
+ <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
+ {% if owishid %}
+ <input type="hidden" name="owishid" value="{{ owishid }}">
+ {% endif %}
+ {% if toBasketFunction %}
+ <input type="hidden" name="fnc" value="{{ toBasketFunction }}">
+ {% else %}
+ <input type="hidden" name="fnc" value="tobasket">
+ {% endif %}
+ <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
+ {% if altproduct %}
+ <input type="hidden" name="anid" value="{{ altproduct }}">
+ {% else %}
+ <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+ {% endif %}
+ <input type="hidden" name="am" value="1">
+ {% endhasrights %}
+ {% else %}
+ <input type="hidden" name="cl" value="details">
+ <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+ {% endif %}
+ </div>
+ #}
+
+        {% if not removeFunction %}
+
+            {% if oxcmp_user %}
+                <a class="component__productbox-noticelist" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=")|cat(oViewConf.getTopActiveClassName()), params: "aid=`$product.oxarticles__oxnid.value`&anid=`$product.oxarticles__oxnid.value`&amp;fnc=tonoticelist&amp;am=1"|cat(oViewConf.getNavUrlParams())|cat("&amp;stoken=")|cat(oViewConf.getSessionChallengeToken()) }) }}">
+                    {% if product.isInList() %}
+                        <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" fill="#929292" stroke="#929292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    {% else %}
+                        <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    {% endif %}
+                </a>
+            {% else %}
+                <a class="component__productbox-noticelist" title="{{ translate({ ident: "LOGIN_TO_ACCESS_GIFT_REGISTRY" }) }}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account"), params: "anid=`$oDetailsProduct.oxarticles__oxnid.value`"|cat("&amp;sourcecl=")|cat(oViewConf.getTopActiveClassName())|cat(oViewConf.getNavUrlParams()) }) }}">
+                    <svg style="transform:translateY(1px)" width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.61699 1C3.88324 1 1.66699 3.15216 1.66699 5.80685C1.66699 10.6137 7.51699 14.9836 10.667 16C13.817 14.9836 19.667 10.6137 19.667 5.80685C19.667 3.15216 17.4507 1 14.717 1C13.043 1 11.5625 1.80712 10.667 3.04248C10.2105 2.41112 9.60416 1.89586 8.89918 1.54033C8.1942 1.1848 7.41138 0.999456 6.61699 1Z" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            {% endif %}
+
+        {% else %}
+
+            {% if ((owishid and (owishid==$oxcmp_user.oxuser__oxid.value)) or ((wishid==$oxcmp_user.oxuser__oxid.value)) or recommid) %}
+                <button data-js-noticelist="remove_{{ removeFunction }}{{ testid }}" type="submit" class="component__productbox-remove btn" title="{{ translate({ ident: "REMOVE" }) }}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1.5 14a2 2 0 01-2 1.5H8.5a2 2 0 01-2-1.5L5 6" stroke="#999" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 11v5M14 11v5" stroke="#999" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            {% endif %}
+
+        {% endif %}
+
+        {% block widget_product_listitem_infogrid_gridpicture %}
+            {% set sHoverPic = product.getPictureUrl(2) %}
+            <div class="component__productbox-picture mb-4">
+                <a class="component__productbox-picture-link" href="{{ _productLink }}" title="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                    <img loading="lazy" src="{{ product.getThumbnailUrl() }}" alt="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                    {% if sHoverPic and not (sHoverPic|strstr('nopic')) %}
+                        <img class="img-hover" loading="lazy" src="{{ sHoverPic }}" alt="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                    {% endif %}
+                </a>
+                {% if blShowToBasket %}
+                {% hasrights { ident: "TOBASKET" } %}
+                <form class="component__productbox-quickadd" action="{{ oViewConf.getSelfActionLink() }}" method="post">
+                    {{ oViewConf.getNavFormParams() }}
+                    {{ oViewConf.getHiddenSid() }}
+                    <input type="hidden" name="pgNr" value="{{ oView.getActPage() }}">
+                    <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
+                    <input type="hidden" name="fnc" value="tobasket">
+                    <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
+                    <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+                    {% include "widget/product/tobasket.html.twig" with {name: "am", value: 1, submit: true, blCanBuy: true, stockflag: product.oxarticles__oxstockflag.value, stock: product.oxarticles__oxstock.value, disabled: false} %}
+                </form>
+                {% endhasrights %}
+                {% endif %}
+            </div>
+        {% endblock %}
+
+
+        {% block widget_product_listitem_infogrid_titlebox %}
+            <a href="{{ _productLink }}" class="component__productbox-title" title="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                {{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}
+            </a>
+        {% endblock %}
+
+        {% if oConfig.getConfigParam('bl_perfLoadReviews') %}
+            {% block widget_product_listitem_grid_ratings %}
+                {% include "widget/reviews/rating.html.twig" with {iRatingValue: product.oxarticles__oxrating.value, id: product.oxarticles__oxid.value, sView: "listing"} %}
+            {% endblock %}
+        {% endif %}
+
+        <div class="component__productbox-price mt-2">
+            {% block widget_product_listitem_grid_price %}
+                {% hasrights { ident: "SHOWARTICLEPRICE" } %}
+                    {% set oUnitPrice = product.getUnitPrice() %}
+                    {% set tprice = product.getTPrice() %}
+                    {% set price = product.getPrice() %}
+
+                    {% if tprice and tprice.getBruttoPrice() > price.getBruttoPrice() %}
+                        <del class="component__productbox-price-old">{{ product.getFTPrice() }} {{ currency.sign }}</del>
+                    {% endif %}
+
+                    {% block widget_product_listitem_grid_price_value %}
+                        {% if product.getFPrice() %}
+                            <span class="lead">
+                                {% if product.isRangePrice() %}
+                                    {{ translate({ ident: "PRICE_FROM" }) }}
+                                    {% if not product.isParentNotBuyable() %}
+                                        {{ product.getFMinPrice() }}
+                                    {% else %}
+                                        {{ product.getFVarMinPrice() }}
+                                    {% endif %}
+                                {% else %}
+                                    {% if not product.isParentNotBuyable() %}
+                                        {{ product.getFPrice() }}
+                                    {% else %}
+                                        {{ product.getFVarMinPrice() }}
+                                    {% endif %}
+                                {% endif %}
+                                {{ currency.sign }}
+                                {% if oView.isVatIncluded() %}
+                                     {% if not (product.hasMdVariants() or (oViewConf.showSelectListsInList() and product.getSelections(1)) or product.getVariants()) %}*{% endif %}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% if oUnitPrice %}
+                        <span id="productPricePerUnit_{{ testid }}" class="pricePerUnit">
+                            {{ product.oxarticles__oxunitquantity.value }} {{ product.getUnitName() }} | {{ format_price(oUnitPrice, { currency: currency }) }}/{{ product.getUnitName() }}
+                        </span>
+                    {% elseif product.oxarticles__oxweight.value  %}
+                        <span id="productPricePerUnit_{{ testid }}" class="pricePerUnit">
+                            <span title="weight">{{ translate({ ident: "WEIGHT" }) }}</span>
+                            <span class="value">{{ product.oxarticles__oxweight.value }} {{ translate({ ident: "KG" }) }}</span>
+                        </span>
+                    {% endif %}
+                {% endhasrights %}
+            {% endblock %}
+        </div>
+
+        {% block widget_product_listitem_grid_tobasket %}{% endblock %}
+    {# 
+ </form>
+ #}
+
+    {% if removeFunction and ((owishid and (owishid==$oxcmp_user.oxuser__oxid.value)) or ((wishid==$oxcmp_user.oxuser__oxid.value)) or recommid) %}
+        <form action="{{ oViewConf.getSelfActionLink() }}" method="post" id="remove_{{ removeFunction }}{{ testid }}" class="d-none">
+            <div>
+                {{ oViewConf.getHiddenSid() }}
+                <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
+                <input type="hidden" name="fnc" value="{{ removeFunction }}">
+                <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
+                <input type="hidden" name="am" value="0">
+                <input type="hidden" name="itmid" value="{{ product.getItemKey() }}">
+                {% if recommid %}
+                    <input type="hidden" name="recommid" value="{{ recommid }}">
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

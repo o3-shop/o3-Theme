@@ -1,0 +1,51 @@
+{% block account_delete_my_account_confirmation %}
+    <div
+        class="modal fade"
+        id="delete_my_account_confirmation"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="delete_my_account_modal_label"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% block account_delete_my_account_confirmation_header_message %}
+                        <div class="modal-title fs-5">{{ translate({ ident: "DD_DELETE_MY_ACCOUNT_CONFIRMATION_QUESTION" }) }}</div>
+                    {% endblock %}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% block account_delete_my_account_confirmation_warning_message %}
+                                <div class="alert alert-danger">
+                                    {{ translate({ ident: "DD_DELETE_MY_ACCOUNT_WARNING" }) }}
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {% block account_delete_my_account_confirmation_form %}
+                        <form name="delete_my_account" action="{{ oViewConf.getSelfActionLink() }}" method="post" role="form">
+                            <div class="d-none">
+                                {{ oViewConf.getHiddenSid() }}
+                                <input type="hidden" name="cl" value="account">
+                                <input type="hidden" name="fnc" value="deleteAccount">
+                            </div>
+                            {% block account_delete_my_account_confirmation_form_button_set %}
+                                <button type="submit" class="btn btn-danger">
+                                    {{ translate({ ident: "DD_DELETE_MY_ACCOUNT" }) }}
+                                </button>
+                                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">
+                                    {{ translate({ ident: "DD_DELETE_MY_ACCOUNT_CANCEL" }) }}
+                                </button>
+                            {% endblock %}
+                        </form>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

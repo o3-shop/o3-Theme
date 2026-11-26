@@ -1,0 +1,42 @@
+{# {{ script({ add: "$('a.js-external').attr('target', '_blank');", dynamic: __oxid_include_dynamic }) }} #}
+{% capture append = "oxidBlock_content" %}
+    {% set search_title = "SEARCH"|translate %}
+    {% set searchparamforhtml = oView.getSearchParamForHtml() %}
+    {% set template_title = "$search_title - $searchparamforhtml" %}
+    {% set search_head = "HITS_FOR"|translate %}
+    {% set search_head = oView.getArticleCount()|cat(" ")|cat(search_head)|cat(" &quot;")|cat(oView.getSearchParamForHtml())|cat("&quot;") %}
+
+
+    <div class="page-header">
+        {% block search_header %}
+            <h1 class="float-left">{{ search_head }}</h1>
+
+            <div class="clearfix"></div>
+        {% endblock %}
+    </div>
+    {% block search_results %}
+        {% if oView.getArticleCount() %}
+            <div class="listRefine clear bottomRound">
+                {% block search_top_listlocator %}
+                    {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigationLimitedTop(), sort: true, itemsPerPage: true} %}
+                {% endblock %}
+            </div>
+        {% else %}
+            <p class="alert alert-info">{{ translate({ ident: "NO_ITEMS_FOUND" }) }}</p>
+        {% endif %}
+        {% if oView.getArticleList() %}
+            {% for product in oView.getArticleList() %}
+                {% include "widget/product/list.html.twig" with {type: oView.getListDisplayType(), listId: "searchList", products: oView.getArticleList(), showMainLink: true} %}
+            {% endfor %}
+        {% endif %}
+        {% if oView.getArticleCount() %}
+            {% block search_bottom_listlocator %}
+                {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigationLimitedBottom(), place: "bottom"} %}
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
+    {{ insert_tracker({title: template_title}) }}
+{% endcapture %}
+{% set template_title = "SEARCH"|translate %}
+
+{% include "layout/page.html.twig" with {title: template_title, location: "SEARCH"|translate} %}

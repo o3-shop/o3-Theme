@@ -1,0 +1,38 @@
+{% capture append = "oxidBlock_pageBody" %}
+    {% if oView.showRDFa() %}
+        {% include "rdfa/rdfa.html.twig" %}
+    {% endif %}
+
+    {% block layout_header %}
+        {% include "layout/header.html.twig" %}
+    {% endblock %}
+
+    <main>
+        <div class="container-xxl">
+
+            {% if oView.getClassName() != "start" and not blHideBreadcrumb %}
+                {% block layout_breadcrumb %}
+                    {% include "widget/breadcrumb.html.twig" %}
+                {% endblock %}
+            {% endif %}
+
+            {{ smarty.capture.loginErrors }}
+
+            {% block content_main %}
+                {% include "message/errors.html.twig" %}
+
+                {% for _block in oxidBlock_content %}
+                    {{ _block }}
+                {% endfor %}
+            {% endblock %}
+
+        </div>
+    </main>
+
+    {% include "layout/footer.html.twig" %}
+
+    {% block layout_init_social %}
+    {% endblock %}
+
+{% endcapture %}
+{% include "layout/base.html.twig" %}

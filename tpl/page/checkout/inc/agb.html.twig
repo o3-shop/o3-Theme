@@ -1,0 +1,108 @@
+{% if not hideButtons %}
+
+    {% if not oView.isActive('PsLogin') %}
+
+        {% if oView.isConfirmAGBActive() %}
+            {% ifcontent ident "oxrighttocancellegend" set oContent %}
+                <h3 class="title-small">
+                    {{ oContent.oxcontents__oxtitle.value }}
+                </h3>
+            {% endifcontent %}
+        {% else %}
+            {% ifcontent ident "oxrighttocancellegend2" set oContent %}
+                <h3 class="title-small">
+                    {{ oContent.oxcontents__oxtitle.value }}
+                </h3>
+            {% endifcontent %}
+        {% endif %}
+
+        {% ifcontent ident "oxagb" set oCont %}
+            <div class="modal fade" id="modal__agb" tabindex="-1" aria-labelledby="modal__agb-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modal__agb-label">{{  oCont.oxcontents__oxtitle.value  }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{  oCont.oxcontents__oxcontent.value  }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endifcontent %}
+
+        {% ifcontent ident "oxrightofwithdrawal" set oCont %}
+            <div class="modal fade" id="modal__rightofwithdrawal" tabindex="-1" aria-labelledby="modal__rightofwithdrawal-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modal__rightofwithdrawal-label">{{  oCont.oxcontents__oxtitle.value  }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{  oCont.oxcontents__oxcontent.value  }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endifcontent %}
+
+    {% endif %}
+
+    {% block checkout_order_agb_inner %}
+        {% if not oView.isActive('PsLogin') %}
+            {% if oView.isConfirmAGBActive() %}
+                {% ifcontent ident "oxrighttocancellegend" set oContent %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="ord_agb" value="1" id="checkAgbTop">
+                        <label class="form-check-label" for="checkAgbTop">
+                            {{ oContent.oxcontents__oxcontent.value }}
+                        </label>
+                    </div>
+                {% endifcontent %}
+            {% else %}
+                {% ifcontent ident "oxrighttocancellegend2" set oContent %}
+                    {{ oContent.oxcontents__oxcontent.value }}
+                {% endifcontent %}
+            {% endif %}
+        {% endif %}
+
+        {% if oViewConf.isFunctionalityEnabled('blEnableIntangibleProdAgreement')  %}
+            {% set oExplanationMarks = oView.getBasketContentMarkGenerator() %}
+            {% if oxcmp_basket.hasArticlesWithDownloadableAgreement()  %}
+                {% ifcontent ident "oxdownloadableproductsagreement" set oContent %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="oxdownloadableproductsagreement" value="1" id="oxdownloadableproductsagreement">
+                        <label class="form-check-label" for="oxdownloadableproductsagreement">
+                            {{ oExplanationMarks.getMark('downloadable') }} {{ oContent.oxcontents__oxcontent.value }}
+                        </label>
+                    </div>
+                {% endifcontent %}
+            {% endif %}
+            {% if oxcmp_basket.hasArticlesWithIntangibleAgreement()  %}
+                {% ifcontent ident "oxserviceproductsagreement" set oContent %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="oxserviceproductsagreement" value="1" id="oxserviceproductsagreement">
+                        <label class="form-check-label" for="oxserviceproductsagreement">
+                            {{ oExplanationMarks.getMark('intangible') }} {{ oContent.oxcontents__oxcontent.value }}
+                        </label>
+                    </div>
+                {% endifcontent %}
+            {% endif %}
+        {% endif %}
+
+        {% if oViewConf.isFunctionalityEnabled("blShowTSInternationalFeesMessage") %}
+            {% ifcontent ident "oxtsinternationalfees" set oTSIFContent %}
+                <hr/>{{ oTSIFContent.oxcontents__oxcontent.value }}
+            {% endifcontent %}
+        {% endif %}
+
+        {% if payment.oxpayments__oxid.value == "oxidcashondel" and oViewConf.isFunctionalityEnabled("blShowTSCODMessage") %}
+            {% ifcontent ident "oxtscodmessage" set oTSCODContent %}
+                <hr/>{{ oTSCODContent.oxcontents__oxcontent.value }}
+            {% endifcontent %}
+        {% endif %}
+    {% endblock %}
+
+{% endif %}

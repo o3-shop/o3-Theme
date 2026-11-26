@@ -1,0 +1,99 @@
+{% block dd_widget_header_categorylist %}
+    {% if oxcmp_categories %}
+        {% set homeSelected = "false" %}
+        {% if oViewConf.getTopActionClassName() == 'start' %}
+            {% set homeSelected = "true" %}
+        {% endif %}
+        {% set oxcmp_categories = oxcmp_categories %}
+
+        <nav>
+            <ul class="nav">
+                {% block dd_widget_header_categorylist_navbar_list %}
+
+                    {% if oViewConf.getViewThemeParam('blHomeLink') %}
+                        <li data-level="is-level-1" class="nav-item">
+                            <a data-level="is-level-1" class="nav-link" href="{{ oViewConf.getHomeLink() }}">{{ translate({ ident: "HOME" }) }}</a>
+                        </li>
+                    {% endif %}
+
+                    {% for catkey, ocat in oxcmp_categories %}
+                        {% if ocat.getIsVisible() %}
+
+                            {# CMS #}
+                            {% for oTopCont in ocat.getContentCats() %}
+                                <li data-level="is-level-1" class="nav-item">
+                                    <a data-level="is-level-1" class="nav-link" href="{{ oTopCont.getLink() }}">{{ oTopCont.oxcontents__oxtitle.value }}</a>
+                                </li>
+                            {% endfor %}
+
+                            <li data-level="is-level-1" class="nav-item{% if ocat.getSubCats() %} nav-expand{% endif %}">
+                                <a data-level="is-level-1" class="nav-link{% if loop.last %} last{% endif %}" href="{{ ocat.getLink() }}" data-title="{{ ocat.oxcategories__oxtitle.value }}">
+                                    {{ ocat.oxcategories__oxtitle.value }}
+                                    {% if ocat.getSubCats() %}
+                                        <span class="nav-expand-link" data-level="is-level-1" role="button" aria-label="{{ ocat.oxcategories__oxtitle.value }}"></span>
+                                    {% endif %}
+                                </a>
+
+                                {% if ocat.getSubCats() %}
+                                    <ul data-level="is-level-2" class="nav-items nav-expand-content">
+
+                                        <li class="nav-item">
+                                            <a data-level-back="is-level-1" class="nav-link nav-back-link" href="javascript:;">
+                                                {{ ocat.oxcategories__oxtitle.value }}
+                                            </a>
+                                        </li>
+
+                                        {% for subcatkey, osubcat in ocat.getSubCats() %}
+                                            {% if osubcat.getIsVisible() %}
+
+                                                {# CMS #}
+                                                {% for ocont in osubcat.getContentCats() %}
+                                                    <li data-level="is-level-2" class="nav-item">
+                                                        <a data-level="is-level-2" class="nav-link" href="{{ ocont.getLink() }}">{{ ocont.oxcontents__oxtitle.value }}</a>
+                                                    </li>
+                                                {% endfor %}
+
+                                                {% if osubcat.getIsVisible() %}
+                                                    <li data-level="is-level-2" class="nav-item{% if osubcat.getSubCats() %} nav-expand{% endif %}">
+                                                        <a data-level="is-level-2" class="nav-link{% if loop.last %} last{% endif %}" href="{{ osubcat.getLink() }}">
+                                                            {{ osubcat.oxcategories__oxtitle.value }}
+                                                            {% if osubcat.getSubCats() %}
+                                                                <span class="nav-expand-link" data-level="is-level-2" role="button" aria-label="{{ osubcat.oxcategories__oxtitle.value }}"></span>
+                                                            {% endif %}
+                                                        </a>
+
+                                                        {% if osubcat.getSubCats() %}
+                                                            <ul data-level="is-level-3" class="nav-items nav-expand-content">
+
+                                                                <li class="nav-item">
+                                                                    <a data-level-back="is-level-2" class="nav-link nav-back-link" href="javascript:;">
+                                                                        {{ osubcat.oxcategories__oxtitle.value }}
+                                                                    </a>
+                                                                </li>
+
+                                                                {% for subsubcatkey, osubsubcat in osubcat.getSubCats() %}
+                                                                    {% if osubsubcat.getIsVisible()  %}
+                                                                        <li data-level="is-level-3" class="nav-item">
+                                                                            <a data-level="is-level-3" class="nav-link{% if loop.last %} last{% endif %}" href="{{ osubsubcat.getLink() }}">{{ osubsubcat.oxcategories__oxtitle.value }}</a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                {% endblock %}
+            </ul>
+        </nav>
+
+    {% endif %}
+{% endblock %}

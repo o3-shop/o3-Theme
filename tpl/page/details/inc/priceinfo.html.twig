@@ -1,0 +1,40 @@
+{% set currency = oView.getActCurrency() %}
+
+<table class="details__price-scaled">
+    <thead>
+        <tr>
+            <th scope="col">{{ translate({ ident: "O3_QUANTITY" }) }}</th>
+            <th scope="col">{{ translate({ ident: "O3_UNIT_PRICE" }) }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for priceItem in oDetailsProduct.loadAmountPriceInfo() %}
+            <tr>
+                <td>{{ translate({ ident: "O3_FROM" }) }} {{ priceItem.oxprice2article__oxamount.value }}</td>
+                <td>
+                    {% if priceItem.oxprice2article__oxaddperc.value %}
+                        {{ priceItem.oxprice2article__oxaddperc.value }}% {{ translate({ ident: "DISCOUNT" }) }}
+                    {% else %}
+                        {% block details_productmain_price %}
+                            {% if oView.isVatIncluded() %}
+                                {{ priceItem.fbrutprice }} {{ currency.sign }}
+                                {% if oDetailsProduct.getUnitName() and priceItem.fbrutamountprice %}
+                                    &nbsp;({{ priceItem.fbrutamountprice }} {{ currency.sign }} / {{ oDetailsProduct.getUnitName() }})
+                                {% endif %}
+                            {% else %}
+                                {{ priceItem.fnetprice }} {{ currency.sign }}
+                                {% if oDetailsProduct.getUnitName() and priceItem.fnetamountprice %}
+                                    &nbsp;({{ priceItem.fnetamountprice }} {{ currency.sign }} / {{ oDetailsProduct.getUnitName() }})
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+

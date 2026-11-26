@@ -1,0 +1,9 @@
+{% set template_title = "REGISTER"|translate %}
+{% capture append = "oxidBlock_content" %}
+
+    {% include "form/login_account.html.twig" %}
+
+    {{ insert_tracker({title: template_title}) }}
+{% endcapture %}
+
+{% include "layout/page.html.twig" %}

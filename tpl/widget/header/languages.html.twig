@@ -1,0 +1,24 @@
+{% if oView.isLanguageLoaded() %}
+    <div class="languages dropdown">
+        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% block dd_layout_page_header_icon_menu_languages_button %}
+                {% for _lng in oxcmp_lang %}
+                    {% if _lng.selected %}
+                        {{ _lng.name }}
+                    {% endif %}
+                {% endfor %}
+            {% endblock %}
+        </button>
+        <ul class="dropdown-menu">
+            {% block dd_layout_page_header_icon_menu_languages_list %}
+                {% for _lng in oxcmp_lang %}
+                    <li>
+                        <a class="dropdown-item{% if _lng.selected %} active{% endif %} {{ _lng.abbr }}" title="{{ _lng.name }}" href="{{ _lng.link|add_url_parameters(oView.getDynUrlParams()) }}" hreflang="{{ _lng.abbr }}">
+                            {{ _lng.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endblock %}
+        </ul>
+    </div>
+{% endif %}

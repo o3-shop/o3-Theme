@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.0] — Unreleased
+
+### Changed
+- **Twig port.** All storefront templates (including e-mails) are now Twig (`tpl/**/*.html.twig`); the Smarty `.tpl` files are removed. Requires shop-ce 2.x (`o3-shop/shop-ce: ^2.0`). Theme id, package name and block names are unchanged. For the upgrade from 1.x and the rules for module/theme authors see `docs/twig.md` in shop-ce.
+- Initial conversion is the automated `smarty-to-twig-converter` baseline; templates are reworked by hand in follow-up commits.
+
 ## [Unreleased]
 
 ### Added

@@ -1,0 +1,23 @@
+{% if place == "bottom" %}
+    {% if locator %}
+        {% include "widget/locator/paging.html.twig" with {pages: locator, place: place, attributes: attributes} %}
+    {% endif %}
+{% else %}
+    <div class="alist__locatorbar">
+        <div class="alist__locatorbar-paging">
+            {% if locator %}
+                {% include "widget/locator/paging.html.twig" with {pages: locator, place: place} %}
+            {% endif %}
+        </div>
+        {% if sort or itemsPerPage %}
+            <div class="alist__locatorbar-controls">
+                {% if sort %}
+                    {% include "widget/locator/sort.html.twig" %}
+                {% endif %}
+                {% if itemsPerPage %}
+                    {% include "widget/locator/itemsperpage.html.twig" %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

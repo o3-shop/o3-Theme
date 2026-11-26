@@ -1,0 +1,4 @@
+{% set oActionProducts = oView.getAction() %}
+{% if oActionProducts  %}
+    {% include "widget/product/list.html.twig" with {type: oView.getListType(), head: oView.getActionName(), listId: "articles", products: oActionProducts, showMainLink: true} %}
+{% endif %}

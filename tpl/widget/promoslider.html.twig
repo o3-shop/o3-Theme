@@ -1,0 +1,80 @@
+{% block dd_widget_promoslider %}
+    {% set oBanners = oView.getBanners() %}
+    {% set currency = oView.getActCurrency() %}
+
+    {% if oBanners|length %}
+
+        {# Count valid (non-nopic, non-fixedBanner) slides #}
+        {% set iValidBanners = 0 %}
+        {% for oBannerCheck in oBanners %}
+            {% set sCheckUrl = oBannerCheck.getBannerPictureUrl() %}
+            {% if sCheckUrl and not (sCheckUrl|strstr('nopic')) and not oBannerCheck.oxactions__oxid.value|strstr("fixedBanner") %}
+                {% set iValidBanners = iValidBanners+1 %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="start__promoslider splide" data-splide='{
+                                "mediaQuery": "min",
+                                "rewind": true,
+                                {% if oViewConf.getViewThemeParam('sSliderAutostart') == "on" %}
+                                    "autoplay": true,
+                                    "interval": {{ oViewConf.getViewThemeParam('sSliderInterval') }},
+                                    "speed": {{ oViewConf.getViewThemeParam('sSliderSpeed') }},
+                                {% endif %}
+                                {% if oViewConf.getViewThemeParam('sSliderSlideFade') == "fade" %}
+                                    "type": "fade",
+                                {% endif %}
+                                "breakpoints":{
+                                    "1400":{
+                                        "pagination": false,
+                                        "arrows": {% if iValidBanners > 1 %}true{% else %}false{% endif %}
+                                    },
+                                    "992":{
+                                        "arrows": {% if iValidBanners > 1 %}true{% else %}false{% endif %}
+                                    },
+                                    "0":{
+                                        "arrows": false
+                                    }
+                                }
+                                }'
+        >
+            {% if iValidBanners > 1 %}
+            <div class="splide__arrows">
+                <button type="button" class="splide__arrow splide__arrow--prev">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 1L1 5L5 9" stroke="#121212" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button type="button" class="splide__arrow splide__arrow--next">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L5 5L1 9" stroke="#121212" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
+            <div class="splide__track">
+                <div class="splide__list">
+                    {% block dd_widget_promoslider_list %}
+                        {% for iPicNr, oBanner in oBanners %}
+                            {% set oArticle = oBanner.getBannerArticle() %}
+                            {% set sBannerPictureUrl = oBanner.getBannerPictureUrl() %}
+                            {% if sBannerPictureUrl and not (sBannerPictureUrl|strstr('nopic')) and not oBanner.oxactions__oxid.value|strstr("fixedBanner") %}
+                                {% set sBannerLink = oBanner.getBannerLink() %}
+                                {% if sBannerLink %}
+                                    <a class="splide__slide" href="{{ sBannerLink }}" title="{{ oBanner.oxactions__oxtitle.value }}">
+                                        <img src="{{ sBannerPictureUrl }}" class="d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value }}" title="{{ oBanner.oxactions__oxtitle.value }}">
+                                    </a>
+                                {% else %}
+                                    <img src="{{ sBannerPictureUrl }}" class="splide__slide d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value }}" title="{{ oBanner.oxactions__oxtitle.value }}">
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        {{ script({ add: "new Splide('.start__promoslider').mount();", dynamic: __oxid_include_dynamic }) }}
+
+    {% endif %}
+{% endblock %}

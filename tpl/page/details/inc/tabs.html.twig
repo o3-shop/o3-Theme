@@ -1,0 +1,114 @@
+{% set blFirstTab = true %}
+
+{% block details_tabs_longdescription %}
+    {% hasrights { ident: "SHOWLONGDESCRIPTION" } %}
+        {% set oLongdesc = oDetailsProduct.getLongDescription() %}
+        {% if oLongdesc.value %}
+            {% capture append = "tabs" %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__description" role="tab" data-bs-toggle="tab" aria-controls="details__description" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "DESCRIPTION" }) }}</a>{% endcapture %}
+            {% capture append = "tabsContent" %}
+                <div id="details__description" class="details__description tab-pane{% if blFirstTab %} active{% endif %}" role="tabpanel">
+                    <h4 class="d-md-none">{{ translate({ ident: "DESCRIPTION" }) }}</h4>
+                    <span itemprop="description">{{ include(template_from_string(oLongdesc)) }}</span>
+                    {% if oDetailsProduct.oxarticles__oxexturl.value %}
+                        <a class="mt-5" href="{{ oDetailsProduct.oxarticles__oxexturl.value }}">
+                            {% if oDetailsProduct.oxarticles__oxurldesc.value %}
+                                {{ oDetailsProduct.oxarticles__oxurldesc.value }}
+                            {% else %}
+                                {{ oDetailsProduct.oxarticles__oxexturl.value }}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endcapture %}
+            {% set blFirstTab = false %}
+        {% endif %}
+    {% endhasrights %}
+{% endblock %}
+
+{% block details_tabs_attributes %}
+    {% if oView.getAttributes() %}
+        {% capture append = "tabs" %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__attributes" role="tab" data-bs-toggle="tab" aria-controls="details__attributes" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "SPECIFICATION" }) }}</a>{% endcapture %}
+        {% capture append = "tabsContent" %}
+            <div id="details__attributes" class="details__attributes tab-pane col-12 col-lg-8{% if blFirstTab %} active{% endif %}" role="tabpanel">
+                <h4 class="d-md-none">{{ translate({ ident: "SPECIFICATION" }) }}</h4>
+                {% include "page/details/inc/attributes.html.twig" %}
+            </div>
+            {% set blFirstTab = false %}
+        {% endcapture %}
+    {% endif %}
+{% endblock %}
+
+{% block details_tabs_reviews %}
+    {% if oView.isReviewActive() %}
+
+        {% if oxcmp_shop.oxshops__oxproductive.value %}
+            {{ script({ include: "js/widget/rating.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {% else %}
+            {{ script({ include: "js/widget/rating.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {% endif %}
+
+        {% capture append = "tabs" %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__reviews" role="tab" data-bs-toggle="tab" aria-controls="details__reviews" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "REVIEWS" }) }} ({% if oView.getReviews() %}{{ oView.getReviews()|length }}{% else %}0{% endif %})</a>{% endcapture %}
+        {% capture append = "tabsContent" %}
+            <div id="details__reviews" class="details__reviews tab-pane col-12 col-lg-8{% if blFirstTab %} active{% endif %}" role="tabpanel">
+                <h4 class="d-md-none">{{ translate({ ident: "REVIEWS" }) }} ({% if oView.getReviews() %}{{ oView.getReviews()|length }}{% else %}0{% endif %})</h4>
+                {% include "widget/reviews/reviews.html.twig" %}
+            </div>
+            {% set blFirstTab = false %}
+        {% endcapture %}
+    {% endif %}
+{% endblock %}
+
+{% block details_tabs_tags %}
+{% endblock %}
+
+{% block details_tabs_media %}
+    {% if oView.getMediaFiles() or oDetailsProduct.oxarticles__oxfile.value %}
+        {% capture append = "tabs" %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__media" role="tab" data-bs-toggle="tab" aria-controls="details__media" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "MEDIA" }) }}</a>{% endcapture %}
+        {% capture append = "tabsContent" %}
+            <div id="details__media" class="details__media tab-pane col-12 col-lg-8{% if blFirstTab %} active{% endif %}" role="tabpanel">
+                <h4 class="d-md-none">{{ translate({ ident: "MEDIA" }) }}</h4>
+                {% include "page/details/inc/media.html.twig" %}
+            </div>
+            {% set blFirstTab = false %}
+        {% endcapture %}
+    {% endif %}
+{% endblock %}
+
+{% if oViewConf.getViewThemeParam('bl_showPriceAlarm') %}
+    {% block details_tabs_pricealarm %}
+        {% if oView.isPriceAlarm() and not oDetailsProduct.isParentNotBuyable() %}
+            {% capture append = "tabs" %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__pricealarm" role="tab" data-bs-toggle="tab" aria-controls="details__pricealarm" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "DD_PRICEALARM_HEADING" }) }}</a>{% endcapture %}
+            {% capture append = "tabsContent" %}
+                <div id="details__pricealarm" class="details__pricealarm tab-pane col-12 col-lg-8{% if blFirstTab %} active{% endif %}" role="tabpanel">
+                    <h4 class="d-md-none">{{ translate({ ident: "DD_PRICEALARM_HEADING" }) }}</h4>
+                    {% include "form/pricealarm.html.twig" %}
+                </div>
+                {% set blFirstTab = false %}
+            {% endcapture %}
+        {% endif %}
+    {% endblock %}
+{% endif %}
+
+{% block details_tabs_comments %}
+{% endblock %}
+
+{% block details_tabs_invite %}
+{% endblock %}
+
+{% block details_tabs_main %}
+    {% if tabs %}        
+        <ul class="nav nav-tabs col-12 col-xl-8 d-none d-md-flex" role="tablist">
+            {% for tab in tabs %}
+                <li class="nav-item" role="presentation">{{ tab }}</li>
+            {% endfor %}
+            {% block details_tabs_social_navigation %}{% endblock %}
+        </ul>
+        <div class="tab-content">
+            {% for tabContent in tabsContent %}
+                {{ tabContent }}
+            {% endfor %}
+            {% block details_tabs_social_content %}{% endblock %}
+        </div>        
+    {% endif %}
+{% endblock %}
+

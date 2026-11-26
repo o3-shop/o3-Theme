@@ -1,0 +1,68 @@
+{% capture append = "oxidBlock_content" %}
+    {% set template_title = "MY_DOWNLOADS"|translate %}
+
+    <div class="row">
+
+        <div class="col-12 col-md-4 col-lg-3 mb-5">
+            {% include "layout/sidebar.html.twig" with {content: "account", active_link: "downloads"} %}
+        </div>
+
+        <div class="col-12 col-md-7 col-lg-8 offset-md-1">
+            <h1 class="title-big">{{ translate({ ident: "MY_DOWNLOADS" }) }}</h1>
+
+            {% if oView.getOrderFilesList()|length %}
+
+                {% for oOrderArticle in oView.getOrderFilesList() %}
+
+                    {% for oOrderFile in oOrderArticle.oxorderfiles %}
+                        <div class="download">
+                            <div>
+                                <strong>{{ oOrderArticle.oxarticletitle }} &nbsp;-&nbsp; {{ translate({ ident: "ORDER_NUMBER" }) }}: {{ oOrderArticle.oxordernr }}</strong>{{ oOrderArticle.oxorderdate|date_format("%d.%m.%Y") }}
+                            </div>
+
+                            {% if oOrderFile.isPaid() or not oOrderFile.oxorderfiles__oxpurchasedonly.value  %}
+
+                                {% if oOrderFile.isValid() %}
+                                    <div>{{ translate({ ident: "DD_FILE_ATTRIBUTES_FILENAME", suffix: "COLON" }) }} {{ oOrderFile.oxorderfiles__oxfilename.value }}</div>
+                                    <div>{% include "page/account/inc/file_attributes.html.twig" %}</div>
+
+                                    <a class="btn btn-success" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=download"), params: "sorderfileid="|cat(oOrderFile.getId()) }) }}" title="{{ oOrderFile.oxorderfiles__oxfilename.value }} {{ translate({ ident: "DD_DOWNLOADS_DOWNLOAD_TOOLTIP" }) }}">
+                                        {{ translate({ ident: "DD_DOWNLOADS_DOWNLOAD_TOOLTIP" }) }}
+                                    </a>
+                                {% else %}
+
+                                    <div>{{ translate({ ident: "DD_FILE_ATTRIBUTES_FILENAME", suffix: "COLON" }) }} {{ oOrderFile.oxorderfiles__oxfilename.value }}</div>
+
+                                    <div>
+                                        <a class="btn btn-danger" title="{{ oOrderFile.oxorderfiles__oxfilename.value }} {{ translate({ ident: "DD_DOWNLOADS_DOWNLOAD_TOOLTIP" }) }}" disabled>
+                                            {{ translate({ ident: "DD_DOWNLOADS_DOWNLOAD_TOOLTIP" }) }}
+                                        </a>
+                                        {{ translate({ ident: "DOWNLOAD_LINK_EXPIRED_OR_MAX_COUNT_RECEIVED" }) }}
+                                    </div>
+                                {% endif %}
+
+                            {% else %}
+                                <div>
+                                    <span class="downloadableFile pending">{{ oOrderFile.oxorderfiles__oxfilename.value }}</span>
+                                    <strong>{{ translate({ ident: "DOWNLOADS_PAYMENT_PENDING" }) }}</strong>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+
+                {% endfor %}
+
+            {% else %}
+                <p class="alert alert-info">{{ translate({ ident: "DOWNLOADS_EMPTY" }) }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    {{ insert_tracker({title: template_title}) }}
+{% endcapture %}
+{% capture append = "oxidBlock_sidebar" %}
+    {% include "page/account/inc/account_menu.html.twig" with {active_link: "downloads"} %}
+{% endcapture %}
+{% include "layout/page.html.twig" %}

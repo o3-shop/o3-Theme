@@ -1,0 +1,145 @@
+{% set template_title = "MY_ACCOUNT"|translate %}
+{% capture append = "oxidBlock_content" %}
+
+    {% if oView.getAccountDeletionStatus() is same as(false) %}
+        {% set statusMessage = "DD_DELETE_MY_ACCOUNT_ERROR"|translate %}
+        {% include "message/error.html.twig" with {statusMessage: statusMessage} %}
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-12 col-md-4 col-lg-3 mb-5">
+            {% include "layout/sidebar.html.twig" with {content: "account"} %}
+        </div>
+
+        <div class="col-12 col-md-7 col-lg-8 offset-md-1">
+
+            <h1 class="title-big">{{ translate({ ident: "MY_ACCOUNT" }) }}</h1>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    {% block account_dashboard_col1 %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a id="linkAccountPassword" href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_password") }) }}">{{ translate({ ident: "CHANGE_PASSWORD" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_password") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "CHANGE_PASSWORD" }) }}</div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a id="linkAccountNewsletter" href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_newsletter") }) }}">{{ translate({ ident: "NEWSLETTER_SETTINGS" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_newsletter") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "NEWSLETTER_SUBSCRIBE_CANCEL" }) }}</div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a id="linkAccountBillship" href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_user") }) }}">{{ translate({ ident: "BILLING_SHIPPING_SETTINGS" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_user") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "UPDATE_YOUR_BILLING_SHIPPING_SETTINGS" }) }}</div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a id="linkAccountOrder" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_order") }) }}">{{ translate({ ident: "ORDER_HISTORY" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_order") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "ORDERS" }) }} {{ oView.getOrderCnt() }}</div>
+                    </div>
+                    {% if oView.isEnabledDownloadableFiles() %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a id="linkAccountDownloads" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_downloads") }) }}">{{ translate({ ident: "MY_DOWNLOADS" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_downloads") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "MY_DOWNLOADS_DESC" }) }}</div>
+                    </div>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+                <div class="col-12 col-md-6">
+                    {% block account_dashboard_col2 %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_noticelist") }) }}">{{ translate({ ident: "MY_WISH_LIST" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_noticelist") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "PRODUCT" }) }} {% if oxcmp_user %}{{ oxcmp_user.getNoticeListArtCnt() }}{% else %}0{% endif %}</div>
+                    </div>
+                    {% if oViewConf.getShowWishlist() %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_wishlist") }) }}">{{ translate({ ident: "MY_GIFT_REGISTRY" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_wishlist") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "PRODUCT" }) }} {% if oxcmp_user %}{{ oxcmp_user.getWishListArtCnt() }}{% else %}0{% endif %}</div>
+                    </div>
+                    {% endif %}
+                    {% if oViewConf.getShowCompareList() %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=compare") }) }}">{{ translate({ ident: "MY_PRODUCT_COMPARISON" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=compare") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "PRODUCT" }) }} {% if oView.getCompareItemsCnt() %}{{ oView.getCompareItemsCnt() }}{% else %}0{% endif %}</div>
+                    </div>
+                    {% endif %}
+                    {% if oViewConf.getShowListmania() %}
+                    <div class="card mb-4">
+                        <div class="card-header card-header d-flex align-center justify-content-between">
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_recommlist") }) }}">{{ translate({ ident: "MY_LISTMANIA" }) }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_recommlist") }) }}" class="btn btn-edit">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </a>
+                        </div>
+                        <div class="card-body">{{ translate({ ident: "LISTS" }) }} {% if oxcmp_user.getRecommListsCount() %}{{ oxcmp_user.getRecommListsCount() }}{% else %}0{% endif %}</div>
+                    </div>
+                    {% endif %}
+                        {% if oView.isUserAllowedToManageOwnReviews() %}
+                            <div class="card mb-4">
+                                <div class="card-header card-header d-flex align-center justify-content-between">
+                                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_reviewlist") }) }}">{{ translate({ ident: "MY_REVIEWS" }) }}</a>
+                                    <a href="{{ seo_url({ ident: oViewConf.getSslSelfLink()|cat("cl=account_reviewlist") }) }}" class="btn btn-edit">
+                                        {{ translate({ ident: "CHANGE" }) }}
+                                    </a>
+                                </div>
+                                <div class="card-body">{{ translate({ ident: "MY_REVIEWS" }) }} {% if oView.getReviewAndRatingItemsCount() %}{{ oView.getReviewAndRatingItemsCount() }}{% else %}0{% endif %}</div>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% block account_dashboard_delete_my_account %}
+                {% if oView.isUserAllowedToDeleteOwnAccount() %}
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_my_account_confirmation" aria-controls="delete_my_account_confirmation">
+                        {{ translate({ ident: "DD_DELETE_MY_ACCOUNT" }) }}
+                    </button>
+                    {% include "page/account/delete_my_account_confirmation.html.twig" %}
+                {% endif %}
+            {% endblock %}
+
+        </div>
+    </div>
+
+    {{ insert_tracker({title: template_title}) }}
+{% endcapture %}
+
+{% include "layout/page.html.twig" %}

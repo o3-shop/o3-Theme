@@ -1,0 +1,117 @@
+{% capture append = "oxidBlock_content" %}
+
+    {% set oConfig = oViewConf.getConfig() %}
+    {% set rsslinks = oView.getRssLinks() %}
+
+    {% if oView.getBanners() and not empty(oView.getBanners()) %}
+        {% include "widget/promoslider.html.twig" %}
+    {% endif %}
+
+    {% block start_welcome_text %}
+
+        {% set o3benefit1 = 0 %}
+        {% ifcontent ident "o3benefit1" set oCont %}
+            {% set o3benefit1 = 1 %}
+        {% endifcontent %}
+
+        {% set o3benefit2 = 0 %}
+        {% ifcontent ident "o3benefit2" set oCont %}
+            {% set o3benefit2 = 1 %}
+        {% endifcontent %}
+
+        {% set o3benefit3 = 0 %}
+        {% ifcontent ident "o3benefit3" set oCont %}
+            {% set o3benefit3 = 1 %}
+        {% endifcontent %}
+
+        {% set o3benefit4 = 0 %}
+        {% ifcontent ident "o3benefit1" set oCont %}
+            {% set o3benefit4 = 1 %}
+        {% endifcontent %}
+
+        {% if o3benefit1 or o3benefit2 or o3benefit3 or o3benefit4 %}
+            <div class="start__benefits">
+                {% ifcontent ident "o3benefit1" set oCont %}
+                    <div class="start__benefits-box">
+                        {{ oCont.oxcontents__oxcontent.value }}
+                    </div>
+                {% endifcontent %}
+                {% ifcontent ident "o3benefit2" set oCont %}
+                    <div class="start__benefits-box">
+                        {{ oCont.oxcontents__oxcontent.value }}
+                    </div>
+                {% endifcontent %}
+                {% ifcontent ident "o3benefit3" set oCont %}
+                    <div class="start__benefits-box">
+                        {{ oCont.oxcontents__oxcontent.value }}
+                    </div>
+                {% endifcontent %}
+                {% ifcontent ident "o3benefit4" set oCont %}
+                    <div class="start__benefits-box">
+                        {{ oCont.oxcontents__oxcontent.value }}
+                    </div>
+                {% endifcontent %}
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+    {% set fixedBanner = oView.getBanners() %}
+
+    {% if fixedBanner.fixedBannerSmall1 or fixedBanner.fixedBannerSmall2 or fixedBanner.fixedBannerSmall3 %}
+        {% include "widget/fixedbanner.html.twig" with {fixedBanner: fixedBanner} %}
+    {% endif %}
+
+    {% set oTopArticles = oView.getTop5ArticleList() %}
+
+    {% block start_bargain_articles %}
+        {% set oBargainArticles = oView.getBargainArticleList() %}
+        {% if oBargainArticles and oBargainArticles.count() %}
+            <div class="component__productslider">
+                <h2 class="title-big">{{ translate({ ident: "START_BARGAIN_HEADER" }) }}</h2>
+                <hr>
+                {% include "widget/product/list_splide.html.twig" with {listId: "bargainItems", products: oBargainArticles, rsslink: rsslinks.bargainArticles, rssId: "rssBargainProducts", showMainLink: true} %}
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% if fixedBanner.fixedBannerBig and not (fixedBanner.fixedBannerBig.getBannerPictureUrl()|strstr('nopic')) %}
+        {% if fixedBanner.fixedBannerBig.getBannerLink() %}
+            <a class="start__fixedbanner d-block" href="{{ fixedBanner.fixedBannerBig.getBannerLink() }}">
+                <img class="img-fluid" src="{{ fixedBanner.fixedBannerBig.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerBig.oxactions__oxtitle.value }}">
+            </a>
+        {% else %}
+            <img class="start__fixedbanner img-fluid" src="{{ fixedBanner.fixedBannerBig.getBannerPictureUrl() }}" alt="{{ fixedBanner.fixedBannerBig.oxactions__oxtitle.value }}">
+        {% endif %}
+    {% endif %}
+
+    {% block start_newest_articles %}
+        {% set oNewestArticles = oView.getNewestArticles() %}
+        {% if oNewestArticles and oNewestArticles.count() %}
+            <div class="component__productslider">
+                <h2 class="title-big">{{ translate({ ident: "START_NEWEST_HEADER" }) }}</h2>
+                <hr>
+                {% include "widget/product/list_splide.html.twig" with {listId: "newItems", products: oNewestArticles, rsslink: rsslinks.newestArticles, rssId: "rssNewestProducts", showMainLink: true} %}
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% block start_top_articles %}
+        {% if oTopArticles and oTopArticles.count() %}
+            <div class="component__productslider">
+                <h2 class="title-big">{{ translate({ ident: "START_TOP_PRODUCTS_HEADER" }) }}</h2>
+                <hr>
+                {% include "widget/product/list_splide.html.twig" with {listId: "topBox", products: oTopArticles, rsslink: rsslinks.topArticles, rssId: "rssTopProducts", showMainLink: true} %}
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% block start_manufacturer_slider %}
+        {% if oViewConf.getViewThemeParam('bl_showManufacturer') %}
+            {% include "widget/manufacturers.html.twig" %}
+        {% endif %}
+    {% endblock %}
+
+    {{ insert_tracker() }}
+{% endcapture %}
+{% include "layout/page.html.twig" %}

@@ -1,0 +1,19 @@
+<div class="form-floating mb-3">
+    {% block user_noaccount_email %}
+        <input type="email" class="form-control" id="userLoginName" name="lgn_usr" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}*" value="{{ oView.getActiveUsername() }}" required>
+        <label for="userLoginName">{{ translate({ ident: "EMAIL_ADDRESS" }) }}*</label>
+        <div class="invalid-feedback">
+            {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}
+        </div>
+        {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxusername} %}
+    {% endblock %}
+</div>
+
+<div class="form-check mb-3">
+    {% block user_noaccount_newsletter %}
+        <input type="hidden" name="blnewssubscribed" value="0">
+        <input type="checkbox" class="form-check-input" id="newsletterCheckbox" name="blnewssubscribed" value="1" {% if oView.isNewsSubscribed() %}checked{% endif %}>
+        <label class="form-check-label" for="newsletterCheckbox">{{ translate({ ident: "NEWSLETTER_SUBSCRIPTION" }) }}</label>
+        <div class="form-text">{{ translate({ ident: "MESSAGE_NEWSLETTER_SUBSCRIPTION" }) }}</div>
+    {% endblock %}
+</div>

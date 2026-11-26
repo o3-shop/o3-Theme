@@ -1,0 +1,26 @@
+{% set oConfig = oViewConf.getConfig() %}
+
+<form action="{{ oViewConf.getSelfActionLink() }}" name="newsletter" method="post">
+    <div class="d-none">
+        {{ oViewConf.getHiddenSid() }}
+        {{ oViewConf.getNavFormParams() }}
+        <input type="hidden" name="fnc" value="subscribe">
+        <input type="hidden" name="cl" value="account_newsletter">
+    </div>
+
+    <div class="form-floating mb-3">
+        <select name="status" id="account_newsletter__status" class="form-select">
+            <option value="1"{% if oView.isNewsletter() %} selected{% endif %}>{{ translate({ ident: "YES" }) }}</option>
+            <option value="0"{% if not oView.isNewsletter() %} selected{% endif %}>{{ translate({ ident: "NO" }) }}</option>
+        </select>
+        <label for="account_newsletter__status">{{ translate({ ident: "NEWSLETTER_SUBSCRIPTION" }) }}</label>
+    </div>
+
+    {% if oConfig.getConfigParam('blOrderOptInEmail') and oView.getSubscriptionStatus() == 1 %}
+        <p>
+            {{ translate({ ident: "O3_NEWSLETTER_OPT_IN_DESCRIPTION" }) }}
+        </p>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">{{ translate({ ident: "SAVE" }) }}</button>
+</form>

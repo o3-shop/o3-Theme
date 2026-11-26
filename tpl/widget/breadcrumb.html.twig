@@ -1,0 +1,28 @@
+{% block dd_widget_breadcrumb %}
+    {% spaceless %}
+        {% block dd_widget_breadcrumb_list_inner %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                    {% block dd_widget_breadcrumb_list %}
+                        <li class="breadcrumb-item" itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
+                            <a href="{{ oViewConf.getHomeLink() }}" itemprop="item"><span itemprop="name">{{ translate({ ident: "HOME" }) }}</span></a>
+                            <meta itemprop="position" content="1" />
+                        </li>
+                        {% for sCrum in oView.getBreadCrumb() %}
+                            <li class="breadcrumb-item{% if loop.last %} aria-current="page"{% endif %} itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
+                                {% if sCrum.link %}
+                                    <a href="{{ sCrum.link }}" itemprop="item">
+                                        <span itemprop="name">{{ sCrum.title }}</span>
+                                    </a>
+                                {% else %}
+                                    <span itemprop="name">{{ sCrum.title }}</span>
+                                {% endif %}
+                                <meta itemprop="position" content="{{ loop.index + 1 }}" />
+                            </li>
+                        {% endfor %}
+                    {% endblock %}
+                </ol>
+            </nav>
+        {% endblock %}
+    {% endspaceless %}
+{% endblock %}
