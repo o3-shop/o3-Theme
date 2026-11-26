@@ -52,6 +52,8 @@ $urlGetters = [
     'getCanonicalUrl', 'getBaseLink', 'getCatMoreUrl', 'getWidgetLink',
     // Application/Model/Order.php, Basket.php (values built from escaped fields / an `&amp;` config URL)
     'getShipmentTrackingUrl', 'getCardMessage',
+    // Application/Model/SelectList.php, VariantSelectList.php (title .value / htmlspecialchars)
+    'getLabel',
 ];
 $basketItemGetters = ['getTitle', 'getVarSelect'];
 // T_RAW fields holding plain text (raw DB value, never core-escaped)
