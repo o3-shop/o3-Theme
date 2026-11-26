@@ -80,6 +80,7 @@
                     <!--Add custom error message here-->
                     <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_PAYMENT_AUTHORIZATION_FAILED" }) }}</div>
                 {% elseif iPayError == -1 %}
+                    {# getPaymentErrorText(): request payerrortext is escaped by the core; the session fallback is set server-side only (payment modules), printed as 1.x did #}
                     <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT_ERROR" }) }} "{{ oView.getPaymentErrorText()|raw }}").</div>
                 {% elseif iPayError == -2 %}
                     <div class="alert alert-danger">{{ translate({ ident: "MESSAGE_NO_SHIPPING_METHOD_FOUND" }) }}</div>

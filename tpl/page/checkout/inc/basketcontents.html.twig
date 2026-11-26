@@ -273,8 +273,8 @@
                 {% for key, oEr in Errors.basket %}
                     {% if oEr.getErrorClassType() == 'oxVoucherException' %}
                         <div class="alert alert-danger">
-                            {# voucherNr is HTML-escaped by the core (getRequestEscapedParameter / voucher field value); the lang text has no markup #}
-                            {{ translate({ ident: "COUPON_NOT_ACCEPTED", args: oEr.getValue('voucherNr') })|raw }}
+                            {# lang text escaped here; voucherNr is HTML-escaped by the core (getRequestEscapedParameter / voucher field value), so it goes in as is #}
+                            {{ translate({ ident: "COUPON_NOT_ACCEPTED" })|e|replace({ '%s': oEr.getValue('voucherNr') })|raw }}
                             <strong>{{ translate({ ident: "REASON", suffix: "COLON" }) }}</strong>
                             {{ oEr.getOxMessage() }}
                         </div>

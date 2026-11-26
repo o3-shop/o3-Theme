@@ -9,8 +9,9 @@
                {% endif %}
                {% hasrights { ident: "SHOWLONGDESCRIPTION" } %}
                {% set oLongdesc = oProduct.getLongDescription() %}
+               {# long description: admin HTML (T_RAW). Tags stripped, its entities kept, `"` encoded so the attribute holds (1.x broke on a quote) #}
                {% if oLongdesc.value %}
-                   <div property="gr:description" content="{{ oLongdesc.value|striptags|regex_replace('/\\s+/', ' ')|raw }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
+                   <div property="gr:description" content="{{ oLongdesc.value|striptags|regex_replace('/\\s+/', ' ')|replace({ '"': '&quot;' })|raw }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
                {% endif %}
             {% endhasrights %}
             <div rel="foaf:depiction v:image" resource="{{ oView.getActPicture() }}"></div>

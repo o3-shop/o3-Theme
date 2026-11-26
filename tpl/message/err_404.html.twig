@@ -10,7 +10,8 @@
                     {% if sUrl %}
                         {% set sModifiedUrl = sUrl|escape %}
                         {% set sModifiedUrl = "<i><strong>'"|cat(sModifiedUrl)|cat("'</strong></i>") %}
-                        {{ translate({ ident: "ERROR_404", args: sModifiedUrl })|raw }}
+                        {# lang text escaped here; sModifiedUrl is markup around the escaped sUrl #}
+                        {{ translate({ ident: "ERROR_404" })|e|replace({ '%s': sModifiedUrl })|raw }}
                     {% else %}
                         {{ translate({ ident: "ERROR_404" }) }}
                     {% endif %}

@@ -12,7 +12,7 @@
         {% if oView.getWishList() %}
             {% set wishuser = oView.getWishUser() %}
             <p class="wishlistUser">
-            {{ translate({ ident: "WISHLIST_PRODUCTS", args: wishuser.oxuser__oxfname.value|cat(' ')|cat(wishuser.oxuser__oxlname.value) })|raw }}
+            {{ translate({ ident: "WISHLIST_PRODUCTS", args: wishuser.oxuser__oxfname.getRawValue() ~ ' ' ~ wishuser.oxuser__oxlname.getRawValue() }) }}
             </p>
         {% endif %}
     </div>

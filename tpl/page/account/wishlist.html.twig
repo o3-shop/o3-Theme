@@ -17,8 +17,8 @@
             {% endif %}
             {% set editval = oView.getEnteredData() %}
             {% if oView.isWishListEmailSent() %}
-                {# rec_email is request-escaped (AccountWishlistController::sendWishList); a {% set %} block keeps the message safe, so message/notice does not escape it again #}
-                {% set _statusMessage %}{{ "GIFT_REGISTRY_SENT_SUCCESSFULLY"|translate(editval.rec_email)|raw }}{% endset %}
+                {# lang text escaped here; rec_email is request-escaped (AccountWishlistController::sendWishList), so it goes in as is. A {% set %} block keeps the message safe, so message/notice does not escape it again #}
+                {% set _statusMessage %}{{ "GIFT_REGISTRY_SENT_SUCCESSFULLY"|translate|e|replace({ '%s': editval.rec_email })|raw }}{% endset %}
                 {% include "message/notice.html.twig" with {statusMessage: _statusMessage} %}
             {% endif %}
 

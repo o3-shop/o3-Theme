@@ -45,33 +45,34 @@
             {% endif %}
 
 
+            {# values in JS strings: decoded text (getRawValue(); oxorderarticles__oxtitle is T_RAW already) through |e('js'), not HTML-escaped #}
             <script>
                 ga( 'require', 'ecommerce' );
 
                 ga( 'ecommerce:addTransaction', {
                     'id': '{{ oOrder.oxorder__oxordernr.value|raw }}',           // Transaction ID. Required.
-                    'affiliation': '{{ oxcmp_shop.oxshops__oxname.value|raw }}', // Affiliation or store name.
+                    'affiliation': '{{ oxcmp_shop.oxshops__oxname.getRawValue()|e('js') }}', // Affiliation or store name.
                     'revenue': '{{ oOrder.oxorder__oxtotalordersum.value|raw }}', // Grand Total.
                     'shipping': '{{ oOrder.oxorder__oxdelcost.value|raw }}',     // Shipping.
                     'tax': '{{ oOrder.oxorder__oxartvatprice1.value+oOrder.oxorder__oxartvatprice2.value }}' // Tax.
                 });
 
                 {% for oOrderArticle in oOrder.getOrderArticles() %}
-                    {% set sArticleName = oOrderArticle.oxorderarticles__oxtitle.value|cat(' ')|cat(oOrderArticle.oxorderarticles__oxselvariant.value) %}
+                    {% set sArticleName = oOrderArticle.oxorderarticles__oxtitle.value ~ ' ' ~ oOrderArticle.oxorderarticles__oxselvariant.getRawValue() %}
                     {% set sCategoryName = "" %}
                     {% set oOrderArticlePrice = oOrderArticle.getPrice() %}
                     {% set oArticle = oOrderArticle.getArticle() %}
                     {% if oArticle %}
                         {% set oMainCategory = oArticle.getCategory() %}
                         {% if oMainCategory %}
-                            {% set sCategoryName = oMainCategory.oxcategories__oxtitle.value %}
+                            {% set sCategoryName = oMainCategory.oxcategories__oxtitle.getRawValue() %}
                         {% endif %}
                     {% endif %}
                     ga( 'ecommerce:addItem', {
                         'id': '{{ oOrder.oxorder__oxordernr.value|raw }}',                     // Transaction ID. Required.
-                        'name': '{{ sArticleName|trim|raw }}',                                   // Product name. Required.
-                        'sku': '{{ oOrderArticle.oxorderarticles__oxartnum.value|raw }}',      // SKU/code.
-                        'category': '{{ sCategoryName|raw }}',                                   // Category or variation.
+                        'name': '{{ sArticleName|trim|e('js') }}',                                   // Product name. Required.
+                        'sku': '{{ oOrderArticle.oxorderarticles__oxartnum.getRawValue()|e('js') }}',      // SKU/code.
+                        'category': '{{ sCategoryName|e('js') }}',                                   // Category or variation.
                         'price': '{{ oOrderArticlePrice.getBruttoPrice() }}',               // Unit price.
                         'quantity': '{{ oOrderArticle.oxorderarticles__oxamount.value|raw }}', // Quantity.
                         'currency': '{{ oOrder.oxorder__oxcurrency.value|raw }}'               // local currency code.
@@ -94,7 +95,7 @@
 
     {% if oViewConf.getTopActiveClassName() == 'details' %}
         {% set oArticle = oView.getProduct() %}
-        {% set sGoogleShoppingProductId = oArticle.oxarticles__oxartnum.value %}
+        {% set sGoogleShoppingProductId = oArticle.oxarticles__oxartnum.getRawValue() %}
     {% endif %}
 
     {% if sGoogleVendorId and sPageLanguage %}
@@ -107,7 +108,7 @@
             gts.push(["locale", "{{ sPageLanguage|default('de_DE') }}"]);
             {% if sGoogleShoppingAccountId %}
                 gts.push(["google_base_subaccount_id", "{{ sGoogleShoppingAccountId }}"]);
-                gts.push(["google_base_offer_id", "{{ sGoogleShoppingProductId|raw }}"]);
+                gts.push(["google_base_offer_id", "{{ sGoogleShoppingProductId|e('js') }}"]);
                 {% if sShoppingCountry %}
                     gts.push(["google_base_country", "{{ sShoppingCountry|default('DE') }}"]);
                 {% endif %}
@@ -154,13 +155,14 @@
                         {% for oOrderArticle in oOrder.getOrderArticles() %}
                             {% set oArticle = oOrderArticle.getArticle() %}
                             {% set oOrderArticlePrice = oOrderArticle.getPrice() %}
-                            {% set sArticleName = oOrderArticle.oxorderarticles__oxtitle.value|cat(' ')|cat(oOrderArticle.oxorderarticles__oxselvariant.value) %}
+                            {# oxorderarticles__oxtitle is T_RAW (raw DB text): escaped; oxselvariant.value is core-escaped #}
+                            {% set sGtsItemName %}{{ oOrderArticle.oxorderarticles__oxtitle.value|escape }} {{ oOrderArticle.oxorderarticles__oxselvariant.value|raw }}{% endset %}
                             {% if not blHasPreOrder and oArticle.getStockStatus() == -1 %}
                                 {% set blHasPreOrder = true %}
                             {% endif %}
 
                             <span class="gts-item">
-                                <span class="gts-i-name">{{ sArticleName|trim|raw }}</span>
+                                <span class="gts-i-name">{{ sGtsItemName|trim|raw }}</span>
                                 <span class="gts-i-price">{{ oOrderArticlePrice.getBruttoPrice() }}</span>
                                 <span class="gts-i-quantity">{{ oOrderArticle.oxorderarticles__oxamount.value|raw }}</span>
                                 <span class="gts-i-prodsearch-id">{{ oOrderArticle.oxorderarticles__oxartnum.value|raw }}</span>

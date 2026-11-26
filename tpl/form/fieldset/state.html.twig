@@ -27,8 +27,9 @@
 
         {% set countryStates = country.getStates() %}
         {% for state_id, state in countryStates %}
-            states[i] = '{{ state.oxstates__oxtitle.value|raw }}';
-            ids[i] = '{{ state.oxstates__oxid.value|raw }}';
+            {# JS strings: |e('js') (the title keeps the core's HTML escaping, as in 1.x) #}
+            states[i] = '{{ state.oxstates__oxtitle.value|e('js') }}';
+            ids[i] = '{{ state.oxstates__oxid.value|e('js') }}';
             i++;
         {% endfor %}
         allStates[++cCount] = states;
