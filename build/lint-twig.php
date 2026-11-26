@@ -15,6 +15,17 @@
  * |escape (|e) — the explicit marker for a `.value` that is not a core-escaped Field (raw DB/array values).
  * Output: "escape: <file>:<line>: <expression>", exit 1 on findings, else "OK <n> files".
  *
+ * The reverse mistake (Task 8 audit) is reported as "rawtext: <file>:<line>: <expression>": an output with |raw whose
+ * value is unescaped text, i.e.
+ *   - `.value` of a field the core stores T_RAW although it holds shop/customer text ($rawTextFields, from the models'
+ *     _setFieldData and Order::finalizeOrder), or
+ *   - `.getRawValue()` / `.rawValue` of any field except admin rich text ($richTextFields: CMS, long descriptions,
+ *     link descriptions; printed raw as in 1.x),
+ *   - or a variable {% set %} from one of those.
+ * Print such values escaped (autoescape or an explicit |escape), in JS strings via |e('js').
+ * Also "transraw: …": translate with arguments printed |raw (marks the whole lang text safe). Escape the lang text and
+ * put the already-escaped argument in: translate({ ident: "X" })|e|replace({ '%s': escapedArg })|raw.
+ *
  * Mails: email/html/** follows the same rules. email/plain/** is not autoescaped (core), and Email::setAltBody() decodes
  * one level of entities, so plain mails print values as they are: there any |e, |escape or |raw is reported
  * ("plain: <file>:<line>: <expression>"), as it would put entities into the text or claim escaping that never happens.
@@ -43,11 +54,27 @@ $urlGetters = [
     'getShipmentTrackingUrl', 'getCardMessage',
 ];
 $basketItemGetters = ['getTitle', 'getVarSelect'];
+// T_RAW fields holding plain text (raw DB value, never core-escaped)
+$rawTextFields = [
+    'oxorderarticles__oxtitle', 'oxorderarticles__oxpersparam', 'oxorderarticles__oxerpstatus', // OrderArticle::_setFieldData
+    'oxuserbasketitems__oxsellist', 'oxuserbasketitems__oxpersparam',                           // UserBasketItem::_setFieldData
+];
+// admin-entered rich text (T_RAW or read via getRawValue()), printed raw like 1.x
+$richTextFields = ['oxlongdesc', 'oxcontent', 'oxurldesc'];
 
 $getters = implode('|', $urlGetters);
 // a value path: identifiers, dots, calls with simple args, ['key'] lookups
 $path = '[A-Za-z_][\w]*(?:\.[A-Za-z_]\w*(?:\([^(){}]*\))?|\[[^\]]*\])*';
 $encoded = '/^' . $path . '(?:\.value|\.link|\.(?:' . $getters . ')\([^(){}]*\))$/';
+$isRawText = function (string $expr) use ($rawTextFields, $richTextFields): bool {
+    foreach ($rawTextFields as $f) {
+        if (preg_match('/\b' . $f . '\.value\b/', $expr)) {
+            return true;
+        }
+    }
+    preg_match_all('/__(\w+)\.(?:getRawValue\(\)|rawValue\b)/', $expr, $m);
+    return (bool) array_diff($m[1], $richTextFields);
+};
 
 $base = dirname(__DIR__);
 $findings = [];
@@ -85,8 +112,12 @@ foreach ($scope as $dir) {
 
         // variables set from an encoded value
         $tainted = [];
+        $rawTainted = [];
         preg_match_all('/\{%-?\s*set\s+(\w+)\s*=\s*(.*?)\s*-?%\}/s', $src, $sets, PREG_SET_ORDER);
         foreach ($sets as [, $var, $expr]) {
+            if ($isRawText($expr)) {
+                $rawTainted[] = $var;
+            }
             $first = trim(explode('|', $expr)[0]);
             if ($isEncoded($first) || preg_match('/#\{[^}]*\.value\}/', $expr)) {
                 $tainted[] = $var;
@@ -96,6 +127,13 @@ foreach ($scope as $dir) {
         preg_match_all('/\{\{-?\s*(.*?)\s*-?\}\}/s', $src, $outs, PREG_OFFSET_CAPTURE);
         foreach ($outs[1] as [$expr, $offset]) {
             if (preg_match('/\|\s*raw\b/', $expr)) {
+                $line = substr_count($src, "\n", 0, $offset) + 1;
+                if ($isRawText($expr) || in_array(trim(explode('|', $expr)[0]), $rawTainted, true)) {
+                    $findings[] = "rawtext: $rel:$line: {{ $expr }}";
+                }
+                if (preg_match('/translate\(\{[^}]*\bargs\s*:|\|\s*translate\(\s*[^)\s]/', $expr)) {
+                    $findings[] = "transraw: $rel:$line: {{ $expr }}";
+                }
                 continue;
             }
             $parts = explode('|', $expr);
