@@ -29,7 +29,7 @@
         {% endblock %}
 
         {% block head_meta_open_graph %}
-            <meta property="og:site_name" content="{{ oViewConf.getBaseDir() }}">
+            <meta property="og:site_name" content="{{ oViewConf.getBaseDir()|raw }}">
             <meta property="og:title" content="{{ sPageTitle|raw }}">
             <meta property="og:description" content="{{ oView.getMetaDescription()|raw }}">
             {% if oViewConf.getActiveClassName() == 'details' %}
@@ -44,7 +44,7 @@
         {% endblock %}
 
         {% block head_meta_schema %}
-            <meta itemprop="copyrightHolder" content="{{ oxcmp_shop.oxshops__oxname.value }}">
+            <meta itemprop="copyrightHolder" content="{{ oxcmp_shop.oxshops__oxname.value|raw }}">
             <meta itemprop="image" content="{{ oViewConf.getImageUrl() }}{{ oViewConf.getViewThemeParam('sLogoFile') }}">
         {% endblock %}
 

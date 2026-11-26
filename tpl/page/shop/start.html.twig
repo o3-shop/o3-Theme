@@ -79,11 +79,11 @@
 
     {% if fixedBanner['fixedBannerBig'] and 'nopic' not in fixedBanner['fixedBannerBig'].getBannerPictureUrl() %}
         {% if fixedBanner['fixedBannerBig'].getBannerLink() %}
-            <a class="start__fixedbanner d-block" href="{{ fixedBanner['fixedBannerBig'].getBannerLink() }}">
-                <img class="img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value }}">
+            <a class="start__fixedbanner d-block" href="{{ fixedBanner['fixedBannerBig'].getBannerLink()|raw }}">
+                <img class="img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value|raw }}">
             </a>
         {% else %}
-            <img class="start__fixedbanner img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value }}">
+            <img class="start__fixedbanner img-fluid" src="{{ fixedBanner['fixedBannerBig'].getBannerPictureUrl() }}" alt="{{ fixedBanner['fixedBannerBig'].oxactions__oxtitle.value|raw }}">
         {% endif %}
     {% endif %}
 

@@ -6,7 +6,7 @@
         {% set rsslinks = oView.getRssLinks() %}
         {% if rsslinks.bargainArticles %}
             <small>
-                <a class="rss js-external" id="rssBargainProducts" href="{{ rsslinks.bargainArticles.link }}" title="{{ rsslinks.bargainArticles.title }}"><img src="{{ oViewConf.getImageUrl('rss.png') }}" alt="{{ rsslinks.bargainArticles.title }}"><span class="FXgradOrange corners glowShadow">{{ rsslinks.bargainArticles.title }}</span></a>
+                <a class="rss js-external" id="rssBargainProducts" href="{{ rsslinks.bargainArticles.link|raw }}" title="{{ rsslinks.bargainArticles.title }}"><img src="{{ oViewConf.getImageUrl('rss.png') }}" alt="{{ rsslinks.bargainArticles.title }}"><span class="FXgradOrange corners glowShadow">{{ rsslinks.bargainArticles.title }}</span></a>
             </small>
         {% endif %}
     </h2>
@@ -38,24 +38,24 @@
                         {% hasrights { ident: "TOBASKET" } %}
                             <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                             <input type="hidden" name="fnc" value="tobasket">
-                            <input type="hidden" name="aid" value="{{ _product.oxarticles__oxid.value }}">
-                            <input type="hidden" name="anid" value="{{ _product.oxarticles__oxnid.value }}">
+                            <input type="hidden" name="aid" value="{{ _product.oxarticles__oxid.value|raw }}">
+                            <input type="hidden" name="anid" value="{{ _product.oxarticles__oxnid.value|raw }}">
                             <input type="hidden" name="am" value="1">
                         {% endhasrights %}
                     {% else %}
                         <input type="hidden" name="cl" value="details">
-                        <input type="hidden" name="anid" value="{{ _product.oxarticles__oxnid.value }}">
+                        <input type="hidden" name="anid" value="{{ _product.oxarticles__oxnid.value|raw }}">
                     {% endif %}
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-{{ iColIdent }} component__productbox">
                     <div class="picture text-center">
-                        <a href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags }}" class="img-thumbnail">
-                            <img src="{{ _product.getThumbnailUrl() }}" alt="{{ sBargainArtTitle|striptags }}" class="img-fluid">
+                        <a href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags|raw }}" class="img-thumbnail">
+                            <img src="{{ _product.getThumbnailUrl() }}" alt="{{ sBargainArtTitle|striptags|raw }}" class="img-fluid">
                         </a>
                     </div>
                     <div class="title">
-                        <a id="titleBargain_{{ loop.index }}" href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags }}">{{ sBargainArtTitle|striptags }}</a>
+                        <a id="titleBargain_{{ loop.index }}" href="{{ _product.getMainLink()|raw }}" title="{{ sBargainArtTitle|striptags|raw }}">{{ sBargainArtTitle|striptags|raw }}</a>
                     </div>
                     <div class="price text-center">
                         {% block widget_product_bargainitem_price %}
@@ -76,7 +76,7 @@
                             {% endif %}
                             {% if oUnitPrice %}
                                 <span class="pricePerUnit">
-                                    {{ _product.oxarticles__oxunitquantity.value }} {{ _product.getUnitName() }} | {{ format_price(oUnitPrice, { currency: currency }) }}/{{ _product.getUnitName() }}
+                                    {{ _product.oxarticles__oxunitquantity.value|raw }} {{ _product.getUnitName() }} | {{ format_price(oUnitPrice, { currency: currency }) }}/{{ _product.getUnitName() }}
                                 </span>
                             {% endif %}
                             {% endhasrights %}

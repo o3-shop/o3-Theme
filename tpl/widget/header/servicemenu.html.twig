@@ -18,7 +18,7 @@
             {% if not oxcmp_user %}
                 {{ translate({ ident: "LOGIN" }) }} / {{ translate({ ident: "REGISTER" }) }}
             {% else %}
-                {{ oxcmp_user.oxuser__oxfname.value }}
+                {{ oxcmp_user.oxuser__oxfname.value|raw }}
             {% endif %}
         {% endblock %}
     </span>

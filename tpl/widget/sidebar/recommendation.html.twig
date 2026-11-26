@@ -16,8 +16,8 @@
                     {% set _oBoxTopProduct = _oFirstRecommendationList.getFirstArticle() %}
                     {% set _sTitle = "#{_oBoxTopProduct.oxarticles__oxtitle.value} #{_oBoxTopProduct.oxarticles__oxvarselect.value}"|striptags %}
                     <div class="text-center">
-                        <a href="{{ _oBoxTopProduct.getMainLink()|raw }}" class="featured img-thumbnail" title="{{ _sTitle }}">
-                            <img src="{{ _oBoxTopProduct.getIconUrl() }}" alt="{{ _sTitle }}">
+                        <a href="{{ _oBoxTopProduct.getMainLink()|raw }}" class="featured img-thumbnail" title="{{ _sTitle|raw }}">
+                            <img src="{{ _oBoxTopProduct.getIconUrl() }}" alt="{{ _sTitle|raw }}">
                         </a>
                     </div>
                 {% endif %}
@@ -26,8 +26,8 @@
                 {% if _oRecommendationList %}
                     {% for _oListItem in _oRecommendationList %}
 
-                            <a href="{{ _oListItem.getLink()|raw }}"><b>{{ _oListItem.oxrecommlists__oxtitle.value|striptags }}</b></a>
-                            <div class="desc">{{ translate({ ident: "LIST_BY" }) }}: {{ _oListItem.oxrecommlists__oxauthor.value|striptags }}</div>
+                            <a href="{{ _oListItem.getLink()|raw }}"><b>{{ _oListItem.oxrecommlists__oxtitle.value|striptags|raw }}</b></a>
+                            <div class="desc">{{ translate({ ident: "LIST_BY" }) }}: {{ _oListItem.oxrecommlists__oxauthor.value|striptags|raw }}</div>
                     {% endfor %}
                 {% endif %}
             {% if _oRecommendationList or oRecommList.getRecommSearch() %}

@@ -49,10 +49,10 @@
                 ga( 'require', 'ecommerce' );
 
                 ga( 'ecommerce:addTransaction', {
-                    'id': '{{ oOrder.oxorder__oxordernr.value }}',           // Transaction ID. Required.
-                    'affiliation': '{{ oxcmp_shop.oxshops__oxname.value }}', // Affiliation or store name.
-                    'revenue': '{{ oOrder.oxorder__oxtotalordersum.value }}', // Grand Total.
-                    'shipping': '{{ oOrder.oxorder__oxdelcost.value }}',     // Shipping.
+                    'id': '{{ oOrder.oxorder__oxordernr.value|raw }}',           // Transaction ID. Required.
+                    'affiliation': '{{ oxcmp_shop.oxshops__oxname.value|raw }}', // Affiliation or store name.
+                    'revenue': '{{ oOrder.oxorder__oxtotalordersum.value|raw }}', // Grand Total.
+                    'shipping': '{{ oOrder.oxorder__oxdelcost.value|raw }}',     // Shipping.
                     'tax': '{{ oOrder.oxorder__oxartvatprice1.value+oOrder.oxorder__oxartvatprice2.value }}' // Tax.
                 });
 
@@ -68,13 +68,13 @@
                         {% endif %}
                     {% endif %}
                     ga( 'ecommerce:addItem', {
-                        'id': '{{ oOrder.oxorder__oxordernr.value }}',                     // Transaction ID. Required.
-                        'name': '{{ sArticleName|trim }}',                                   // Product name. Required.
-                        'sku': '{{ oOrderArticle.oxorderarticles__oxartnum.value }}',      // SKU/code.
-                        'category': '{{ sCategoryName }}',                                   // Category or variation.
+                        'id': '{{ oOrder.oxorder__oxordernr.value|raw }}',                     // Transaction ID. Required.
+                        'name': '{{ sArticleName|trim|raw }}',                                   // Product name. Required.
+                        'sku': '{{ oOrderArticle.oxorderarticles__oxartnum.value|raw }}',      // SKU/code.
+                        'category': '{{ sCategoryName|raw }}',                                   // Category or variation.
                         'price': '{{ oOrderArticlePrice.getBruttoPrice() }}',               // Unit price.
-                        'quantity': '{{ oOrderArticle.oxorderarticles__oxamount.value }}', // Quantity.
-                        'currency': '{{ oOrder.oxorder__oxcurrency.value }}'               // local currency code.
+                        'quantity': '{{ oOrderArticle.oxorderarticles__oxamount.value|raw }}', // Quantity.
+                        'currency': '{{ oOrder.oxorder__oxcurrency.value|raw }}'               // local currency code.
                     });
                 {% endfor %}
 
@@ -107,7 +107,7 @@
             gts.push(["locale", "{{ sPageLanguage|default('de_DE') }}"]);
             {% if sGoogleShoppingAccountId %}
                 gts.push(["google_base_subaccount_id", "{{ sGoogleShoppingAccountId }}"]);
-                gts.push(["google_base_offer_id", "{{ sGoogleShoppingProductId }}"]);
+                gts.push(["google_base_offer_id", "{{ sGoogleShoppingProductId|raw }}"]);
                 {% if sShoppingCountry %}
                     gts.push(["google_base_country", "{{ sShoppingCountry|default('DE') }}"]);
                 {% endif %}
@@ -160,10 +160,10 @@
                             {% endif %}
 
                             <span class="gts-item">
-                                <span class="gts-i-name">{{ sArticleName|trim }}</span>
+                                <span class="gts-i-name">{{ sArticleName|trim|raw }}</span>
                                 <span class="gts-i-price">{{ oOrderArticlePrice.getBruttoPrice() }}</span>
-                                <span class="gts-i-quantity">{{ oOrderArticle.oxorderarticles__oxamount.value }}</span>
-                                <span class="gts-i-prodsearch-id">{{ oOrderArticle.oxorderarticles__oxartnum.value }}</span>
+                                <span class="gts-i-quantity">{{ oOrderArticle.oxorderarticles__oxamount.value|raw }}</span>
+                                <span class="gts-i-prodsearch-id">{{ oOrderArticle.oxorderarticles__oxartnum.value|raw }}</span>
                                 {% if sGoogleShoppingAccountId %}
                                     <span class="gts-i-prodsearch-store-id">{{ sGoogleShoppingAccountId }}</span>
                                     {% if sShoppingCountry %}
@@ -191,14 +191,14 @@
                         {% set sDeliveryDate = "#{sDeliveryDaysOnStock} weekdays"|strtotime %}
                     {% endif %}
 
-                    <span id="gts-o-id">{{ oOrder.oxorder__oxordernr.value }}</span>
+                    <span id="gts-o-id">{{ oOrder.oxorder__oxordernr.value|raw }}</span>
                     <span id="gts-o-domain">{{ aShopDomain.host }}</span>
-                    <span id="gts-o-email">{{ oOrder.oxorder__oxbillemail.value }}</span>
-                    <span id="gts-o-country">{{ sCustomerCountry }}</span>
-                    <span id="gts-o-currency">{{ oOrder.oxorder__oxcurrency.value }}</span>
-                    <span id="gts-o-total">{{ oOrder.oxorder__oxtotalordersum.value }}</span>
-                    <span id="gts-o-discounts">{% if oOrder.oxorder__oxdiscount.value > 0 %}-{% endif %}{{ oOrder.oxorder__oxdiscount.value }}</span>
-                    <span id="gts-o-shipping-total">{{ oOrder.oxorder__oxdelcost.value }}</span>
+                    <span id="gts-o-email">{{ oOrder.oxorder__oxbillemail.value|raw }}</span>
+                    <span id="gts-o-country">{{ sCustomerCountry|raw }}</span>
+                    <span id="gts-o-currency">{{ oOrder.oxorder__oxcurrency.value|raw }}</span>
+                    <span id="gts-o-total">{{ oOrder.oxorder__oxtotalordersum.value|raw }}</span>
+                    <span id="gts-o-discounts">{% if oOrder.oxorder__oxdiscount.value > 0 %}-{% endif %}{{ oOrder.oxorder__oxdiscount.value|raw }}</span>
+                    <span id="gts-o-shipping-total">{{ oOrder.oxorder__oxdelcost.value|raw }}</span>
                     <span id="gts-o-tax-total">{{ oOrder.oxorder__oxartvatprice1.value+oOrder.oxorder__oxartvatprice2.value }}</span>
                     <span id="gts-o-est-ship-date">{{ sShipDate|date_format("%Y-%m-%d") }}</span>
                     <span id="gts-o-est-delivery-date">{{ sDeliveryDate|date_format("%Y-%m-%d") }}</span>

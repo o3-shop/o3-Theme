@@ -1,13 +1,13 @@
 {% if delivadr %}
     <address {% if oxid %}id="user_shipppingaddress-address_{{ oxid }}" class="collapse show"{% endif %}>
-        {% if delivadr.oxaddress__oxcompany.value %} {{ delivadr.oxaddress__oxcompany.value }}<br>{% endif %}
-        {% if delivadr.oxaddress__oxaddinfo.value %} {{ delivadr.oxaddress__oxaddinfo.value }}<br>{% endif %}
-        {% if delivadr.oxaddress__oxfname.value or delivadr.oxaddress__oxlname.value %}{{ delivadr.oxaddress__oxfname.value }}&nbsp;{{ delivadr.oxaddress__oxlname.value }}<br>{% endif %}
-        {% if delivadr.oxaddress__oxstreet.value or delivadr.oxaddress__oxstreetnr.value %}{{ delivadr.oxaddress__oxstreet.value }}&nbsp;{{ delivadr.oxaddress__oxstreetnr.value }}<br>{% endif %}
-        {% if delivadr.oxaddress__oxstateid.value %}{{ delivadr.oxaddress__oxstateid.value }} {% endif %}
-        {% if delivadr.oxaddress__oxzip.value or delivadr.oxaddress__oxcity.value %}{{ delivadr.oxaddress__oxzip.value }}&nbsp;{{ delivadr.oxaddress__oxcity.value }}<br>{% endif %}
-        {% if delivadr.oxaddress__oxcountry.value %}{{ delivadr.oxaddress__oxcountry.value }}{% endif %}{% if delivadr.oxaddress__oxfon.value or delivadr.oxaddress__oxfax.value %}<br><br>{% endif %}
-        {% if delivadr.oxaddress__oxfon.value %}{{ translate({ ident: "PHONE" }) }} {{ delivadr.oxaddress__oxfon.value }}{% endif %}{% if delivadr.oxaddress__oxfax.value %}<br>{% endif %}
-        {% if delivadr.oxaddress__oxfax.value %}{{ translate({ ident: "FAX" }) }} {{ delivadr.oxaddress__oxfax.value }}{% endif %}
+        {% if delivadr.oxaddress__oxcompany.value %} {{ delivadr.oxaddress__oxcompany.value|raw }}<br>{% endif %}
+        {% if delivadr.oxaddress__oxaddinfo.value %} {{ delivadr.oxaddress__oxaddinfo.value|raw }}<br>{% endif %}
+        {% if delivadr.oxaddress__oxfname.value or delivadr.oxaddress__oxlname.value %}{{ delivadr.oxaddress__oxfname.value|raw }}&nbsp;{{ delivadr.oxaddress__oxlname.value|raw }}<br>{% endif %}
+        {% if delivadr.oxaddress__oxstreet.value or delivadr.oxaddress__oxstreetnr.value %}{{ delivadr.oxaddress__oxstreet.value|raw }}&nbsp;{{ delivadr.oxaddress__oxstreetnr.value|raw }}<br>{% endif %}
+        {% if delivadr.oxaddress__oxstateid.value %}{{ delivadr.oxaddress__oxstateid.value|raw }} {% endif %}
+        {% if delivadr.oxaddress__oxzip.value or delivadr.oxaddress__oxcity.value %}{{ delivadr.oxaddress__oxzip.value|raw }}&nbsp;{{ delivadr.oxaddress__oxcity.value|raw }}<br>{% endif %}
+        {% if delivadr.oxaddress__oxcountry.value %}{{ delivadr.oxaddress__oxcountry.value|raw }}{% endif %}{% if delivadr.oxaddress__oxfon.value or delivadr.oxaddress__oxfax.value %}<br><br>{% endif %}
+        {% if delivadr.oxaddress__oxfon.value %}{{ translate({ ident: "PHONE" }) }} {{ delivadr.oxaddress__oxfon.value|raw }}{% endif %}{% if delivadr.oxaddress__oxfax.value %}<br>{% endif %}
+        {% if delivadr.oxaddress__oxfax.value %}{{ translate({ ident: "FAX" }) }} {{ delivadr.oxaddress__oxfax.value|raw }}{% endif %}
     </address>
 {% endif %}

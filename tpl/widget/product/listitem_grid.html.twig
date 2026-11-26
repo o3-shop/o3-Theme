@@ -98,10 +98,10 @@
         {% block widget_product_listitem_infogrid_gridpicture %}
             {% set sHoverPic = product.getPictureUrl(2) %}
             <div class="component__productbox-picture mb-4">
-                <a class="component__productbox-picture-link" href="{{ _productLink }}" title="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
-                    <img loading="lazy" src="{{ product.getThumbnailUrl() }}" alt="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                <a class="component__productbox-picture-link" href="{{ _productLink|raw }}" title="{{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}">
+                    <img loading="lazy" src="{{ product.getThumbnailUrl() }}" alt="{{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}">
                     {% if sHoverPic and 'nopic' not in sHoverPic %}
-                        <img class="img-hover" loading="lazy" src="{{ sHoverPic }}" alt="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
+                        <img class="img-hover" loading="lazy" src="{{ sHoverPic }}" alt="{{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}">
                     {% endif %}
                 </a>
                 {% if blShowToBasket %}
@@ -112,8 +112,8 @@
                     <input type="hidden" name="pgNr" value="{{ oView.getActPage() }}">
                     <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
                     <input type="hidden" name="fnc" value="tobasket">
-                    <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
-                    <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+                    <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value|raw }}">
+                    <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value|raw }}">
                     {% include "widget/product/tobasket.html.twig" with {name: "am", value: 1, submit: true, blCanBuy: true, stockflag: product.oxarticles__oxstockflag.value, stock: product.oxarticles__oxstock.value, disabled: false} %}
                 </form>
                 {% endhasrights %}
@@ -123,8 +123,8 @@
 
 
         {% block widget_product_listitem_infogrid_titlebox %}
-            <a href="{{ _productLink }}" class="component__productbox-title" title="{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}">
-                {{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}
+            <a href="{{ _productLink|raw }}" class="component__productbox-title" title="{{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}">
+                {{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}
             </a>
         {% endblock %}
 
@@ -172,12 +172,12 @@
 
                     {% if oUnitPrice %}
                         <span id="productPricePerUnit_{{ testid }}" class="pricePerUnit">
-                            {{ product.oxarticles__oxunitquantity.value }} {{ product.getUnitName() }} | {{ format_price(oUnitPrice, { currency: currency }) }}/{{ product.getUnitName() }}
+                            {{ product.oxarticles__oxunitquantity.value|raw }} {{ product.getUnitName() }} | {{ format_price(oUnitPrice, { currency: currency }) }}/{{ product.getUnitName() }}
                         </span>
                     {% elseif product.oxarticles__oxweight.value  %}
                         <span id="productPricePerUnit_{{ testid }}" class="pricePerUnit">
                             <span title="weight">{{ translate({ ident: "WEIGHT" }) }}</span>
-                            <span class="value">{{ product.oxarticles__oxweight.value }} {{ translate({ ident: "KG" }) }}</span>
+                            <span class="value">{{ product.oxarticles__oxweight.value|raw }} {{ translate({ ident: "KG" }) }}</span>
                         </span>
                     {% endif %}
                 {% endhasrights %}
@@ -195,7 +195,7 @@
                 {{ oViewConf.getHiddenSid()|raw }}
                 <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
                 <input type="hidden" name="fnc" value="{{ removeFunction }}">
-                <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
+                <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value|raw }}">
                 <input type="hidden" name="am" value="0">
                 <input type="hidden" name="itmid" value="{{ product.getItemKey() }}">
                 {% if recommid %}

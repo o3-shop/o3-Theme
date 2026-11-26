@@ -8,7 +8,7 @@
                         {% for _oNewsItem in oNews %}
                             <li>
                                 {{ _oNewsItem.getLongDesc()|striptags|truncate(100)|raw }}<br>
-                                <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=news") }) }}#{{ _oNewsItem.oxnews__oxid.value }}" class="readMore">{{ translate({ ident: "NEXT" }) }}</a>
+                                <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=news") }) }}#{{ _oNewsItem.oxnews__oxid.value|raw }}" class="readMore">{{ translate({ ident: "NEXT" }) }}</a>
                             </li>
                         {% endfor %}
                     {% endblock %}

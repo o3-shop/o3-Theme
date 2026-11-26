@@ -61,11 +61,11 @@
                             {% if sBannerPictureUrl and 'nopic' not in sBannerPictureUrl and "fixedBanner" not in oBanner.oxactions__oxid.value %}
                                 {% set sBannerLink = oBanner.getBannerLink() %}
                                 {% if sBannerLink %}
-                                    <a class="splide__slide" href="{{ sBannerLink }}" title="{{ oBanner.oxactions__oxtitle.value }}">
-                                        <img src="{{ sBannerPictureUrl }}" class="d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value }}" title="{{ oBanner.oxactions__oxtitle.value }}">
+                                    <a class="splide__slide" href="{{ sBannerLink|raw }}" title="{{ oBanner.oxactions__oxtitle.value|raw }}">
+                                        <img src="{{ sBannerPictureUrl }}" class="d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value|raw }}" title="{{ oBanner.oxactions__oxtitle.value|raw }}">
                                     </a>
                                 {% else %}
-                                    <img src="{{ sBannerPictureUrl }}" class="splide__slide d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value }}" title="{{ oBanner.oxactions__oxtitle.value }}">
+                                    <img src="{{ sBannerPictureUrl }}" class="splide__slide d-block w-100" alt="{{ oBanner.oxactions__oxtitle.value|raw }}" title="{{ oBanner.oxactions__oxtitle.value|raw }}">
                                 {% endif %}
                             {% endif %}
                         {% endfor %}

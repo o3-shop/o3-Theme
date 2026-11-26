@@ -3,7 +3,7 @@
     {% set _error_content %}
         <div>
             <div>{{ translate({ ident: "ERROR_MESSAGE_OXID_SHOP_ERROR" }) }}</div>
-            <div>{{ translate({ ident: "MESSAGE_PLEASE_DELETE_FOLLOWING_DIRECTORY", suffix: "COLON" }) }} {{ oViewConf.getBaseDir() }}/setup!</div>
+            <div>{{ translate({ ident: "MESSAGE_PLEASE_DELETE_FOLLOWING_DIRECTORY", suffix: "COLON" }) }} {{ oViewConf.getBaseDir()|raw }}/setup!</div>
         </div>
     {% endset %}
     {% include "message/error.html.twig" with {statusMessage: _error_content} %}

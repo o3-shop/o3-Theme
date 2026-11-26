@@ -3,11 +3,11 @@
 <div id="page">
     <div id="header" class="clear">
        {% include "widget/header/languages.html.twig" %}
-       <div><a id="logo" href="{{ oViewConf.getHomeLink() }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}"><img src="{{ oViewConf.getImageUrl('logo.png') }}" alt="{{ oxcmp_shop.oxshops__oxtitleprefix.value }}"></a></div>
+       <div><a id="logo" href="{{ oViewConf.getHomeLink()|raw }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}"><img src="{{ oViewConf.getImageUrl('logo.png') }}" alt="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}"></a></div>
     </div>
     <div>
         {% ifcontent ident "oxstartwelcome" set oCont %}
-            {{ oCont.oxcontents__oxcontent.value }}
+            {{ oCont.oxcontents__oxcontent.value|raw }}
         {% endifcontent %}
         <div>
             {{ translate({ ident: "PLEASE_CHOOSE" }) }}
@@ -17,9 +17,9 @@
             {% set shoplangs = oView.getShopDefaultLangs() %}
             {% for shopid, mallshop in oView.getShopList() %}
                 {% if shoplinks.$shopid %}
-                    <a href="{{ shoplinks.$shopid }}">{{ mallshop.oxshops__oxname.value }}</a><br>
+                    <a href="{{ shoplinks.$shopid }}">{{ mallshop.oxshops__oxname.value|raw }}</a><br>
                 {% else %}
-                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=mallstart"), params: "fnc=chshp&amp;shp=`$mallshop->oxshops__oxid->value`&amp;lang=`$shoplangs.$shopid`" }) }}" >{{ mallshop.oxshops__oxname.value }}</a><br>
+                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=mallstart"), params: "fnc=chshp&amp;shp=`$mallshop->oxshops__oxid->value`&amp;lang=`$shoplangs.$shopid`" }) }}" >{{ mallshop.oxshops__oxname.value|raw }}</a><br>
                 {% endif %}
             {% endfor %}
          </div>
@@ -32,7 +32,7 @@
         </div>
         <div class="text">
             {% ifcontent ident "oxstdfooter" set oCont %}
-            {{ oCont.oxcontents__oxcontent.value }}
+            {{ oCont.oxcontents__oxcontent.value|raw }}
             {% endifcontent %}
         </div>
     </div>

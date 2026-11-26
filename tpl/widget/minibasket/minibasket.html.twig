@@ -12,12 +12,12 @@
                 {% set minibasketItemTitle = _product.getTitle() %}
                 <div class="component__basketarticle">
 
-                    <a href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags }}">
-                        <img src="{{ _product.getIconUrl() }}" alt="{{ minibasketItemTitle|striptags }}"/>
+                    <a href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags|raw }}">
+                        <img src="{{ _product.getIconUrl() }}" alt="{{ minibasketItemTitle|striptags|raw }}"/>
                     </a>
 
                     <div class="component__basketarticle-info">
-                        <a class="component__basketarticle-title" href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags }}">{{ _product.getAmount() }} x {{ minibasketItemTitle|striptags }}</a>
+                        <a class="component__basketarticle-title" href="{{ _product.getLink()|raw }}" title="{{ minibasketItemTitle|striptags|raw }}">{{ _product.getAmount() }} x {{ minibasketItemTitle|striptags|raw }}</a>
 
                         <input type="hidden" name="aproducts[{{ basketindex }}][remove]" value="0">
                         <button type="submit" name="removeBtn" class="component__basketarticle-remove btn" data-remove-id="aproducts[{{ basketindex }}][remove]" data-js="remove-from-basket">

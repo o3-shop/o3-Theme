@@ -244,10 +244,10 @@
                 <input type="hidden" name="fnc" value="savereview">
                 <input type="hidden" name="cl" value="{{ oViewConf.getTopActiveClassName() }}">
                 {% if oDetailsProduct %}
-                    <input type="hidden" name="anid" value="{{ oDetailsProduct.oxarticles__oxid.value }}">
+                    <input type="hidden" name="anid" value="{{ oDetailsProduct.oxarticles__oxid.value|raw }}">
                 {% else %}
                     {% set _actvrecommlist = oView.getActiveRecommList() %}
-                    <input type="hidden" name="recommid" value="{{ _actvrecommlist.oxrecommlists__oxid.value }}">
+                    <input type="hidden" name="recommid" value="{{ _actvrecommlist.oxrecommlists__oxid.value|raw }}">
                 {% endif %}
 
                 {% if sReviewUserHash %}
@@ -295,7 +295,7 @@
             {% block widget_reviews_record %}
 
                 <div class="details__reviews-writer" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                    <span itemprop="name">{{ review.oxuser__oxfname.value }}</span>
+                    <span itemprop="name">{{ review.oxuser__oxfname.value|raw }}</span>
                 </div>
 
                 {% if review.oxreviews__oxrating.value %}
@@ -317,7 +317,7 @@
 
                         <div class="d-none">
                             <span itemprop="worstRating">1</span>
-                            <span itemprop="ratingValue">{{ review.oxreviews__oxrating.value|default('0') }}</span>
+                            <span itemprop="ratingValue">{{ review.oxreviews__oxrating.value|default('0')|raw }}</span>
                             <span itemprop="bestRating">5</span>
                         </div>
 
@@ -329,7 +329,7 @@
                 </time>
 
                 <div class="details__reviews-message" itemprop="reviewBody">
-                    {{ review.oxreviews__oxtext.value }}
+                    {{ review.oxreviews__oxtext.value|raw }}
                 </div>
 
             {% endblock %}
