@@ -1,7 +1,7 @@
 {% if oxcmp_shop.oxshops__oxproductive.value %}
-    {{ script({ include: "js/widget/validate.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+    {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
 {% else %}
-    {{ script({ include: "js/widget/validate.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+    {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
 {% endif %}
 
 <form action="{{ oViewConf.getSelfActionLink() }}" name="forgotpwd" method="post" class="needs-validation" novalidate>

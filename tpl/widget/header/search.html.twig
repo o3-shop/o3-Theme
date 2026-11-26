@@ -32,8 +32,8 @@
     </form>
 
     {% if oxcmp_shop.oxshops__oxproductive.value %}
-        {{ script({ include: "js/widget/oxsearchsuggest.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/oxsearchsuggest.min.js", priority: 10 }) }}
     {% else %}
-        {{ script({ include: "js/widget/oxsearchsuggest.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/oxsearchsuggest.js", priority: 10 }) }}
     {% endif %}
 {% endblock %}

@@ -97,7 +97,7 @@
                                                 </div>
                                                 {% set ictr = "`$ictr+1`" %}
                                             {% endfor %}
-                                            {{ script({ add: "$( '#wrapp_`$loop.index` img' ).click(function(){ $(this).parent().parent().find('input').click(); });", dynamic: __oxid_include_dynamic }) }}
+                                            {{ script({ add: "$( '#wrapp_`$loop.index` img' ).click(function(){ $(this).parent().parent().find('input').click(); });" }) }}
                                         </div>
 
                                                 {% set icounter = "`$icounter+1`" %}
@@ -155,7 +155,7 @@
                                                 </div>
                                             {% set icounter = "`$icounter+1`" %}
                                         {% endfor %}
-                                        {{ script({ add: "$( '#wrappCard img' ).click(function(){ $(this).parent().siblings().find('input').click(); });", dynamic: __oxid_include_dynamic }) }}
+                                        {{ script({ add: "$( '#wrappCard img' ).click(function(){ $(this).parent().siblings().find('input').click(); });" }) }}
                                     </div>
 
                                 {% endblock %}

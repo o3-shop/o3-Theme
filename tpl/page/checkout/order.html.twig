@@ -1,9 +1,9 @@
 {% capture append = "oxidBlock_content" %}
 
     {% if oxcmp_shop.oxshops__oxproductive.value %}
-        {{ script({ include: "js/widget/check-agb.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/check-agb.min.js", priority: 10 }) }}
     {% else %}
-        {{ script({ include: "js/widget/check-agb.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/check-agb.js", priority: 10 }) }}
     {% endif %}
 
     <h1 class="title-big">

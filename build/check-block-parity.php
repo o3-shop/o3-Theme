@@ -6,7 +6,9 @@
  *
  * Usage: php build/check-block-parity.php <ref-with-tpl> <dir-with-twig>
  *   e.g. php build/check-block-parity.php main .
- * Exit 0 + "OK <n> blocks", else "missing: <file>: <block>" lines and exit 1.
+ * Also fails on a Twig block that is not in the Smarty file ("extra: <file>: <block>") and on a
+ * `dynamic:` parameter in script()/style() calls ("dynamic: <file>"): the core reads that flag itself.
+ * Exit 0 + "OK <n> blocks", else the problem lines and exit 1.
  */
 
 [, $ref, $dir] = $argv + [null, 'main', '.'];
@@ -31,6 +33,17 @@ foreach ($files as $file) {
     foreach ($blocks as $block) {
         if (!preg_match('/\{%-?\s*block\s+' . preg_quote($block, '/') . '\b/', $twig)) {
             $missing[] = "missing: $file: $block";
+        }
+    }
+    preg_match_all('/\{%-?\s*block\s+(\w+)/', $twig, $t);
+    foreach (array_diff(array_unique($t[1]), $blocks) as $block) {
+        $missing[] = "extra: $file: $block";
+    }
+    preg_match_all('/\{\{-?\s*(?:script|style)\(.*?\}\)\s*-?\}\}/s', $twig, $calls);
+    foreach ($calls[0] as $c) {
+        if (preg_match('/\bdynamic\s*:/', $c)) {
+            $missing[] = "dynamic: $file";
+            break;
         }
     }
 }

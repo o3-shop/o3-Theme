@@ -170,17 +170,17 @@
 
     {% block base_js %}
         {% if oxcmp_shop.oxshops__oxproductive.value %}
-            {{ script({ include: "js/main.min.js", priority: 1, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ include: "js/main.min.js", priority: 1 }) }}
         {% else %}
-            {{ script({ include: "js/main.js", priority: 1, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ include: "js/main.js", priority: 1 }) }}
         {% endif %}
     {% endblock %}
 
     {% if oViewConf.getViewThemeParam('activateJquery') %}
-        {{ script({ include: "js/jquery.min.js", priority: 1, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/jquery.min.js", priority: 1 }) }}
     {% endif %}
 
-    {{ script({ dynamic: __oxid_include_dynamic }) }}
+    {{ script() }}
 
     {% include_dynamic "widget/dynscript.html.twig" %}
 

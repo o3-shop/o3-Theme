@@ -2,9 +2,9 @@
     {% set template_title = "MY_WISH_LIST"|translate %}
 
     {% if oxcmp_shop.oxshops__oxproductive.value %}
-        {{ script({ include: "js/widget/remove-from-notice.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/remove-from-notice.min.js", priority: 10 }) }}
     {% else %}
-        {{ script({ include: "js/widget/remove-from-notice.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widget/remove-from-notice.js", priority: 10 }) }}
     {% endif %}
 
     <div class="row">

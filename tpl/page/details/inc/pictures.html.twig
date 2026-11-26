@@ -1,5 +1,5 @@
-{{ script({ include: "js/libs/photoswipe.min.js", priority: 8, dynamic: __oxid_include_dynamic }) }}
-{{ script({ include: "js/libs/photoswipe-ui-default.min.js", priority: 8, dynamic: __oxid_include_dynamic }) }}
+{{ script({ include: "js/libs/photoswipe.min.js", priority: 8 }) }}
+{{ script({ include: "js/libs/photoswipe-ui-default.min.js", priority: 8 }) }}
 
 {% set oConfig = oViewConf.getConfig() %}
 
@@ -116,7 +116,7 @@
                 thumbnails.mount();
             }
             initPictureSlider();
-        ", dynamic: __oxid_include_dynamic }) }}
+        " }) }}
 
     {% endif %}
 
@@ -164,6 +164,6 @@
                 });
             });
         })();
-    ", dynamic: __oxid_include_dynamic }) }}
+    " }) }}
 
 </div>

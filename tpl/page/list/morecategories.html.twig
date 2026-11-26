@@ -5,8 +5,8 @@
     {% set _iCategoriesPerRow = 3 %}
     {% set iSubCategoriesCount = 0 %}
     {% if _navcategorytree|length %}
-        {{ script({ include: "js/widgets/oxequalizer.min.js", priority: 10, dynamic: __oxid_include_dynamic }) }}
-        {{ script({ add: "$(window).on('load', function(){ if( !isMobileDevice() ) { oxEqualizer.equalHeight( $( '.subcatList .row .panel' ) ); } });", dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: "js/widgets/oxequalizer.min.js", priority: 10 }) }}
+        {{ script({ add: "$(window).on('load', function(){ if( !isMobileDevice() ) { oxEqualizer.equalHeight( $( '.subcatList .row .panel' ) ); } });" }) }}
         <div class="subcatList">
             <div class="row">
                 {% for category in _navcategorytree %}
