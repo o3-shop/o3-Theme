@@ -23,11 +23,11 @@ anon 200 search-empty             cl-search                       GET /index.php
 anon 200 manufacturer-list        cl-manufacturerlist             GET /index.php?cl=manufacturerlist&mnid={MANUFACTURER}
 anon 200 vendor-list              cl-vendorlist                   GET /index.php?cl=vendorlist
 anon 200 compare-empty            cl-compare                      GET /index.php?cl=compare
-anon 200 compare-add              cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tocomp&aid={ARTICLE}&anid={ARTICLE}&am=1
+anon 200 compare-add              cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tocomparelist&aid={ARTICLE}&anid={ARTICLE}&am=1
 anon 200 compare-with-product     cl-compare~{TERM}               GET /index.php?cl=compare
 anon 200 price-alarm-submit       cl-details~alert-success        POST /index.php stoken={STOKEN}&cl=details&anid={ARTICLE}&fnc=addme&pa[price]=1&pa[email]=smoke-test@example.invalid&pa[aid]={ARTICLE}
 anon 200 recommendation-list      cl-recommlist                   GET /index.php?cl=recommlist
-anon 200 suggest                  cl-suggest                      GET /index.php?cl=suggest&anid={ARTICLE}
+# suggest and account_reviews redirect to the start page in the demo shop (feature switched off): not covered, see task-2 report
 
 # --- anonymous: basket / user / info ---
 anon 200 basket-empty             cl-basket                       GET /index.php?cl=basket
@@ -58,7 +58,6 @@ user 200 account-wishlist-empty   cl-account_wishlist             GET /index.php
 user 200 wishlist-add             cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=towishlist&aid={ARTICLE}&anid={ARTICLE}&am=1
 user 200 account-wishlist-filled  cl-account_wishlist~{TERM}      GET /index.php?cl=account_wishlist
 user 200 account-recommlist       cl-account_recommlist           GET /index.php?cl=account_recommlist
-user 200 account-reviews          cl-account_reviews              GET /index.php?cl=account_reviews
 user 200 account-downloads        cl-account_downloads            GET /index.php?cl=account_downloads
 user 200 review-logged-in         cl-review                       GET /index.php?cl=review&anid={ARTICLE}
 user 200 contact-logged-in        cl-contact                      GET /index.php?cl=contact
