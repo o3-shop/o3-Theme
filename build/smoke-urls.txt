@@ -1,63 +1,73 @@
 # Storefront smoke URLs for build/smoke.sh
-# columns: auth  expected-status  label  METHOD  path  [post-data]
-#   auth    anon = fresh cookie jar per run, user = logged in as the test customer (shared jar, runs in file order)
-#   {PLACEHOLDERS} are resolved from the shop DB by smoke.sh; {STOKEN} is read from the previous page of the same jar
-#   write/flow lines (POST) belong to the checkout sequence and must stay in this order
+# columns: auth  expected-status  label  expect  METHOD  path  [post-data]      (whitespace separated, no spaces inside a column)
+#   auth     anon = shared anonymous cookie jar, user = shared logged-in jar (runs in file order)
+#   expect   page marker(s) that must appear in the FINAL body; '-' = none. Regex (grep -E), several joined with '~' (all must match).
+#            body classes `cl-<controller>` prove we landed on the right page (a redirect to login/basket/start fails).
+#   {PLACEHOLDERS} come from the shop DB (see smoke.sh); {STOKEN}/{MD5} come from the previous page of the same jar
+#   Checks on every URL regardless of this file: status, error markers, leftover template syntax, PHP warnings,
+#   missing translations, truncated page, new ERROR/CRITICAL log lines; on user lines and POSTs also no `alert alert-danger` box.
+#   POST lines form the checkout/compare/wishlist sequences and must stay in this order.
 
 # --- anonymous: catalogue ---
-anon 200 start                    GET /index.php?cl=start
-anon 200 category-list            GET /index.php?cl=alist&cnid={CATEGORY}
-anon 200 category-list-sorted     GET /index.php?cl=alist&cnid={CATEGORY}&listorder=oxtitle&listorderby=desc&ldtype=infogrid
-anon 200 category-parent          GET /index.php?cl=alist&cnid={CATEGORY_PARENT}
-anon 200 product-details          GET /index.php?cl=details&anid={ARTICLE}
-anon 200 product-variants-parent  GET /index.php?cl=details&anid={VARPARENT}
-anon 200 product-variant-child    GET /index.php?cl=details&anid={VARCHILD}
-anon 200 search                   GET /index.php?cl=search&searchparam=panda
-anon 200 search-empty             GET /index.php?cl=search&searchparam=zzqqxxnomatch
-anon 200 manufacturer-list        GET /index.php?cl=manufacturerlist&mnid={MANUFACTURER}
-anon 200 vendor-list              GET /index.php?cl=vendorlist
-anon 200 compare                  GET /index.php?cl=compare
-anon 200 price-alarm-submit       POST /index.php stoken={STOKEN}&cl=details&anid={ARTICLE}&fnc=addme&pa[price]=1&pa[email]=smoke-test@example.invalid&pa[aid]={ARTICLE}
-anon 200 recommendation-list      GET /index.php?cl=recommlist
-anon 200 suggest                  GET /index.php?cl=suggest&anid={ARTICLE}
+anon 200 start                    cl-start                        GET /index.php?cl=start
+anon 200 start-en                 cl-start~<html[^>]*lang="en"    GET /index.php?cl=start&lang=1
+anon 200 category-list            cl-alist~component__productbox-frame GET /index.php?cl=alist&cnid={CATEGORY}
+anon 200 category-list-sorted     cl-alist~component__productbox-frame GET /index.php?cl=alist&cnid={CATEGORY}&listorder=oxtitle&listorderby=desc&ldtype=infogrid
+anon 200 category-parent          cl-alist                        GET /index.php?cl=alist&cnid={CATEGORY_PARENT}
+anon 200 product-details          cl-details                      GET /index.php?cl=details&anid={ARTICLE}
+anon 200 product-details-en       cl-details~<html[^>]*lang="en"  GET /index.php?cl=details&anid={ARTICLE}&lang=1
+anon 200 product-variants-parent  cl-details                      GET /index.php?cl=details&anid={VARPARENT}
+anon 200 product-variant-child    cl-details                      GET /index.php?cl=details&anid={VARCHILD}
+anon 200 search                   cl-search~component__productbox-frame~{TERM} GET /index.php?cl=search&searchparam={TERM}
+anon 200 search-empty             cl-search                       GET /index.php?cl=search&searchparam=zzqqxxnomatch
+anon 200 manufacturer-list        cl-manufacturerlist             GET /index.php?cl=manufacturerlist&mnid={MANUFACTURER}
+anon 200 vendor-list              cl-vendorlist                   GET /index.php?cl=vendorlist
+anon 200 compare-empty            cl-compare                      GET /index.php?cl=compare
+anon 200 compare-add              cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tocomp&aid={ARTICLE}&anid={ARTICLE}&am=1
+anon 200 compare-with-product     cl-compare~{TERM}               GET /index.php?cl=compare
+anon 200 price-alarm-submit       cl-details~alert-success        POST /index.php stoken={STOKEN}&cl=details&anid={ARTICLE}&fnc=addme&pa[price]=1&pa[email]=smoke-test@example.invalid&pa[aid]={ARTICLE}
+anon 200 recommendation-list      cl-recommlist                   GET /index.php?cl=recommlist
+anon 200 suggest                  cl-suggest                      GET /index.php?cl=suggest&anid={ARTICLE}
 
 # --- anonymous: basket / user / info ---
-anon 200 basket-empty             GET /index.php?cl=basket
-anon 200 user-step-guest          GET /index.php?cl=user
-anon 200 register                 GET /index.php?cl=register
-anon 200 forgot-password          GET /index.php?cl=forgotpwd
-anon 200 contact                  GET /index.php?cl=contact
-anon 200 newsletter               GET /index.php?cl=newsletter
-anon 200 revocation               GET /index.php?cl=revocation
-anon 200 links                    GET /index.php?cl=links
-anon 200 news                     GET /index.php?cl=news
-anon 200 clear-cookies            GET /index.php?cl=clearcookies
-anon 200 content-order-info       GET /index.php?cl=content&oxloadid=oxorderinfo
-anon 200 content-withdrawal       GET /index.php?cl=content&oxloadid=oxrightofwithdrawal
-anon 200 content-by-id            GET /index.php?cl=content&oxcid={CONTENT}
-anon 200 account-login            GET /index.php?cl=account
-anon 200 wishlist-anon            GET /index.php?cl=wishlist
-anon 404 not-found                GET /this-page-does-not-exist-smoke/
+anon 200 basket-empty             cl-basket                       GET /index.php?cl=basket
+anon 200 user-step-guest          cl-user                         GET /index.php?cl=user
+anon 200 register                 cl-register                     GET /index.php?cl=register
+anon 200 forgot-password          cl-forgotpwd                    GET /index.php?cl=forgotpwd
+anon 200 contact                  cl-contact                      GET /index.php?cl=contact
+anon 200 newsletter               cl-newsletter                   GET /index.php?cl=newsletter
+anon 200 revocation               cl-revocation                   GET /index.php?cl=revocation
+anon 200 links                    cl-links                        GET /index.php?cl=links
+anon 200 news                     cl-news                         GET /index.php?cl=news
+anon 200 clear-cookies            cl-clearcookies                 GET /index.php?cl=clearcookies
+anon 200 content-order-info       cl-content                      GET /index.php?cl=content&oxloadid=oxorderinfo
+anon 200 content-withdrawal       cl-content                      GET /index.php?cl=content&oxloadid=oxrightofwithdrawal
+anon 200 content-by-id            cl-content                      GET /index.php?cl=content&oxcid={CONTENT}
+anon 200 account-login            cl-account                      GET /index.php?cl=account
+anon 200 wishlist-anon            cl-wishlist                     GET /index.php?cl=wishlist
+anon 404 not-found                -                               GET /this-page-does-not-exist-smoke/
 
 # --- logged in: account ---
-user 200 account-dashboard        GET /index.php?cl=account
-user 200 account-user             GET /index.php?cl=account_user
-user 200 account-password         GET /index.php?cl=account_password
-user 200 account-orders           GET /index.php?cl=account_order
-user 200 account-newsletter       GET /index.php?cl=account_newsletter
-user 200 account-noticelist       GET /index.php?cl=account_noticelist
-user 200 account-wishlist         GET /index.php?cl=account_wishlist
-user 200 account-recommlist       GET /index.php?cl=account_recommlist
-user 200 account-reviews          GET /index.php?cl=account_reviews
-user 200 account-downloads        GET /index.php?cl=account_downloads
-user 200 review-logged-in         GET /index.php?cl=review&anid={ARTICLE}
-user 200 contact-logged-in        GET /index.php?cl=contact
+user 200 account-dashboard        cl-account                      GET /index.php?cl=account
+user 200 account-user             cl-account_user                 GET /index.php?cl=account_user
+user 200 account-password        cl-account_password             GET /index.php?cl=account_password
+user 200 account-orders           cl-account_order                GET /index.php?cl=account_order
+user 200 account-newsletter       cl-account_newsletter           GET /index.php?cl=account_newsletter
+user 200 account-noticelist       cl-account_noticelist           GET /index.php?cl=account_noticelist
+user 200 account-wishlist-empty   cl-account_wishlist             GET /index.php?cl=account_wishlist
+user 200 wishlist-add             cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=towishlist&aid={ARTICLE}&anid={ARTICLE}&am=1
+user 200 account-wishlist-filled  cl-account_wishlist~{TERM}      GET /index.php?cl=account_wishlist
+user 200 account-recommlist       cl-account_recommlist           GET /index.php?cl=account_recommlist
+user 200 account-reviews          cl-account_reviews              GET /index.php?cl=account_reviews
+user 200 account-downloads        cl-account_downloads            GET /index.php?cl=account_downloads
+user 200 review-logged-in         cl-review                       GET /index.php?cl=review&anid={ARTICLE}
+user 200 contact-logged-in        cl-contact                      GET /index.php?cl=contact
 
-# --- logged in: checkout flow (ordered; places one real order, deleted at the end) ---
-user 200 basket-add               POST /index.php stoken={STOKEN}&cl=start&fnc=tobasket&aid={ARTICLE}&anid={ARTICLE}&am=1
-user 200 basket                   GET /index.php?cl=basket
-user 200 checkout-user            GET /index.php?cl=user
-user 200 checkout-payment         GET /index.php?cl=payment
-user 200 checkout-order           POST /index.php stoken={STOKEN}&cl=payment&fnc=validatepayment&paymentid=oxidpayadvance&sShipSet=oxidstandard
-user 200 checkout-thankyou        POST /index.php stoken={STOKEN}&cl=order&fnc=execute&ord_agb=1&sDeliveryAddressMD5={MD5}&challenge=&oxdownloadableproductsagreement=1&oxserviceproductsagreement=1
-user 200 account-orders-after     GET /index.php?cl=account_order
+# --- logged in: checkout flow (ordered; places exactly one real order, removed at the end) ---
+user 200 basket-add               cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tobasket&aid={ARTICLE}&anid={ARTICLE}&am=1
+user 200 basket                   cl-basket~{TERM}                GET /index.php?cl=basket
+user 200 checkout-user            cl-user                         GET /index.php?cl=user
+user 200 checkout-payment         cl-payment                      GET /index.php?cl=payment
+user 200 checkout-order           cl-order~{TERM}                 POST /index.php stoken={STOKEN}&cl=payment&fnc=validatepayment&paymentid=oxidpayadvance&sShipSet=oxidstandard
+user 200 checkout-thankyou        cl-thankyou                     POST /index.php stoken={STOKEN}&cl=order&fnc=execute&ord_agb=1&sDeliveryAddressMD5={MD5}&challenge=&oxdownloadableproductsagreement=1&oxserviceproductsagreement=1
+user 200 account-orders-after     cl-account_order~{TERM}         GET /index.php?cl=account_order
