@@ -23,6 +23,12 @@
     {% if not listId  %}
         {% set listId = oView.getViewParameter('listId') %}
     {% endif %}
+    {# 1.x (Smarty) saw these from the scope of the list template that included the widget; a Twig widget only gets its
+       own view data, so read the widget parameters (oxwArticleBox getters) #}
+    {% set removeFunction = removeFunction|default(oView.getRemoveFunction()) %}
+    {% set owishid = owishid|default(oView.getWishId()) %}
+    {% set recommid = recommid|default(oView.getRecommId()) %}
+    {% set toBasketFunction = toBasketFunction|default(oView.getToBasketFunction()) %}
 
     {# Should items in the listing be able to be added to the shopping cart? YOU NEED THIS! #}
     {# 

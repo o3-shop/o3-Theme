@@ -1,9 +1,9 @@
 {% set oConfig = oViewConf.getConfig() %}
 
-<form action="{{ oViewConf.getSelfActionLink() }}" name="newsletter" method="post">
+<form action="{{ oViewConf.getSelfActionLink()|raw }}" name="newsletter" method="post">
     <div class="d-none">
-        {{ oViewConf.getHiddenSid() }}
-        {{ oViewConf.getNavFormParams() }}
+        {{ oViewConf.getHiddenSid()|raw }}
+        {{ oViewConf.getNavFormParams()|raw }}
         <input type="hidden" name="fnc" value="subscribe">
         <input type="hidden" name="cl" value="account_newsletter">
     </div>
@@ -18,7 +18,7 @@
 
     {% if oConfig.getConfigParam('blOrderOptInEmail') and oView.getSubscriptionStatus() == 1 %}
         <p>
-            {{ translate({ ident: "O3_NEWSLETTER_OPT_IN_DESCRIPTION" }) }}
+            {{ translate({ ident: "O3_NEWSLETTER_OPT_IN_DESCRIPTION" })|raw }}
         </p>
     {% endif %}
 

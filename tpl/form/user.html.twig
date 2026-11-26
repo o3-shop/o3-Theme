@@ -21,13 +21,13 @@
         {{ script({ include: "js/widget/shippingaddress.js", priority: 10 }) }}
     {% endif %}
 
-    <form action="{{ oViewConf.getSelfActionLink() }}" name="order" method="post" class="needs-validation" novalidate>
+    <form action="{{ oViewConf.getSelfActionLink()|raw }}" name="order" method="post" class="needs-validation" novalidate>
         {% block user_form %}
             {% set aErrors = oView.getFieldValidationErrors() %}
 
             <div class="d-none">
-                {{ oViewConf.getHiddenSid() }}
-                {{ oViewConf.getNavFormParams() }}
+                {{ oViewConf.getHiddenSid()|raw }}
+                {{ oViewConf.getNavFormParams()|raw }}
                 <input type="hidden" name="fnc" value="changeuser_testvalues">
                 <input type="hidden" name="cl" value="account_user">
                 <input type="hidden" name="CustomError" value='user'>

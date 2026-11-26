@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set template_title = "ORDER_HISTORY"|translate %}
 
     <div class="row">
@@ -34,33 +36,33 @@
                             {% endif %}
 
                             <div class="account_order__ordernumber">
-                                <span>#{{ order.oxorder__oxordernr.value }}</span> - {{ order.oxorder__oxorderdate.value|date_format("%d.%m.%Y") }}
+                                <span>#{{ order.oxorder__oxordernr.value|raw }}</span> - {{ order.oxorder__oxorderdate.value|date_format("%d.%m.%Y") }}
                             </div>
 
                             <div class="account_order__sum">
                                 {{ format_price(order.oxorder__oxtotalordersum.value, { currency: currency }) }}
                             </div>
 
-                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#accOrderNo_{{ order.oxorder__oxordernr.value }}" aria-controls="accOrderNo_{{ order.oxorder__oxordernr.value }}" aria-expanded="false">
+                            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#accOrderNo_{{ order.oxorder__oxordernr.value|raw }}" aria-controls="accOrderNo_{{ order.oxorder__oxordernr.value|raw }}" aria-expanded="false">
                                 {{ translate({ ident: "MORE" }) }}
                             </button>
                         </div>
 
-                        <div class="account_order__details collapse" id="accOrderNo_{{ order.oxorder__oxordernr.value }}">
+                        <div class="account_order__details collapse" id="accOrderNo_{{ order.oxorder__oxordernr.value|raw }}">
                             <div class="col-12 col-lg-6 p-4">
 
                                 <div class="title-small mb-3">{{ translate({ ident: "O3_ORDER_INFO" }) }}</div>
                                 {# 
  <div class="account_order__details-payment">
  {{ translate({ ident: "PAYMENT_METHOD" }) }}
- {{ order.oxorder__oxpaymenttype.value }}
+ {{ order.oxorder__oxpaymenttype.value|raw }}
  </div>
  #}
 
                                 {% set oDelSet = order.getDelSet() %}
                                 <div class="account_order__details-delivery mb-3">
                                     {{ translate({ ident: "SHIPPING_CARRIER", suffix: "COLON" }) }}
-                                    {{ oDelSet.oxdeliveryset__oxtitle.value }}
+                                    {{ oDelSet.oxdeliveryset__oxtitle.value|raw }}
                                 </div>
 
                                 <div class="account_order__details-address">
@@ -68,17 +70,17 @@
 
                                     <address class="mb-3">
                                         {% if order.oxorder__oxdelfname.value and                                            order.oxorder__oxdellname.value and                                            order.oxorder__oxdelstreet.value and                                            order.oxorder__oxdelstreetnr.value and                                            order.oxorder__oxdelzip.value and                                            order.oxorder__oxdelcity.value                                         %}
-                                            {{ order.oxorder__oxdelcompany.value }}{% if order.oxorder__oxdelcompany.value %}<br>{% endif %}
-                                            {{ order.oxorder__oxdelfname.value }} {{ order.oxorder__oxdellname.value }}<br>
-                                            {{ order.oxorder__oxdelstreet.value }} {{ order.oxorder__oxdelstreetnr.value }}<br>
-                                            {{ order.oxorder__oxdelzip.value }} {{ order.oxorder__oxdelcity.value }}<br>
-                                            {{ order.oxorder__oxdelcountry.value }}
+                                            {{ order.oxorder__oxdelcompany.value|raw }}{% if order.oxorder__oxdelcompany.value %}<br>{% endif %}
+                                            {{ order.oxorder__oxdelfname.value|raw }} {{ order.oxorder__oxdellname.value|raw }}<br>
+                                            {{ order.oxorder__oxdelstreet.value|raw }} {{ order.oxorder__oxdelstreetnr.value|raw }}<br>
+                                            {{ order.oxorder__oxdelzip.value|raw }} {{ order.oxorder__oxdelcity.value|raw }}<br>
+                                            {{ order.oxorder__oxdelcountry.value|raw }}
                                         {% else %}
-                                            {{ order.oxorder__oxbillcompany.value }}{% if order.oxorder__oxbillcompany.value %}<br>{% endif %}
-                                            {{ order.oxorder__oxbillfname.value }} {{ order.oxorder__oxbilllname.value }}<br>
-                                            {{ order.oxorder__oxbillstreet.value }} {{ order.oxorder__oxbillstreetnr.value }}<br>
-                                            {{ order.oxorder__oxbillzip.value }} {{ order.oxorder__oxbillcity.value }}<br>
-                                            {{ order.oxorder__oxbillcountry.value }}
+                                            {{ order.oxorder__oxbillcompany.value|raw }}{% if order.oxorder__oxbillcompany.value %}<br>{% endif %}
+                                            {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }}<br>
+                                            {{ order.oxorder__oxbillstreet.value|raw }} {{ order.oxorder__oxbillstreetnr.value|raw }}<br>
+                                            {{ order.oxorder__oxbillzip.value|raw }} {{ order.oxorder__oxbillcity.value|raw }}<br>
+                                            {{ order.oxorder__oxbillcountry.value|raw }}
                                         {% endif %}
                                     </address>
                                 </div>
@@ -86,7 +88,7 @@
                                 {% if order.getShipmentTrackingUrl() %}
                                     <div class="account_order__details-tracking">
                                         {{ translate({ ident: "TRACKING_ID", suffix: "COLON" }) }}
-                                        <a href="{{ order.getShipmentTrackingUrl() }}">{{ order.oxorder__oxtrackcode.value }}</a>
+                                        <a href="{{ order.getShipmentTrackingUrl()|raw }}">{{ order.oxorder__oxtrackcode.value|raw }}</a>
                                     </div>
                                 {% endif %}
                             </div>
@@ -96,25 +98,27 @@
 
                                     <div class="title-small">{{ translate({ ident: "O3_ARTICLE" }) }}</div>
 
+                                    {# oxorderarticles__oxtitle and oxpersparam are T_RAW (OrderArticle::_setFieldData): raw DB text, so the title and the
+                                       persparam values (customer input) are escaped explicitly #}
                                     {% for orderitem in order.getOrderArticles(true) %}
                                         {% set sArticleId = orderitem.oxorderarticles__oxartid.value %}
-                                        {% set oArticle = oArticleList[$sArticleId] %}
+                                        {% set oArticle = oArticleList[sArticleId] %}
 
                                         <div class="account_order__details-article">
-                                            <img src="{{ oArticle.getThumbnailUrl() }}" alt="{{ orderitem.oxorderarticles__oxtitle.value }}">
+                                            <img src="{{ oArticle.getThumbnailUrl() }}" alt="{{ orderitem.oxorderarticles__oxtitle.value|escape }}">
                                             <div>
-                                                {{ orderitem.oxorderarticles__oxamount.value }} x
+                                                {{ orderitem.oxorderarticles__oxamount.value|raw }} x
                                                 {% if oArticle.oxarticles__oxid.value and oArticle.isVisible() %}
-                                                    <a id="accOrderLink_{{ order.oxorder__oxordernr.value }}_{{ loop.index }}" href="{{ oArticle.getLink() }}">
+                                                    <a id="accOrderLink_{{ order.oxorder__oxordernr.value|raw }}_{{ loop.index }}" href="{{ oArticle.getLink()|raw }}">
                                                 {% endif %}
-                                                {{ orderitem.oxorderarticles__oxtitle.value }} {{ orderitem.oxorderarticles__oxselvariant.value }} <span class="amount"></span>
+                                                {{ orderitem.oxorderarticles__oxtitle.value|escape }} {{ orderitem.oxorderarticles__oxselvariant.value|raw }} <span class="amount"></span>
                                                 {% if oArticle.oxarticles__oxid.value and oArticle.isVisible() %}
                                                     </a>
                                                 {% endif %}
 
                                                 {% for sVar, aParam in orderitem.getPersParams() %}
                                                 {% if aParam %}
-                                                    <br />{{ translate({ ident: "DETAILS" }) }}: {{ aParam }}
+                                                    <br />{{ translate({ ident: "DETAILS" }) }}: {{ aParam|escape }}
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>
@@ -138,6 +142,4 @@
         {% endblock %}
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

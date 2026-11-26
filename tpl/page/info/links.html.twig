@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set template_title = "LINKS"|translate %}
     <h1 class="page-header">{{ translate({ ident: "LINKS" }) }}</h1>
 
@@ -8,10 +10,10 @@
             {% for link in oView.getLinksList() %}
                 <li>
                     <h2>
-                        <a href="{{ link.oxlinks__oxurl.value }}" target="_blank">{{ link.oxlinks__oxurl.value }}</a>
+                        <a href="{{ link.oxlinks__oxurl.value|raw }}" target="_blank">{{ link.oxlinks__oxurl.value|raw }}</a>
                         <small>&ndash; {{ link.oxlinks__oxinsert.value|date_format("%d.%m.%Y") }}</small>
                     </h2>
-                    <article>{{ link.oxlinks__oxurldesc.value }}</article>
+                    <article>{{ link.oxlinks__oxurldesc.value|raw }}</article>
                 </li>
             {% endfor %}
         </ul>
@@ -19,6 +21,4 @@
         <p class="alert alert-info">{{ translate({ ident: "DD_LINKS_NO_ENTRIES" }) }}</p>
     {% endif %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

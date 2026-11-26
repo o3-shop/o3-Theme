@@ -3,8 +3,8 @@
     {% set template_title = oView.getTitle() %}
     {% set tpl = oViewConf.getActTplName() %}
     {% set oxloadid = oViewConf.getActContentLoadId() %}
-    <h1 class="page-header">{{ template_title }}</h1>
-    {{ oView.getParsedContent() }}
+    <h1 class="page-header">{{ template_title|raw }}</h1>
+    {{ oView.getParsedContent()|raw }}
     {{ insert_tracker({title: template_title}) }}
 {% endcapture %}
 {% include "layout/popup.html.twig" %}

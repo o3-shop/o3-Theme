@@ -39,7 +39,7 @@
             <a class="{% if active_link == "reviewlist" %} active{% endif %}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account_reviewlist") }) }}" title="{{ translate({ ident: "MY_REVIEWS" }) }}">{{ translate({ ident: "MY_REVIEWS" }) }}{% if oView.getReviewAndRatingItemsCount() > 0 %} ({{ oView.getReviewAndRatingItemsCount() }}){% endif %}</a>
         {% endif %}
         
-        <a class="account__menu-logout btn btn-outline-primary btn-lg" href="{{ oViewConf.getLogoutLink() }}">
+        <a class="account__menu-logout btn btn-outline-primary btn-lg" href="{{ oViewConf.getLogoutLink()|raw }}">
             {{ translate({ ident: "LOGOUT" }) }}
         </a>
         

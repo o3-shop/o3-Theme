@@ -1,14 +1,15 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set oContent = oView.getContent() %}
     {% set tpl = oViewConf.getActTplName() %}
     {% set oxloadid = oViewConf.getActContentLoadId() %}
     {% set template_title = oView.getTitle() %}
 
-    <h1 class="page-header">{{ template_title }}</h1>
+    <h1 class="page-header">{{ template_title|raw }}</h1>
     <article class="cmsContent">
-        {{ oView.getParsedContent() }}
+        {{ oView.getParsedContent()|raw }}
     </article>
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}

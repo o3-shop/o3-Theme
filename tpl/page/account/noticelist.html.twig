@@ -1,11 +1,15 @@
-{% capture append = "oxidBlock_content" %}
-    {% set template_title = "MY_WISH_LIST"|translate %}
+{% extends "layout/page.html.twig" %}
 
-    {% if oxcmp_shop.oxshops__oxproductive.value %}
-        {{ script({ include: "js/widget/remove-from-notice.min.js", priority: 10 }) }}
-    {% else %}
-        {{ script({ include: "js/widget/remove-from-notice.js", priority: 10 }) }}
-    {% endif %}
+{# 1.x registered js/widget/remove-from-notice at the start of the content capture, so before the header's scripts;
+   registering it here, at the top level, keeps that order #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/remove-from-notice.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/remove-from-notice.js", priority: 10 }) %}
+{% endif %}
+
+{% block content %}
+    {% set template_title = "MY_WISH_LIST"|translate %}
 
     <div class="row">
 
@@ -30,6 +34,4 @@
 
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

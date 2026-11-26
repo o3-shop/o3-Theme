@@ -1,4 +1,14 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/shippingaddress (in form/user) before the header's scripts; registering it here, at the top level, keeps that
+   order (the registration in form/user is deduplicated by the core) #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/shippingaddress.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/shippingaddress.js", priority: 10 }) %}
+{% endif %}
+
+{% block content %}
     <div class="row">
         <div class="col-12 col-md-4 col-lg-3 mb-5">
             {% include "layout/sidebar.html.twig" with {content: "account", active_link: "billship"} %}
@@ -13,6 +23,4 @@
         {% endblock %}
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

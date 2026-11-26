@@ -1,4 +1,16 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/validate (in form/newsletter) before the header's scripts; registering it here, at the top level, keeps that
+   order (the registration in form/newsletter is deduplicated by the core) #}
+{% if oView.getNewsletterStatus() == 4 or not oView.getNewsletterStatus() %}
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+    {% else %}
+        {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+    {% endif %}
+{% endif %}
+
+{% block content %}
 
     {% if oView.getNewsletterStatus() == 4 or not oView.getNewsletterStatus() %}
         <h1 class="title-big">{{ translate({ ident: "STAY_INFORMED" }) }}</h1>
@@ -6,7 +18,7 @@
         <hr>
 
         {% ifcontent ident "oxnewstlerinfo" set oCont %}
-            {{ oCont.oxcontents__oxcontent.value }}
+            {{ oCont.oxcontents__oxcontent.value|raw }}
         {% endifcontent %}
 
         {% include "form/newsletter.html.twig" %}
@@ -32,6 +44,4 @@
     {% endif %}
 
     {{ insert_tracker() }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

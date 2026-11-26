@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set template_title = "NEWSLETTER_SETTINGS"|translate %}
 
     <div class="row">
@@ -27,6 +29,4 @@
     </div>
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

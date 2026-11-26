@@ -9,10 +9,10 @@
     {% include "message/success.html.twig" with {statusMessage: statusMessage} %}
 {% endif %}
 <div class="row">
-    <form name="login" action="{{ oViewConf.getSslSelfLink() }}" method="post" class="needs-validation col-12 col-md-6 col-lg-5 mb-5" novalidate>
+    <form name="login" action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="needs-validation col-12 col-md-6 col-lg-5 mb-5" novalidate>
         <div class="d-none">
-            {{ oViewConf.getHiddenSid() }}
-            {{ oViewConf.getNavFormParams() }}
+            {{ oViewConf.getHiddenSid()|raw }}
+            {{ oViewConf.getNavFormParams()|raw }}
             <input type="hidden" name="fnc" value="login_noredirect">
             <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
             <input type="hidden" name="tpl" value="{{ oViewConf.getActTplName() }}">
@@ -22,7 +22,7 @@
             {% endif %}
             {% if oView.getProduct() %}
                 {% set product = oView.getProduct() %}
-                <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+                <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value|raw }}">
             {% endif %}
         </div>
 

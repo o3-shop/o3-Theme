@@ -1,4 +1,14 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/validate (in the page body) before the header's scripts; registering it here, at the top level, keeps that
+   order (the registration in the page body is deduplicated by the core) #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+{% endif %}
+
+{% block content %}
 
 {# §356a BGB electronic revocation form (issue #99). #}
 {# o3-theme port of wave-theme/revocation.tpl, adapted to Bootstrap 5: #}
@@ -29,7 +39,7 @@
         {# below ONLY when there's a notice to render. #}
         {% ifcontent ident "o3_revocation_notice" set oCont %}
             <div class="o3-revocation-notice mt-3 mb-4">
-                {{ oCont.oxcontents__oxcontent.getRawValue() }}
+                {{ oCont.oxcontents__oxcontent.value|raw }}
             </div>
         {% endifcontent %}
 
@@ -38,10 +48,10 @@
         <form id="o3-revocation-form"
               class="o3-revocation-form needs-validation"
               method="post"
-              action="{{ oViewConf.getSelfActionLink() }}"
+              action="{{ oViewConf.getSelfActionLink()|raw }}"
               role="form"
               novalidate>
-            {{ oViewConf.getHiddenSid() }}
+            {{ oViewConf.getHiddenSid()|raw }}
             <input type="hidden" name="cl" value="revocation">
             <input type="hidden" name="fnc" value="submit">
 
@@ -124,5 +134,4 @@
     </div>
 </div>
 
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}

@@ -1,4 +1,8 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
+    {# set here, not in account_reviewlist_header: the tracker below reads it, and a {% set %} inside a block stays in that block #}
+    {% set template_title = "MY_REVIEWS"|translate %}
 
     <div class="row">
 
@@ -9,7 +13,6 @@
         <div class="col-12 col-md-7 col-lg-8 offset-md-1">
 
             {% block account_reviewlist_header %}
-                {% set template_title = "MY_REVIEWS"|translate %}
                 <h1 class="title-big">{{ translate({ ident: "MY_REVIEWS" }) }}</h1>
             {% endblock %}
 
@@ -23,13 +26,13 @@
                             <div class="account_review" itemprop="review" itemscope itemtype="https://schema.org/Review">
 
                                 <div>
-                                    <strong itemprop="itemreviewed">{{ review.getObjectTitle()|truncate(60) }}</strong><time itemprop="datePublished" datetime="{{ review.getCreatedAt()|date_format("%Y-%m-%d") }}">{{ review.getCreatedAt()|date_format("%d.%m.%Y") }}</time>
+                                    <strong itemprop="itemreviewed">{{ review.getObjectTitle()|truncate(60)|raw }}</strong><time itemprop="datePublished" datetime="{{ review.getCreatedAt()|date_format("%Y-%m-%d") }}">{{ review.getCreatedAt()|date_format("%d.%m.%Y") }}</time>
                                 </div>
 
                                 {% if review.getRating() %}
                                     <div class="account_review__rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-                                        {% for starRatings in 0..5 %}
-                                            {% if review.getRating() >= smarty.section.starRatings.iteration %}
+                                        {% for starRatings in 1..5 %}
+                                            {% if review.getRating() >= starRatings %}
                                                 <div class="star filled"></div>
                                             {% else %}
                                                 <div class="star"></div>
@@ -39,7 +42,7 @@
                                 {% endif %}
 
                                 {% if review.getReviewText() %}
-                                    <div itemprop="description">{{ review.getReviewText() }}</div>
+                                    <div itemprop="description">{{ review.getReviewText()|raw }}</div>
                                 {% endif %}
 
                                 {% block account_reviewlist_item_action %}
@@ -70,6 +73,4 @@
         </div>
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

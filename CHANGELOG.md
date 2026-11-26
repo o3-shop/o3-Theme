@@ -14,6 +14,10 @@
 - `form/fieldset/user_shipping.html.twig`: `form_user_shipping_country` was defined three times in 1.x with different bodies (edit form of the selected address, form for a new address, form when the user has no address). Twig allows one definition per name, so it is defined once and rendered with `{{ block('form_user_shipping_country') }}` at the other two places; `sShippingCountryForm` names the variant (unset = edit, `'new'`, `'register'`). An override of the block applies to all three places, as in 1.x; check `sShippingCountryForm` to keep the variants apart.
 - Checkout pages (`order`, `payment`): variables 1.x assigned inside one block and read in a sibling block (`currency`, `payment`) are set at the start of the page's `content` block, because a Twig block only gets a copy of the context.
 - `page/checkout/inc/basketcontents_list.html.twig`: the unit name after the amount stepper is gone. 1.x printed `$basketitem->oxarticles__oxunitname->value`, which a basket item never has (always empty); in Twig the access would reach `BasketItem::__call` and throw.
+- `page/account/forgotpwd`, `page/account/register`, `page/account/register_success` and `page/info/content_plain` keep the 1.x `capture append` + include shape: they choose the popup or the page layout at runtime (private sales login) or render in the popup layout, and the first two also print the cookie-note widget before the page.
+- `widget/product/listitem_line` and `listitem_grid`: `removeFunction`, `owishid`, `recommid` and `toBasketFunction` fall back to the `oxwArticleBox` widget parameters. In 1.x the widget template saw them from the scope of the including list template, which a Twig widget does not; without the fallback the wish list, gift registry and listmania pages lost their remove buttons.
+- `page/account/order`: the ordered article title and the persparam values are escaped. They are T_RAW fields (raw DB text; persparams are customer input) that 1.x printed unescaped.
+- `page/account/reviews`: `template_title` is set at the start of `content` instead of inside `account_reviewlist_header`, so the tracker after the list still gets it.
 
 ## [Unreleased]
 

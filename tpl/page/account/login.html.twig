@@ -1,9 +1,17 @@
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/validate (in form/login_account) before the header's scripts; registering it here, at the top level, keeps that
+   order (the registration in form/login_account is deduplicated by the core) #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+{% endif %}
+
 {% set template_title = "REGISTER"|translate %}
-{% capture append = "oxidBlock_content" %}
+{% block content %}
 
     {% include "form/login_account.html.twig" %}
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

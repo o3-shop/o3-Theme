@@ -4,11 +4,11 @@
     {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
 {% endif %}
 
-<form action="{{ oViewConf.getSslSelfLink() }}" name="order" method="post" class="needs-validation" novalidate>
+<form action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post" class="needs-validation" novalidate>
     <div class="d-none">
         {% set aErrors = oView.getFieldValidationErrors() %}
-        {{ oViewConf.getHiddenSid() }}
-        {{ oViewConf.getNavFormParams() }}
+        {{ oViewConf.getHiddenSid()|raw }}
+        {{ oViewConf.getNavFormParams()|raw }}
         <input type="hidden" name="fnc" value="registeruser">
         <input type="hidden" name="cl" value="register">
         <input type="hidden" name="lgn_cook" value="0">
@@ -42,7 +42,7 @@
                         {% endifcontent %}
                         {% ifcontent ident "oxrightofwithdrawal" set oCont %}
                             {{ translate({ ident: "FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1" }) }}
-                                <a href="#" data-toggle="modal" data-target="#popup2">{{ oCont.oxcontents__oxtitle.value }}</a>
+                                <a href="#" data-toggle="modal" data-target="#popup2">{{ oCont.oxcontents__oxtitle.value|raw }}</a>
                             {{ translate({ ident: "FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL3" }) }}
                         {% endifcontent %}
                     </label>
@@ -58,10 +58,10 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span class="h4 modal-title" id="popup1Label">{{ oContent.oxcontents__oxtitle.value }}</span>
+                        <span class="h4 modal-title" id="popup1Label">{{ oContent.oxcontents__oxtitle.value|raw }}</span>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="modal-body">{{ oContent.oxcontents__oxcontent.value }}</div>
+                    <div class="modal-body">{{ oContent.oxcontents__oxcontent.value|raw }}</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{{ translate({ ident: "CLOSE" }) }}</button>
                     </div>
@@ -75,10 +75,10 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span class="h4 modal-title" id="popup2Label">{{ oContent.oxcontents__oxtitle.value }}</span>
+                        <span class="h4 modal-title" id="popup2Label">{{ oContent.oxcontents__oxtitle.value|raw }}</span>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="modal-body">{{ oContent.oxcontents__oxcontent.value }}</div>
+                    <div class="modal-body">{{ oContent.oxcontents__oxcontent.value|raw }}</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{{ translate({ ident: "CLOSE" }) }}</button>
                     </div>

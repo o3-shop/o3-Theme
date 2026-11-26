@@ -28,9 +28,9 @@
                 </div>
                 <div class="modal-footer">
                     {% block account_delete_my_account_confirmation_form %}
-                        <form name="delete_my_account" action="{{ oViewConf.getSelfActionLink() }}" method="post" role="form">
+                        <form name="delete_my_account" action="{{ oViewConf.getSelfActionLink()|raw }}" method="post" role="form">
                             <div class="d-none">
-                                {{ oViewConf.getHiddenSid() }}
+                                {{ oViewConf.getHiddenSid()|raw }}
                                 <input type="hidden" name="cl" value="account">
                                 <input type="hidden" name="fnc" value="deleteAccount">
                             </div>

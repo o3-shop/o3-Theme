@@ -1,16 +1,18 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
 {% set wishuser = oView.getWishUser() %}
     {% if not oView.getWishListUsers() and oView.getWishListSearchParam() %}
         {% set _statusMessage = "MESSAGE_SORRY_NO_GIFT_REGISTRY"|translate %}
         {% include "message/error.html.twig" with {statusMessage: _statusMessage} %}
     {% endif %}
-    <h1 class="page-header">{% if wishuser %}{{ translate({ ident: "GIFT_REGISTRY_OF" }) }} {{ wishuser.oxuser__oxfname.value }} {{ wishuser.oxuser__oxlname.value }}{% else %}{{ translate({ ident: "PUBLIC_GIFT_REGISTRIES" }) }}{% endif %}</h1>
+    <h1 class="page-header">{% if wishuser %}{{ translate({ ident: "GIFT_REGISTRY_OF" }) }} {{ wishuser.oxuser__oxfname.value|raw }} {{ wishuser.oxuser__oxlname.value|raw }}{% else %}{{ translate({ ident: "PUBLIC_GIFT_REGISTRIES" }) }}{% endif %}</h1>
     <div class="wishlistView clear bottomRound">
         {% include "form/wishlist_search.html.twig" with {searchClass: "wishlist"} %}
         {% if oView.getWishList() %}
             {% set wishuser = oView.getWishUser() %}
             <p class="wishlistUser">
-            {{ translate({ ident: "WISHLIST_PRODUCTS", args: wishuser.oxuser__oxfname.value|cat(' ')|cat(wishuser.oxuser__oxlname.value) }) }}
+            {{ translate({ ident: "WISHLIST_PRODUCTS", args: wishuser.oxuser__oxfname.value|cat(' ')|cat(wishuser.oxuser__oxlname.value) })|raw }}
             </p>
         {% endif %}
     </div>
@@ -20,5 +22,4 @@
         {{ translate({ ident: "GIFT_REGISTRY_EMPTY" }) }}
     {% endif %}
     {{ insert_tracker() }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}

@@ -1,5 +1,7 @@
+{% extends "layout/page.html.twig" %}
+
 {% set template_title = "MY_ACCOUNT"|translate %}
-{% capture append = "oxidBlock_content" %}
+{% block content %}
 
     {% if oView.getAccountDeletionStatus() is same as(false) %}
         {% set statusMessage = "DD_DELETE_MY_ACCOUNT_ERROR"|translate %}
@@ -140,6 +142,4 @@
     </div>
 
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

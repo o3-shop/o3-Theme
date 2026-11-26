@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     <h1 class="page-header">{{ oView.getTitle() }}</h1>
 
     <ol>
@@ -7,10 +9,9 @@
     </ol>
 
     {% ifcontent ident "oxsecurityinfo" set oCont %}
-        <p>{{ translate({ ident: "MESSAGE_READ_DETAILS" }) }} <a href="{{ oCont.getLink() }}">{{ oCont.oxcontents__oxtitle.value }}</a></p>
+        <p>{{ translate({ ident: "MESSAGE_READ_DETAILS" }) }} <a href="{{ oCont.getLink()|raw }}">{{ oCont.oxcontents__oxtitle.value|raw }}</a></p>
     {% endifcontent %}
 
     {% include "form/suggest.html.twig" %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}

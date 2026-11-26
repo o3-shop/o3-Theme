@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
 
     <div class="row">
 
@@ -15,7 +17,8 @@
             {% endif %}
             {% set editval = oView.getEnteredData() %}
             {% if oView.isWishListEmailSent() %}
-                {% set _statusMessage = "GIFT_REGISTRY_SENT_SUCCESSFULLY"|translate(editval.rec_email) %}
+                {# rec_email is request-escaped (AccountWishlistController::sendWishList); a {% set %} block keeps the message safe, so message/notice does not escape it again #}
+                {% set _statusMessage %}{{ "GIFT_REGISTRY_SENT_SUCCESSFULLY"|translate(editval.rec_email)|raw }}{% endset %}
                 {% include "message/notice.html.twig" with {statusMessage: _statusMessage} %}
             {% endif %}
 
@@ -41,6 +44,4 @@
 
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}
