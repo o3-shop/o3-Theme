@@ -13,8 +13,10 @@ Current version: **2.0** — see [CHANGELOG.md](CHANGELOG.md) for what changed.
 O3-Theme 2.x is a **Twig** theme (`'templateEngine' => 'twig'` in `theme.php`) and
 requires **O3-Shop 2.0** (`o3-shop/shop-ce: ^2.0`). It lives on the `b-2.0` branch.
 The Smarty line, O3-Theme 1.x, stays on `main` for O3-Shop 1.x shops and for 2.0 shops
-that keep a Smarty storefront: pin `o3-shop/o3-theme` to `^1` *before* updating the shop
-to 2.0. Rules for template, module and child-theme authors: `docs/twig.md` in shop-ce.
+that keep a Smarty storefront. Open item: the released 1.x tags require `o3-shop/shop-ce: ^1.2`,
+so Composer cannot install them next to O3-Shop 2.0 yet; that needs an O3-Theme 1.x release
+whose `composer.json` also allows shop-ce 2.0 (not released yet). Until then keep the theme
+checkout/package on the 1.x line manually. Rules for template, module and child-theme authors: `docs/twig.md` in shop-ce.
 
 ---
 
@@ -60,6 +62,18 @@ To rebuild only the CSS without the full gulp pipeline:
 ```bash
 cd out/o3-theme/src/css
 npx sass --style=compressed --no-source-map main.css main.min.css
+```
+
+---
+
+## Template checks
+
+Run from the theme directory; the compile check bootstraps the shop, so it runs inside the shop container:
+
+```bash
+php build/lint-twig.php                 # escaping lint over tpl/
+php build/check-block-parity.php main . # every 1.x block exists in the Twig templates
+docker exec -w /var/www/html/source/Application/views/o3-theme <shop-container> php build/compile-twig.php
 ```
 
 ---
