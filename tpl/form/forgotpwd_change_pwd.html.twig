@@ -1,0 +1,40 @@
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
+{% else %}
+    {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
+{% endif %}
+
+<form action="{{ oViewConf.getSelfActionLink()|raw }}" name="forgotpwd" method="post" class="needs-validation" novalidate>
+    {% set aErrors = oView.getFieldValidationErrors() %}
+    <div class="d-none">
+        {{ oViewConf.getHiddenSid()|raw }}
+        {{ oViewConf.getNavFormParams()|raw }}
+        <input type="hidden" name="fnc" value="updatePassword">
+        <input type="hidden" name="uid" value="{{ oView.getUpdateId() }}">
+        <input type="hidden" name="cl" value="forgotpwd">
+        <input type="hidden" id="passwordLength" value="{{ oViewConf.getPasswordLength() }}">
+    </div>
+
+    <div class="form-floating mb-3">
+        {% block user_account_password %}
+            <input type="hidden" data-js="password-length" value="{{ oViewConf.getPasswordLength() }}">
+            <input id="userPassword" type="password" name="password_new" placeholder="{{ translate({ ident: "NEW_PASSWORD" }) }}*" class="form-control" required autocomplete="new-password">
+            <label for="userPassword">{{ translate({ ident: "NEW_PASSWORD" }) }}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "O3_FORM_VALIDATION_PASSWORD" }) }}
+            </div>
+            {% include "form/fieldset/password_validation.html.twig" %}
+        {% endblock %}
+    </div>
+
+    <div class="form-floating mb-3">
+        <input id="userPasswordConfirm" type="password" name="password_new_confirm" class="form-control" placeholder="{{ translate({ ident: "CONFIRM_PASSWORD" }) }}*" required autocomplete="new-password">
+        <label for="userPasswordConfirm">{{ translate({ ident: "CONFIRM_PASSWORD" }) }}</label>
+        <div class="invalid-feedback">
+            {{ translate({ ident: "DD_FORM_VALIDATION_PASSWORDAGAIN" }) }}
+        </div>
+    </div>
+
+    <button class="btn btn-primary submitButton" type="submit" name="save" value="{{ translate({ ident: "CHANGE_PASSWORD" }) }}">{{ translate({ ident: "CHANGE_PASSWORD" }) }}</button>
+
+</form>

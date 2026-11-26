@@ -1,0 +1,61 @@
+{% block checkout_user_options %}
+	<div class="row">
+
+		{% block checkout_options_login %}
+			{% include "form/login.html.twig" %}
+		{% endblock %}
+
+		<div class="col-12 col-md-5 offset-md-1 offset-lg-2">
+			{% block checkout_options_reg %}
+
+				<form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="mb-5">
+
+					<div class="d-none">
+						{{ oViewConf.getHiddenSid()|raw }}
+						{{ oViewConf.getNavFormParams()|raw }}
+						<input type="hidden" name="cl" value="user">
+						<input type="hidden" name="fnc" value="">
+						<input type="hidden" name="option" value="3">
+					</div>
+
+					<h2 class="title-big">{{ translate({ ident: "OPEN_ACCOUNT" }) }}</h2>
+					<p>{{ translate({ ident: "DD_LOGIN_ACCOUNT_PANEL_CREATE_BODY" }) }}</p>
+
+					<button class="btn btn-primary" type="submit">{{ translate({ ident: "OPEN_ACCOUNT" }) }}</button>
+
+					{% block checkout_options_reg_text %}
+					{% endblock %}
+				</form>
+
+			{% endblock %}
+
+			{% block checkout_options_noreg %}
+				{% if oView.getShowNoRegOption() %}
+
+					<form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post">
+
+						<div class="d-none">
+							{{ oViewConf.getHiddenSid()|raw }}
+							{{ oViewConf.getNavFormParams()|raw }}
+							<input type="hidden" name="cl" value="user">
+							<input type="hidden" name="fnc" value="">
+							<input type="hidden" name="option" value="1">
+						</div>
+
+						{% block checkout_options_noreg_text %}
+							<h3 class="title-small">{{ translate({ ident: "DO_NOT_WANT_CREATE_ACCOUNT" }) }}</h3>
+							{% if oView.isDownloadableProductWarning() %}
+								<p class="errorMsg">{{ translate({ ident: "MESSAGE_DOWNLOADABLE_PRODUCT" }) }}</p>
+							{% endif %}
+						{% endblock %}
+
+						<button class="btn btn-primary" type="submit">{{ translate({ ident: "NEXT" }) }}</button>
+
+					</form>
+
+				{% endif %}
+			{% endblock %}
+		</div>
+	</div>
+
+{% endblock %}

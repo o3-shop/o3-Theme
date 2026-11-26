@@ -1,0 +1,40 @@
+<address{% if collapse %} id="{{ collapse }}" class="collapse show"{% endif %}>
+    {% if oxcmp_user.oxuser__oxcompany.value %}{{ oxcmp_user.oxuser__oxcompany.value|raw }}<br>{% endif %}
+    {% if oxcmp_user.oxuser__oxaddinfo.value %}{{ oxcmp_user.oxuser__oxaddinfo.value|raw }}<br>{% endif %}
+    {% if oxcmp_user.oxuser__oxustid.value %}{{ translate({ ident: "VAT_ID_NUMBER" }) }} {{ oxcmp_user.oxuser__oxustid.value|raw }}<br>{% endif %}
+
+    {% if oxcmp_user.oxuser__oxsal.value or oxcmp_user.oxuser__oxfname.value or oxcmp_user.oxuser__oxlname.value %}
+        {{ oxcmp_user.oxuser__oxsal.value|translate_salutation|raw }}&nbsp;{{ oxcmp_user.oxuser__oxfname.value|raw }}&nbsp;{{ oxcmp_user.oxuser__oxlname.value|raw }}
+        <br>
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxstreet.value or oxcmp_user.oxuser__oxstreetnr.value %}
+        {{ oxcmp_user.oxuser__oxstreet.value|raw }}&nbsp;{{ oxcmp_user.oxuser__oxstreetnr.value|raw }}
+        <br>
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxstateid.value %}
+        {{ oxcmp_user.oxuser__oxstateid.value|raw }}
+        <br>
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxzip.value or oxcmp_user.oxuser__oxcity.value %}
+        {{ oxcmp_user.oxuser__oxzip.value|raw }}&nbsp;{{ oxcmp_user.oxuser__oxcity.value|raw }}
+        <br>
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxcountry.value %}
+        {{ oxcmp_user.oxuser__oxcountry.value|raw }}
+        <br><br>
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxusername.value %}
+        {{ translate({ ident: "EMAIL", suffix: "COLON" }) }}&nbsp;{{ oxcmp_user.oxuser__oxusername.value|raw }}
+        {% if oxcmp_user.oxuser__oxfon.value or oxcmp_user.oxuser__oxfax.value or oxcmp_user.oxuser__oxmobfon.value or oxcmp_user.oxuser__oxprivfon.value %}<br><br>{% endif %}
+    {% endif %}
+
+    {% if oxcmp_user.oxuser__oxfon.value %}{{ translate({ ident: "PHONE", suffix: "COLON" }) }}&nbsp;{{ oxcmp_user.oxuser__oxfon.value|raw }}<br>{% endif %}
+    {% if oxcmp_user.oxuser__oxfax.value %}{{ translate({ ident: "FAX", suffix: "COLON" }) }}&nbsp;{{ oxcmp_user.oxuser__oxfax.value|raw }}<br>{% endif %}
+    {% if oxcmp_user.oxuser__oxmobfon.value %}{{ translate({ ident: "CELLUAR_PHONE", suffix: "COLON" }) }}&nbsp;{{ oxcmp_user.oxuser__oxmobfon.value|raw }}<br>{% endif %}
+    {% if oxcmp_user.oxuser__oxprivfon.value %}{{ translate({ ident: "PERSONAL_PHONE", suffix: "COLON" }) }}&nbsp;{{ oxcmp_user.oxuser__oxprivfon.value|raw }}{% endif %}
+</address>

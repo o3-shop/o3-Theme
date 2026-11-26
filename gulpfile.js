@@ -23,9 +23,9 @@ const paths = {
         themeScss: './build/scss/**/*.scss',
         moduleJS: '../../../modules/**/out/src/js/**/*.js',
         moduleScss: '../../../modules/**/out/src/scss/**/*.scss',
-        themeTpl: './tpl/**/*.tpl',
+        themeTpl: './tpl/**/*.html.twig',
         themeTranslations: ['./de/**/*.php', './en/**/*.php'],
-        moduleTpl: '../../../modules/**/Application/views/**/*.tpl',
+        moduleTpl: '../../../modules/**/Application/views/**/*.html.twig',
         moduleTranslations: '../../../modules/**/Application/translations/**/*.php'
     }
 };
@@ -93,7 +93,7 @@ if (usePurge) {
             // the committed main.min.css would depend on the build machine. A
             // module must ship the CSS it needs. See o3-shop/o3-shop#264.
             content: [
-                './tpl/**/*.tpl',
+                './tpl/**/*.html.twig',
                 './build/js/**/*.js',
             ],
             safelist: [

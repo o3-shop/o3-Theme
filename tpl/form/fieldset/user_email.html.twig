@@ -1,0 +1,41 @@
+<div class="form-floating mb-3">
+    <input class="form-control" type="email" name="invadr[oxuser__oxusername]" value="{% if invadr.oxuser__oxusername is not null %}{{ invadr.oxuser__oxusername|raw }}{% else %}{{ oxcmp_user.oxuser__oxusername.value|raw }}{% endif %}" placeholder="{{ translate({ ident: "EMAIL_ADDRESS" }) }}" autocomplete="username">
+    <label for="email">{{ translate({ ident: "EMAIL_ADDRESS" }) }}</label>
+    <div class="invalid-feedback">
+        {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}
+    </div>
+</div>
+
+{# 
+<div class="form-group{% if aErrors.oxuser__oxusername %} oxInValid{% endif %}">
+ <label class="req control-label col-lg-3">{{ translate({ ident: "EMAIL_ADDRESS" }) }}</label>
+ <div class="col-lg-9">
+ <input class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email oxValidate_enterPass oxValidate_enterPassTarget[oxValidate_pwd] form-control" type="text" name="invadr[oxuser__oxusername]" value="{% if invadr.oxuser__oxusername is not null %}{{ invadr.oxuser__oxusername|raw }}{% else %}{{ oxcmp_user.oxuser__oxusername.value|raw }}{% endif %}" size="37" autocomplete="username">
+ {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxusername} %}
+ <div class="help-block"></div>
+ </div>
+</div>
+ #}
+
+{% if oxcmp_user.oxuser__oxpassword.value %}
+    <div class="form-floating mb-3"{% if not aErrors.oxuser__oxpassword %} style="display:none;"{% endif %}>
+        <input class="form-control" type="password" name="user_password" placeholder="{{ translate({ ident: "PASSWORD" }) }}" autocomplete="new-password">
+        <label for="password">{{ translate({ ident: "PASSWORD" }) }}</label>
+        <div class="invalid-feedback">
+            {{ translate({ ident: "ERROR_MESSAGE_INPUT_EMPTYPASS" }) }}
+        </div>
+    </div>
+{% endif %}
+
+{# 
+{% if oxcmp_user.oxuser__oxpassword.value %}
+ <div class="oxValidate_pwd form-group{% if aErrors.oxuser__oxpassword %} oxInValid{% endif %}" {% if not aErrors.oxuser__oxpassword %}style="display:none;"{% endif %}>
+ <label class="req control-label col-lg-3">{{ translate({ ident: "PASSWORD" }) }}</label>
+ <div class="col-lg-9">
+ <input class="js-oxValidate js-oxValidate_notEmpty form-control" type="password" size="37" name="user_password" autocomplete="new-password">
+ {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxpassword} %}
+ <div class="help-block"></div>
+ </div>
+ </div>
+{% endif %}
+ #}

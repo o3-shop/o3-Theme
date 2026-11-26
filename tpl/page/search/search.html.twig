@@ -1,0 +1,41 @@
+{# {{ script({ add: "$('a.js-external').attr('target', '_blank');" }) }} #}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
+    {% set search_title = "SEARCH"|translate %}
+    {% set searchparamforhtml = oView.getSearchParamForHtml() %}
+    {% set template_title = "#{search_title} - #{searchparamforhtml}" %}
+    {# getSearchParamForHtml() is already HTML-escaped by the core; {% set %}…{% endset %} keeps the heading safe markup #}
+    {% set search_head %}{{ oView.getArticleCount() }} {{ "HITS_FOR"|translate }} &quot;{{ oView.getSearchParamForHtml()|raw }}&quot;{% endset %}
+
+
+    <div class="page-header">
+        {% block search_header %}
+            <h1 class="float-left">{{ search_head }}</h1>
+
+            <div class="clearfix"></div>
+        {% endblock %}
+    </div>
+    {% block search_results %}
+        {% if oView.getArticleCount() %}
+            <div class="listRefine clear bottomRound">
+                {% block search_top_listlocator %}
+                    {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigationLimitedTop(), sort: true, itemsPerPage: true} %}
+                {% endblock %}
+            </div>
+        {% else %}
+            <p class="alert alert-info">{{ translate({ ident: "NO_ITEMS_FOUND" }) }}</p>
+        {% endif %}
+        {% if oView.getArticleList() %}
+            {% for product in oView.getArticleList() %}
+                {% include "widget/product/list.html.twig" with {type: oView.getListDisplayType(), listId: "searchList", products: oView.getArticleList(), showMainLink: true} %}
+            {% endfor %}
+        {% endif %}
+        {% if oView.getArticleCount() %}
+            {% block search_bottom_listlocator %}
+                {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigationLimitedBottom(), place: "bottom"} %}
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
+    {{ insert_tracker({title: template_title}) }}
+{% endblock %}

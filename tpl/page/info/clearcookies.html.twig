@@ -1,0 +1,13 @@
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
+    {% set template_title = oView.getTitle() %}
+    <h1 class="page-header">{{ oView.getTitle() }}</h1>
+    <div class="cmsContent">
+        <p>
+            {% ifcontent ident "oxcookiesexplanation" set oCont %}
+                {{ oCont.oxcontents__oxcontent.value|raw }}
+            {% endifcontent %}
+        </p>
+    </div>
+{% endblock %}

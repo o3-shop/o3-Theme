@@ -1,0 +1,88 @@
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+
+{# 1.x registered validate.js (in page/checkout/inc/basketcontents) before the header's scripts; registering it here, at
+   the top level, keeps that order (the second registration in basketcontents is deduplicated by the core) #}
+{% if oxcmp_basket.getProductsCount() %}
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+    {% else %}
+        {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+    {% endif %}
+{% endif %}
+
+{% block content %}
+
+    {% block checkout_basket_main %}
+        {% set currency = oView.getActCurrency() %}
+
+        <h1 class="title-big">
+            {{ translate({ ident: "CART" }) }}
+            <span>
+                {% if oxcmp_basket.getProductsCount() %}
+                    {{ oxcmp_basket.getProductsCount() }} {{ translate({ ident: "O3_ARTICLE" }) }}
+                {% endif %}
+            </span>
+        </h1>
+
+        <hr class="hr-big">
+
+        {% if oView.isLowOrderPrice() %}
+            {% block checkout_basket_loworderprice_top %}
+                <div class="alert alert-info">{{ translate({ ident: "MIN_ORDER_PRICE" }) }} {{ oView.getMinOrderPrice() }} {{ currency.sign }}</div>
+            {% endblock %}
+        {% endif %}
+
+        {% if not oxcmp_basket.getProductsCount() %}
+
+            {% block checkout_basket_emptyshippingcart %}
+                <div class="alert alert-danger" id="empty-basket-warning">
+                    <a href="{{ oViewConf.getHomeLink()|raw }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}" class="btn btn-outline-dark"><i class="fa fa-caret-left"></i> {{ translate({ ident: "DD_BASKET_BACK_TO_SHOP" }) }}</a>
+                    {{ translate({ ident: "BASKET_EMPTY" }) }}
+                </div>
+            {% endblock %}
+
+        {% else %}
+
+            {% block checkout_basket_next_step_top %}
+                {% block checkout_basket_backtoshop_top %}
+                {% endblock %}
+                {% block basket_btn_next_top %}
+                {% endblock %}
+            {% endblock %}
+
+            <div class="basket">
+                {% include "page/checkout/inc/basketcontents.html.twig" with {editable: true} %}
+
+                {% block checkout_basket_next_step_bottom %}
+
+                    {% block checkout_basket_loworderprice_bottom %}
+                    {% endblock %}
+                    {% block checkout_basket_backtoshop_bottom %}
+                    {% endblock %}
+
+                    {% if not oView.isLowOrderPrice() %}
+                        {% block basket_btn_next_bottom %}
+                            <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="basket__proceed">
+                                <div class="d-none">
+                                    {{ oViewConf.getHiddenSid()|raw }}
+                                    <input type="hidden" name="cl" value="user">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    {{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}
+                                </button>
+                            </form>
+                        {% endblock %}
+                    {% endif %}
+                {% endblock %}
+            </div>
+        {% endif %}
+
+        {% if oView.isWrapping() %}
+           {% include "page/checkout/inc/wrapping.html.twig" %}
+        {% endif %}
+
+    {% endblock %}
+
+    {{ insert_tracker({title: template_title}) }}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
+    {% set template_title = "LISTMANIA"|translate %}
+    {% if oView.getActiveRecommList() %}
+        {% set _actvrecommlist = oView.getActiveRecommList() %}
+        {% set recommendation_head = _actvrecommlist.oxrecommlists__oxtitle.value %}
+
+        <h1 class="page-header">{{ recommendation_head|raw }}</h1>
+        <div class="listmaniaView">
+            {% include "form/recommendation_edit.html.twig" with {actvrecommlist: _actvrecommlist} %}
+        </div>
+        {% if oView.getArticleList() %}
+            {% set blEdit = true %}
+            {% include "widget/product/list.html.twig" with {type: "line", listId: "recommendProductList", products: oView.getArticleList(), recommid: _actvrecommlist.getId(), removeFunction: "removeArticle"} %}
+            {% include "widget/locator/listlocator.html.twig" with {locator: oView.getPageNavigation(), place: "bottom"} %}
+        {% endif %}
+    {% endif %}
+    {{ insert_tracker({title: template_title}) }}
+
+    {# 1.x captured the account menu into oxidBlock_sidebar after the content; layout/page never prints that list (1.6.5 neither) #}
+    {% capture append = "oxidBlock_sidebar" %}
+        {% include "page/account/inc/account_menu.html.twig" with {active_link: "recommendationlist"} %}
+    {% endcapture %}
+{% endblock %}

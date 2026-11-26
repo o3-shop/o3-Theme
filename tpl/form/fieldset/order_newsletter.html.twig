@@ -1,0 +1,26 @@
+{% if blSubscribeNews %}
+    {% block user_billing_newsletter %}
+        <div class="user__newsletter mb-5">
+            <h3 class="title-small">
+                {{ translate({ ident: "NEWSLETTER" }) }}
+            </h3>
+            <input type="hidden" name="blnewssubscribed" value="0">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="blnewssubscribed" value="1" id="subscribeNewsletter"{% if oView.isNewsSubscribed() %} checked{% endif %}>
+                <label class="form-check-label" for="subscribeNewsletter">
+                    {{ translate({ ident: "NEWSLETTER_SUBSCRIPTION" }) }}
+                </label>
+            </div>
+            <div>{{ translate({ ident: "MESSAGE_NEWSLETTER_SUBSCRIPTION" }) }}</div>
+        </div>
+        {# 
+ <input type="hidden" name="blnewssubscribed" value="0">
+ <div class="checkbox">
+ <label for="subscribeNewsletter">
+ <input type="checkbox" name="blnewssubscribed" id="subscribeNewsletter" {% if oView.isNewsSubscribed() %}checked{% endif %} value="1"> {{ translate({ ident: "NEWSLETTER_SUBSCRIPTION" }) }}
+ </label>
+ </div>
+ <span class="help-block">{{ translate({ ident: "MESSAGE_NEWSLETTER_SUBSCRIPTION" }) }}</span>
+ #}
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,349 @@
+{% block user_checkout_change %}
+
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {{ script({ include: "js/widget/shippingaddress.min.js", priority: 10 }) }}
+    {% else %}
+        {{ script({ include: "js/widget/shippingaddress.js", priority: 10 }) }}
+    {% endif %}
+
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
+    {% else %}
+        {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
+    {% endif %}
+
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post" class="user needs-validation" novalidate>
+        {% block user_checkout_change_form %}
+            {% set aErrors = oView.getFieldValidationErrors() %}
+            {{ oViewConf.getHiddenSid()|raw }}
+            {{ oViewConf.getNavFormParams()|raw }}
+            <input type="hidden" name="cl" value="user">
+            <input type="hidden" name="option" value="{{ oView.getLoginOption() }}">
+            <input type="hidden" name="fnc" value="changeuser">
+            <input type="hidden" name="lgn_cook" value="0">
+            <input type="hidden" name="blshowshipaddress" value="1">
+
+            {# ordering steps #}
+            {% include "page/checkout/inc/steps.html.twig" with {active: 2} %}
+
+            {% block user_checkout_change_next_step_top %}
+            {% endblock %}
+
+            <div class="user__billingaddress mb-5">
+                {% block user_checkout_billing %}
+
+                    {% block user_checkout_billing_head %}
+                        <h3 class="title-small">
+                            {{ translate({ ident: "BILLING_ADDRESS" }) }}
+                            <button type="button" class="btn btn-edit" data-bs-toggle="collapse" data-bs-target="#user__billingaddress-address, #user__billingaddress-form" aria-controls="user__billingaddress-address, user__billingaddress-form">
+                                {{ translate({ ident: "CHANGE" }) }}
+                            </button>
+                        </h3>
+                        {# oxscript add="$('#userChangeAddress').click( function() { $('#addressForm').show();$('#addressText').hide();$('#userChangeAddress').hide();return false;});" #}
+                    {% endblock %}
+
+                {% endblock %}
+
+                {% block user_checkout_billing_feedback %}
+                    {% include "widget/address/billing_address.html.twig" with {noFormSubmit: true, blSubscribeNews: true, blOrderRemark: true, collapse: "user__billingaddress-address"} %}
+                {% endblock %}
+
+                {% block user_checkout_billing_form %}
+                    <div id="user__billingaddress-form" class="user__billingaddress-form collapse">
+                        {% if not oxcmp_user.oxuser__oxpassword.value %}
+                            {% include "form/fieldset/user_email.html.twig" %}
+                        {% endif %}
+                        {% include "form/fieldset/user_billing.html.twig" with {noFormSubmit: true, blSubscribeNews: true, blOrderRemark: true} %}
+                    </div>
+                {% endblock %}
+            </div>
+
+            <div class="user__shippingaddress mb-5">
+                {% block user_checkout_shipping %}
+
+                    {% block user_checkout_shipping_head %}
+                        <h3 class="title-small">
+                            {{ translate({ ident: "SHIPPING_ADDRESS" }) }}
+                            {# if $oView->showShipAddress() and $oxcmp_user->getSelectedAddress()}]
+ <button class="btn btn-edit" name="changeShippingAddress" {% if not oView.showShipAddress() and oxcmp_user.getSelectedAddress() %} style="display: none;" {% endif %} title="{{ translate({ ident: "CHANGE" }) }}">
+ {{ translate({ ident: "CHANGE" }) }}
+ </button>
+ [{/if #}
+                        </h3>
+                    {# oxscript add="$('#userChangeShippingAddress').toggle($(this).is(':not(:checked)'));" #}
+                    {% endblock %}
+
+                {% endblock %}
+
+                {% block user_checkout_shipping_change %}
+                    <div class="form-check">
+                        <input data-bs-toggle="collapse" data-bs-target="#user__shippingaddress-change" class="form-check-input" type="checkbox" name="blshowshipaddress" value="0" id="user__shippingaddress-chance"{% if not oView.showShipAddress() %} checked{% endif %} aria-controls="user__shippingaddress-change">
+                        <label class="form-check-label" for="user__shippingaddress-chance">
+                            {{ translate({ ident: "USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS" }) }}
+                        </label>
+                    </div>
+                {% endblock %}
+
+                {% block user_checkout_shipping_form %}
+                    <div id="user__shippingaddress-change" class="user__shippingaddress-change collapse{% if oView.showShipAddress() %} show{% endif %}">
+                        {% include "form/fieldset/user_shipping.html.twig" with {noFormSubmit: true, onChangeClass: 'user'} %}
+                    </div>
+                {% endblock %}
+            </div>
+
+            {% block user_checkout_shipping_feedback %}
+                {% include "form/fieldset/order_newsletter.html.twig" with {blSubscribeNews: true} %}
+                {% include "form/fieldset/order_remark.html.twig" with {blOrderRemark: true} %}
+            {% endblock %}
+
+            {% block checkout_basketcontents_summary %}
+                <div class="basket__summary">
+
+                    <div class="basket__summary-title">{{ translate({ ident: "O3_ORDER_SUMMARY" }) }}</div>
+
+                    {# basket summary #}
+                    <table class="table table-borderless">
+                        {% block checkout_basketcontents_summary_table_inner %}
+                            {% if not oxcmp_basket.getDiscounts() %}
+                                {% block checkout_basketcontents_nodiscounttotalnet %}
+                                    <tr>
+                                        <th>{{ translate({ ident: "TOTAL_NET" }) }}</th>
+                                        <td id="basketTotalProductsNetto" class="text-end">{{ format_price(oxcmp_basket.getNettoSum(), { currency: currency }) }}</td>
+                                    </tr>
+                                {% endblock %}
+
+                                {% block checkout_basketcontents_nodiscountproductvats %}
+                                    {% for key, VATitem in oxcmp_basket.getProductVats(false) %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: key }) }}</th>
+                                            <td class="text-end">{{ format_price(VATitem, { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endblock %}
+
+                                {% block checkout_basketcontents_nodiscounttotalgross %}
+                                    <tr>
+                                        <th>{{ translate({ ident: "TOTAL_GROSS", suffix: "COLON" }) }}</th>
+                                        <td id="basketTotalProductsGross" class="text-end">{{ format_price(oxcmp_basket.getBruttoSum(), { currency: currency }) }}</td>
+                                    </tr>
+                                {% endblock %}
+                            {% else %}
+                                {% if oxcmp_basket.isPriceViewModeNetto() %}
+                                    {% block checkout_basketcontents_discounttotalnet %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "TOTAL_NET" }) }}</th>
+                                            <td id="basketTotalProductsNetto" class="text-end">{{ format_price(oxcmp_basket.getNettoSum(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endblock %}
+                                {% else %}
+                                    {% block checkout_basketcontents_discounttotalgross %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "TOTAL_GROSS", suffix: "COLON" }) }}</th>
+                                            <td id="basketTotalProductsGross" class="text-end">{{ format_price(oxcmp_basket.getBruttoSum(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endblock %}
+                                {% endif %}
+
+                                {% block checkout_basketcontents_discounts %}
+                                    {% for oDiscount in oxcmp_basket.getDiscounts() %}
+                                        <tr>
+                                            <th>
+                                                {% if oDiscount.dDiscount < 0 %}
+                                                {{ translate({ ident: "SURCHARGE" }) }}
+                                                {% else %}
+                                                {{ translate({ ident: "DISCOUNT" }) }}
+                                                {% endif %}
+                                                {{ oDiscount.sDiscount|raw }}
+                                            </th>
+                                            <td class="text-end text-primary">
+                                                {{ format_price(oDiscount.dDiscount*-1, { currency: currency }) }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endblock %}
+
+                                {% if not oxcmp_basket.isPriceViewModeNetto() %}
+                                    {% block checkout_basketcontents_totalnet %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "TOTAL_NET" }) }}</th>
+                                            <td id="basketTotalNetto" class="text-end">{{ format_price(oxcmp_basket.getNettoSum(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endblock %}
+                                {% endif %}
+
+                                {% block checkout_basketcontents_productvats %}
+                                    {% for key, VATitem in oxcmp_basket.getProductVats(false) %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: key }) }}</th>
+                                            <td class="text-end">{{ format_price(VATitem, { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endblock %}
+
+                                {% if oxcmp_basket.isPriceViewModeNetto() %}
+                                    {% block checkout_basketcontents_totalgross %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "TOTAL_GROSS", suffix: "COLON" }) }}</th>
+                                            <td id="basketTotalGross" class="text-end">{{ format_price(oxcmp_basket.getBruttoSum(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endblock %}
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block checkout_basketcontents_voucherdiscount %}
+                            {% if oViewConf.getShowVouchers() and oxcmp_basket.getVoucherDiscValue() %}
+                                {% for key, sVoucher in oxcmp_basket.getVouchers() %}
+                                    <tr class="couponData">
+                                        <th><span class="lead">{{ translate({ ident: "COUPON" }) }}&nbsp;({{ translate({ ident: "NUMBER" }) }} {{ sVoucher.sVoucherNr|raw }})</span>
+                                            {% if editable %}
+                                                <a href="{{ oViewConf.getSelfLink()|raw }}&amp;cl=basket&amp;fnc=removeVoucher&amp;voucherId={{ sVoucher.sVoucherId }}&amp;CustomError=basket&amp;stoken={{ oViewConf.getSessionChallengeToken() }}" class="removeFn">{{ translate({ ident: "REMOVE" }) }}</a>
+                                            {% endif %}
+                                        </th>
+                                        <td class="lead text-end">{{ format_price(sVoucher.dVoucherdiscount*-1, { currency: currency }) }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block checkout_basketcontents_delcosts %}
+                            {% set deliveryCost = oxcmp_basket.getDeliveryCost() %}
+                            {% if deliveryCost and (oxcmp_basket.getBasketUser() or oViewConf.isFunctionalityEnabled('blCalculateDelCostIfNotLoggedIn') )  %}
+                                {% if oViewConf.isFunctionalityEnabled('blShowVATForDelivery')  %}
+                                    <tr>
+                                        <th>{{ translate({ ident: "SHIPPING_NET", suffix: "COLON" }) }}</th>
+                                        <td id="basketDeliveryNetto" class="text-end">{{ format_price(deliveryCost.getNettoPrice(), { currency: currency }) }}</td>
+                                    </tr>
+                                    {% if deliveryCost.getVatValue() %}
+                                        <tr>
+                                            {% if oxcmp_basket.isProportionalCalculationOn()  %}
+                                                <th>{{ translate({ ident: "BASKET_TOTAL_PLUS_PROPORTIONAL_VAT", suffix: "COLON" }) }}</th>
+                                            {% else %}
+                                                <th>{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: deliveryCost.getVat() }) }}</th>
+                                            {% endif %}
+                                            <td id="basketDeliveryVat" class="text-end">{{ format_price(deliveryCost.getVatValue(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr>
+                                        <th>{{ translate({ ident: "SHIPPING_COST", suffix: "COLON" }) }}</th>
+                                        <td id="basketDeliveryGross" class="text-end">{{ format_price(deliveryCost.getBruttoPrice(), { currency: currency }) }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block checkout_basketcontents_paymentcosts %}
+                            {% set paymentCost = oxcmp_basket.getPaymentCost() %}
+                            {% if paymentCost and paymentCost.getPrice()  %}
+                                {% if oViewConf.isFunctionalityEnabled('blShowVATForPayCharge')  %}
+                                    <tr>
+                                        <th>{% if paymentCost.getPrice() >= 0 %}{{ translate({ ident: "SURCHARGE" }) }}{% else %}{{ translate({ ident: "DEDUCTION" }) }}{% endif %} {{ translate({ ident: "PAYMENT_METHOD", suffix: "COLON" }) }}</th>
+                                        <td id="basketPaymentNetto">{{ format_price(paymentCost.getNettoPrice(), { currency: currency }) }}</td>
+                                    </tr>
+                                    {% if paymentCost.getVatValue() %}
+                                        <tr>
+                                            {% if oxcmp_basket.isProportionalCalculationOn()  %}
+                                                <th>{{ translate({ ident: "BASKET_TOTAL_PLUS_PROPORTIONAL_VAT", suffix: "COLON" }) }}</th>
+                                            {% else %}
+                                                <th>{{ translate({ ident: "SURCHARGE_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: paymentCost.getVat() }) }}</th>
+                                            {% endif %}
+                                            <td id="basketPaymentVat">{{ format_price(paymentCost.getVatValue(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr>
+                                        <th>{% if paymentCost.getPrice() >= 0 %}{{ translate({ ident: "SURCHARGE" }) }}{% else %}{{ translate({ ident: "DEDUCTION" }) }}{% endif %} {{ translate({ ident: "PAYMENT_METHOD", suffix: "COLON" }) }}</th>
+                                        <td id="basketPaymentGross" class="text-end">{{ format_price(paymentCost.getBruttoPrice(), { currency: currency }) }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block checkout_basketcontents_wrappingcosts %}
+                            {% if oViewConf.getShowGiftWrapping()  %}
+
+                                {% set wrappingCost = oxcmp_basket.getWrappingCost() %}
+                                {% if wrappingCost and wrappingCost.getPrice() > 0  %}
+                                    {% if oViewConf.isFunctionalityEnabled('blShowVATForWrapping')  %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "BASKET_TOTAL_WRAPPING_COSTS_NET", suffix: "COLON" }) }}</th>
+                                            <td id="basketWrappingNetto" class="text-end">{{ format_price(wrappingCost.getNettoPrice(), { currency: currency }) }}</td>
+                                        </tr>
+                                        {% if oxcmp_basket.getWrappCostVat()  %}
+                                            <tr>
+                                                <th>{{ translate({ ident: "PLUS_VAT", suffix: "COLON" }) }}</th>
+                                                <td id="basketWrappingVat" class="text-end">{{ format_price(wrappingCost.getVatValue(), { currency: currency }) }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% else %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "GIFT_WRAPPING", suffix: "COLON" }) }}</th>
+                                            <td id="basketWrappingGross" class="text-end">{{ format_price(wrappingCost.getBruttoPrice(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set giftCardCost = oxcmp_basket.getGiftCardCost() %}
+                                {% if giftCardCost and giftCardCost.getPrice() > 0  %}
+                                    {% if oViewConf.isFunctionalityEnabled('blShowVATForWrapping')  %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "BASKET_TOTAL_GIFTCARD_COSTS_NET", suffix: "COLON" }) }}</th>
+                                            <td id="basketGiftCardNetto" class="text-end">{{ format_price(giftCardCost.getNettoPrice(), { currency: currency }) }}</td>
+                                        </tr>
+                                        <tr>
+                                            {% if oxcmp_basket.isProportionalCalculationOn()  %}
+                                                <th>{{ translate({ ident: "BASKET_TOTAL_PLUS_PROPORTIONAL_VAT", suffix: "COLON" }) }}</th>
+                                            {% else %}
+                                                <th>{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: giftCardCost.getVat() }) }} </th>
+                                            {% endif %}
+                                            <td id="basketGiftCardVat" class="text-end">{{ format_price(giftCardCost.getVatValue(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <th>{{ translate({ ident: "GREETING_CARD", suffix: "COLON" }) }}</th>
+                                            <td id="basketGiftCardGross" class="text-end">{{ format_price(giftCardCost.getBruttoPrice(), { currency: currency }) }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+
+                        {% block checkout_basketcontents_grandtotal %}
+                            <tr class="basket__summary-total">
+                                <th class="lead">{{ translate({ ident: "GRAND_TOTAL", suffix: "COLON" }) }}</th>
+                                <td class="lead text-primary text-end">{{ format_price(oxcmp_basket.getPrice(), { currency: currency }) }}</td>
+                            </tr>
+                        {% endblock %}
+
+                        {% if oxcmp_basket.hasSkipedDiscount() %}
+                            <tr>
+                                <th><span class="note">**</span> {{ translate({ ident: "MESSAGE_COUPON_NOT_APPLIED_FOR_ARTICLES" }) }}</span></th>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            {% endblock %}
+
+            <div class="user__navi">
+                {% block user_checkout_change_next_step_bottom %}
+                    <a href="{{ seo_url({ ident: oViewConf.getBasketLink() }) }}" class="btn btn-lg text-primary">
+                        <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.469669 5.96967C0.176776 6.26256 0.176776 6.73744 0.469669 7.03033L5.24264 11.8033C5.53553 12.0962 6.01041 12.0962 6.3033 11.8033C6.59619 11.5104 6.59619 11.0355 6.3033 10.7426L2.06066 6.5L6.3033 2.25736C6.59619 1.96447 6.59619 1.48959 6.3033 1.1967C6.01041 0.903806 5.53553 0.903806 5.24264 1.1967L0.469669 5.96967ZM16 5.75L0.999999 5.75V7.25L16 7.25V5.75Z" fill="currentColor"/>
+                        </svg>
+                        {{ translate({ ident: "PREVIOUS_STEP" }) }}
+                    </a>
+
+                    <button class="btn btn-primary btn-lg" name="userform" type="submit">
+                        {{ translate({ ident: "NEXT" }) }}
+                        <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.5303 5.96967C15.8232 6.26256 15.8232 6.73744 15.5303 7.03033L10.7574 11.8033C10.4645 12.0962 9.98959 12.0962 9.6967 11.8033C9.40381 11.5104 9.40381 11.0355 9.6967 10.7426L13.9393 6.5L9.6967 2.25736C9.40381 1.96447 9.40381 1.48959 9.6967 1.1967C9.98959 0.903806 10.4645 0.903806 10.7574 1.1967L15.5303 5.96967ZM0 5.75L15 5.75V7.25L0 7.25L0 5.75Z" fill="white"/>
+                        </svg>
+                    </button>
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </form>
+    {% include "form/fieldset/delete_shipping_address_modal.html.twig" %}
+{% endblock %}

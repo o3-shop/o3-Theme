@@ -1,0 +1,42 @@
+{% if selectedStateIdPrim %}
+  {% set selectedStateId = selectedStateIdPrim %}
+{% endif %}
+
+{% set divId = "oxStateDiv_" ~ stateSelectName %}
+{% set stateSelectId = "oxStateSelect_" ~ stateSelectName %}
+
+{% if currCountry %}
+  {% set showDiv = 'true' %}
+{% else %}
+  {% set showDiv = 'false' %}
+{% endif %}
+
+{# oxscript include="js/widgets/oxcountrystateselect.min.js" priority=10 #}
+{# oxscript add="$( '#`$countrySelectId`' ).oxCountryStateSelect({selectedStateId:'`$selectedStateId`', listItem: '.form-group', span: 'div'});" #}
+
+<script type="text/javascript"><!--
+    var allStates = new Array();
+    var allStateIds = new Array();
+    var allCountryIds = new Object();
+    var cCount = 0;
+    {% for country_id, country in oViewConf.getCountryList() %}
+
+        var states = new Array();
+        var ids = new Array();
+        var i = 0;
+
+        {% set countryStates = country.getStates() %}
+        {% for state_id, state in countryStates %}
+            {# JS strings: |e('js') (the title keeps the core's HTML escaping, as in 1.x) #}
+            states[i] = '{{ state.oxstates__oxtitle.value|e('js') }}';
+            ids[i] = '{{ state.oxstates__oxid.value|e('js') }}';
+            i++;
+        {% endfor %}
+        allStates[++cCount] = states;
+        allStateIds[cCount]  = ids;
+        allCountryIds['{{ country.getId() }}']  = cCount;
+    {% endfor %}
+--></script>
+<select{% if disabled %} disabled{% endif %} name="{{ stateSelectName }}" id="{{ stateSelectId }}" {% if class %}class="{{ class }}"{% endif %}>
+    <option value="">{{ translate({ ident: "PLEASE_SELECT_STATE" }) }}</option>
+</select>

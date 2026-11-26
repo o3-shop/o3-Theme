@@ -1,0 +1,295 @@
+{# basket items #}
+{% if not editable %}
+{# #219 order-review cart line: tidy, vertically-aligned layout (title on its own line,
+ Verpackung + compact guarantee label stacked left, stepper and price centered). #}
+<style>
+.component__basketarticle:has(.o3-orderline){align-items:center;}
+.o3-orderline{align-items:center;column-gap:2rem;row-gap:.4rem;}
+.o3-orderline>.component__basketarticle-title{width:100%;margin-bottom:.1rem;}
+.o3-orderline>.d-flex.flex-column{gap:2px;justify-content:space-between;align-self:stretch;}
+.o3-orderline>.d-flex.flex-column .wrapping{line-height:1.1;margin-top:-.35rem;}
+.o3-orderline .o3-guarantee--order{margin:0;line-height:0;}
+.o3-orderline .o3-guarantee--order .o3-guarantee__summary{max-width:none;padding:0;line-height:0;}
+.o3-orderline .o3-guarantee__banner{max-height:1.05rem;width:auto;display:block;}
+.o3-orderline .component__basketarticle-price{align-self:center;}
+</style>
+{% endif %}
+{% set basketitemlist = oView.getBasketArticles() %}
+{% set oConfig = oViewConf.getConfig() %}
+{% for basketindex, basketitem in oxcmp_basket.getContents() %}
+    {% block checkout_basketcontents_basketitem %}
+        {% set basketproduct = basketitemlist[basketindex] %}
+        {% set oArticle = basketitem.getArticle() %}
+        {% set oAttributes = oArticle.getAttributesDisplayableInBasket() %}
+
+        <div class="component__basketarticle">
+
+            {% block checkout_basketcontents_basketitem_image %}
+                {# product image #}
+                {% if editable %}
+                    <a href="{{ basketitem.getLink()|raw }}">
+                        <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags|raw }}">
+                    </a>
+                {% else %}
+                    <img src="{{ basketitem.getIconUrl() }}" alt="{{ basketitem.getTitle()|striptags|raw }}">
+                {% endif %}
+            {% endblock %}
+
+            <div class="component__basketarticle-info{% if not editable %} o3-orderline{% endif %}">
+                {% block checkout_basketcontents_basketitem_titlenumber %}
+                    {% block checkout_basketcontents_basketitem_title %}
+                        {% if editable %}
+                            <a class="component__basketarticle-title" rel="nofllow" href="{{ basketitem.getLink()|raw }}">
+                                {{ basketitem.getTitle()|raw }}
+                            </a>
+                        {% else %}
+                            <div class="component__basketarticle-title">{{ basketitem.getTitle()|raw }}</div>
+                        {% endif %}
+                        {% if basketitem.isSkipDiscount() %} <sup><a href="#SkipDiscounts_link" >**</a></sup>{% endif %}
+                    {% endblock %}
+
+                    {% block checkout_basketcontents_basketitem_removecheckbox %}
+                        {% if editable %}
+                            <input type="hidden" name="aproducts[{{ basketindex }}][remove]" value="0">
+                            <button type="submit" name="removeBtn" class="component__basketarticle-remove btn" data-remove-id="aproducts[{{ basketindex }}][remove]" data-js="remove-from-basket">
+                                <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.4375 2.3125H5.25C5.35313 2.3125 5.4375 2.22812 5.4375 2.125V2.3125ZM5.4375 2.3125H12.5625V2.125C12.5625 2.22812 12.6469 2.3125 12.75 2.3125H12.5625V4H14.25V2.125C14.25 1.29766 13.5773 0.625 12.75 0.625H5.25C4.42266 0.625 3.75 1.29766 3.75 2.125V4H5.4375V2.3125ZM17.25 4H0.75C0.335156 4 0 4.33516 0 4.75V5.5C0 5.60313 0.084375 5.6875 0.1875 5.6875H1.60312L2.18203 17.9453C2.21953 18.7445 2.88047 19.375 3.67969 19.375H14.3203C15.1219 19.375 15.7805 18.7469 15.818 17.9453L16.3969 5.6875H17.8125C17.9156 5.6875 18 5.60313 18 5.5V4.75C18 4.33516 17.6648 4 17.25 4ZM14.1398 17.6875H3.86016L3.29297 5.6875H14.707L14.1398 17.6875Z" fill="#D4D4D4"/>
+                                </svg>
+                            </button>
+                        {% endif %}
+                    {% endblock %}
+
+                    {# 
+ <div class="component__basketarticle-details">
+ {% block checkout_basketcontents_basketitem_artnum %}
+ <span>{{ translate({ ident: "PRODUCT_NO" }) }} {{ basketproduct.oxarticles__oxartnum.value }}</span>
+ {% endblock %}
+
+ {% block checkout_basketcontents_basketitem_attributes %}
+ {% set sep = ", " %}
+ {% set result = "" %}
+ {% for oArtAttributes, oAttr in oAttributes.getArray() %}
+ {% set temp = oAttr.oxattribute__oxvalue.value %}
+ {% set result = result|cat(temp)|cat(sep) %}
+ {% endfor %}
+ {{ result|trim("sep") }}
+ {% endblock %}
+
+ {% block checkout_basketcontents_basketitem_selectlists %}
+ {% if not basketitem.isBundle() or not basketitem.isDiscountArticle() %}
+ {% set oSelections = basketproduct.getSelections("null", basketitem.getSelList()) %}
+ {% if oSelections %}
+ <div class="selectorsBox clear" id="cartItemSelections_{{ loop.index }}">
+ {% for oList in oSelections %}
+ {% if oViewConf.showSelectListsInList() %}
+ {% include "widget/product/selectbox.html.twig" with {oSelectionList: oList, sFieldName: "aproducts[`$basketindex`][sel]", iKey: loop.index0, blHideDefault: true, sSelType: "seldrop"} %}
+ {% else %}
+ {% set oActiveSelection = oList.getActiveSelection() %}
+ {% if oActiveSelection %}
+ <input type="hidden" name="aproducts[{{ basketindex }}][sel][{{ loop.index0 }}]" value="{{ oActiveSelection.getValue() }}">
+ <div>{{ oList.getLabel() }}: {{ oActiveSelection.getName() }}</div>
+ {% endif %}
+ {% endif %}
+ {% endfor %}
+ </div>
+ {% endif %}
+ {% endif %}
+ {% endblock %}
+
+ {% block checkout_basketcontents_basketitem_persparams %}
+ {% if not editable %}
+ <p class="persparamBox">
+ {% for sVar, aParam in basketitem.getPersParams() %}
+ {% if not loop.first %}<br />{% endif %}
+ {% if loop.first and loop.last %}
+ {{ translate({ ident: "LABEL" }) }}
+ {% else %}
+ {{ sVar }} :
+ {% endif %}
+ {{ aParam }}
+ {% endfor %}
+ </p>
+ {% else %}
+ {% if basketproduct.oxarticles__oxisconfigurable.value %}
+ {% if basketitem.getPersParams() %}
+ <br />
+ {% for sVar, aParam in basketitem.getPersParams() %}
+ <p>
+ <input class="textbox persParam form-control" type="text" name="aproducts[{{ basketindex }}][persparam][{{ sVar }}]" value="{{ aParam }}" placeholder="{% if loop.first and loop.last %}{{ translate({ ident: "LABEL" }) }}{% else %}{{ sVar }}{% endif %}">
+ </p>
+ {% endfor %}
+ {% else %}
+ <p>
+ <input class="textbox persParam form-control" type="text" name="aproducts[{{ basketindex }}][persparam][details]" value="" placeholder="{{ translate({ ident: "LABEL" }) }}">
+ </p>
+ {% endif %}
+ {% endif %}
+ {% endif %}
+ {% endblock %}
+
+ {% block checkout_basketcontents_basketitem_unitprice %}
+ {% if basketitem.getUnitPrice() %}
+ <span>{{ translate({ ident: "UNIT_PRICE" }) }}: {{ format_price(basketitem.getUnitPrice(), { currency: currency }) }}</span>
+ {% endif %}
+ {% endblock %}
+ </div>
+ #}
+                {% endblock %}
+
+                {# Verpackung + guarantee label stacked, centered against the +/- stepper for flush alignment (#219). #}
+                <div class="d-flex flex-column">
+                {% block checkout_basketcontents_basketitem_wrapping %}
+                    {# product wrapping #}
+                    {% if oView.isWrapping() %}
+                        <div class="wrapping">
+                            {% if not basketitem.getWrappingId() %}
+                                {% if editable %}
+                                    <a href="#" class="btn btn-outline-dark btn-sm" title="{{ translate({ ident: "ADD" }) }}" data-toggle="modal" data-target="#giftoptions">{{ translate({ ident: "WRAPPING" }) }} {{ translate({ ident: "ADD" }) }}</a>
+                                {% else %}
+                                    <small>{{ translate({ ident: "WRAPPING" }) }}: {{ translate({ ident: "NONE" }) }}</small>
+                                {% endif %}
+                            {% else %}
+                                {% set oWrap = basketitem.getWrapping() %}
+                                {% if editable %}
+                                    <small>{{ translate({ ident: "WRAPPING" }) }}:</small> <a class="btn btn-outline-dark btn-sm" href="#" title="{{ translate({ ident: "ADD" }) }}" data-toggle="modal" data-target="#giftoptions"><i class="fas fa-pencil-alt"></i> {{ oWrap.oxwrapping__oxname.value|raw }}</a>
+                                {% else %}
+                                    <small>{{ translate({ ident: "WRAPPING" }) }}: {{ oWrap.oxwrapping__oxname.value|raw }}</small>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+                {# EU durability-guarantee label under the product info, left-aligned (#219): each #}
+                {# eligible product carries its own label — a basket may mix different durations. #}
+                {% if not editable %}
+                    {% set oGuaranteeArticle = oArticle %}
+                    {% set sGuaranteeContext = "o3-guarantee--order" %}
+                    {% include "page/details/inc/guaranteelabel.html.twig" %}
+                {% endif %}
+                </div>{# /Verpackung + label column #}
+
+                {% block checkout_basketcontents_basketitem_amount %}
+                    {# 
+ {% if basketitem.getFUnitPrice() %} | {% endif %}
+ {% if basketitem.oxarticles__oxunitname.value %}
+ {{ basketitem.getAmount() }} {{ basketitem.oxarticles__oxunitname.value }}
+ {% else %}
+ {{ basketitem.getAmount() }} {{ translate({ ident: "PCS" }) }}
+ {% endif %}
+ #}
+                {% endblock %}
+
+                {% block checkout_basketcontents_basketitem_vat %}
+                    {# 
+ {{ basketitem.getVatPercent() }}% {{ translate({ ident: "VAT" }) }}
+ #}
+                {% endblock %}
+
+                {% block checkout_basketcontents_basketitem_quantity %}
+                    {# product quantity manager #}
+
+                    {% if editable %}
+                        <input type="hidden" name="aproducts[{{ basketindex }}][aid]" value="{{ basketitem.getProductId() }}">
+                        <input type="hidden" name="aproducts[{{ basketindex }}][basketitemid]" value="{{ basketindex }}">
+                        <input type="hidden" name="aproducts[{{ basketindex }}][override]" value="1">
+                        {% if basketitem.isBundle() %}
+                            <input type="hidden" name="aproducts[{{ basketindex }}][bundle]" value="1">
+                        {% endif %}
+
+                        {% if not basketitem.isBundle() or not basketitem.isDiscountArticle() %}
+
+                            {% set tobasket_name = "aproducts[" ~ basketindex ~ "][am]" %}
+                            {% set getStock = basketitem.getArticle() %}
+                            {% include "widget/product/tobasket.html.twig" with {blCanBuy: true, name: tobasket_name, value: basketitem.getAmount(), stockflag: getStock.oxarticles__oxstockflag.value, stock: getStock.oxarticles__oxstock.value} %}
+                            {# 1.x printed $basketitem->oxarticles__oxunitname->value here, which BasketItem never has (always empty);
+                               in Twig the access would go to BasketItem::__call and throw, so it is left out #}
+
+                        {% endif %}
+
+                    {% else %}
+
+                        {% include "widget/product/tobasket.html.twig" with {blCanBuy: true, name: tobasket_name, value: basketitem.getAmount(), disabled: true} %}
+
+                    {% endif %}
+
+                    {% if basketitem.getdBundledAmount() > 0 and (basketitem.isBundle() or basketitem.isDiscountArticle()) %}
+                        +{{ basketitem.getdBundledAmount() }}
+                    {% endif %}
+
+                {% endblock %}
+
+                {% block checkout_basketcontents_basketitem_totalprice %}
+                    {# product quantity * price #}
+                    <div class="component__basketarticle-price">
+                        {{ format_price(basketitem.getPrice(), { currency: currency }) }}
+                    </div>
+                {% endblock %}
+
+            </div>
+            {% block checkout_basketcontents_basketitem_end %}{% endblock %}
+        </div>
+    {% endblock %}
+
+    {# packing unit #}
+
+    {% block checkout_basketcontents_itemerror %}
+        {% for key, oEr in Errors.basket %}
+            {% if oEr.getErrorClassType() == 'oxOutOfStockException' %}
+                {# display only the exceptions for the current article #}
+                {% if basketindex == oEr.getValue('basketIndex') %}
+                    <tr class="basketError">
+                        {% if editable %}<td></td>{% endif %}
+                            <td colspan="5">
+                                <span class="inlineError">{{ oEr.getOxMessage() }} <strong>{{ oEr.getValue('remainingAmount') }}</strong></span>
+                            </td>
+                        {% if oView.isWrapping() %}<td></td>{% endif %}
+                        <td></td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+            {% if oEr.getErrorClassType() == 'oxArticleInputException' %}
+                {% if basketitem.getProductId() == oEr.getValue('productId') %}
+                    <tr class="basketError">
+                        {% if editable %}<td></td>{% endif %}
+                        <td colspan="5">
+                            <span class="inlineError">{{ oEr.getOxMessage() }}</span>
+                        </td>
+                        {% if oView.isWrapping() %}<td></td>{% endif %}
+                        <td></td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
+    {# basket items end #}
+{% endfor %}
+
+{% block checkout_basketcontents_giftwrapping %}
+    {% if oViewConf.getShowGiftWrapping() %}
+        {% set oCard = oxcmp_basket.getCard() %}
+        {% if oCard %}
+            <tr>
+                {% if editable %}<td></td>{% endif %}
+                <td id="orderCardTitle" colspan="3">{{ translate({ ident: "GREETING_CARD" }) }} "{{ oCard.oxwrapping__oxname.value|raw }}"
+                    <br>
+                    <b>{{ translate({ ident: "YOUR_MESSAGE" }) }}</b>
+                    <br>
+                    {# getCardMessage(): request value escaped by the core (getRequestEscapedParameter giftmessage); |raw stops |nl2br pre-escaping #}
+                    <div id="orderCardText">{{ oxcmp_basket.getCardMessage()|raw|nl2br }}</div>
+                </td>
+                <td id="orderCardPrice">{{ oCard.getFPrice() }}&nbsp;{{ currency.sign }}</td>
+                <td>
+                    {% if oxcmp_basket.isProportionalCalculationOn() %}
+                        {{ translate({ ident: "PROPORTIONALLY_CALCULATED" }) }}
+                    {% else %}
+                        {% if oxcmp_basket.getGiftCardCostVat() %}{{ oxcmp_basket.getGiftCardCostVatPercent() }}%{% endif %}
+                    {% endif %}
+                </td>
+                <td id="orderCardTotalPrice" align="right">{{ oCard.getFPrice() }}&nbsp;{{ currency.sign }}</td>
+            </tr>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block checkout_basketcontents_basketfunctions %}{% endblock %}

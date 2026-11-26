@@ -1,0 +1,76 @@
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
+{% else %}
+    {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
+{% endif %}
+
+{# editval, getContactSubject(), getContactMessage(): request-escaped by the core (ContactController, getRequestEscapedParameter), so |raw #}
+{% set editval = oView.getUserData() %}
+<form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post" class="needs-validation" novalidate>
+    <div class="d-none">
+        {{ oViewConf.getHiddenSid()|raw }}
+        <input type="hidden" name="fnc" value="send"/>
+        <input type="hidden" name="cl" value="contact"/>
+    </div>
+
+    {% block contact_form_fields %}
+        <div class="form-floating mb-3">
+            {% include "form/fieldset/salutation.html.twig" with {name: "editval[oxuser__oxsal]", value: editval.oxuser__oxsal, class: "form-select", required: contactFormFields.salutation.isRequired} %}
+            <label for="editval[oxuser__oxsal]">{{ translate({ ident: "TITLE" }) }}{% if contactFormFields.salutation.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "DD_FORM_VALIDATION_TITLE" }) }}
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" name="editval[oxuser__oxfname]" id="editval[oxuser__oxfname]" size=70 maxlength=255 value="{{ editval.oxuser__oxfname|raw }}" class="form-control" placeholder="{{ translate({ ident: "FIRST_NAME" }) }}"{% if contactFormFields.firstName.isRequired %} required{% endif %} autocomplete="given-name">
+            <label for="editval[oxuser__oxfname]">{{ translate({ ident: "FIRST_NAME" }) }}{% if contactFormFields.firstName.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "DD_FORM_VALIDATION_FIRST_NAME" }) }}
+            </div>
+            {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxfname} %}
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="editval[oxuser__oxlname]" name="editval[oxuser__oxlname]" value="{{ editval.oxuser__oxlname|raw }}" placeholder="{{ translate({ ident: "LAST_NAME" }) }}{% if contactFormFields.lastName.isRequired %}*{% endif %}"{% if contactFormFields.lastName.isRequired %} required{% endif %} autocomplete="family-name">
+            <label for="editval[oxuser__oxlname]">{{ translate({ ident: "LAST_NAME" }) }}{% if contactFormFields.lastName.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "DD_FORM_VALIDATION_LAST_NAME" }) }}
+            </div>
+            {% include "message/inputvalidation.html.twig" with {aErrors: aErrors.oxuser__oxlname} %}
+        </div>
+
+        <div class="form-floating mb-3">
+            <input id="contactEmail" type="email" name="editval[oxuser__oxusername]" size=70 maxlength=255 value="{{ editval.oxuser__oxusername|raw }}" class="form-control" placeholder="{{ translate({ ident: "EMAIL" }) }}{% if contactFormFields.email.isRequired %}*{% endif %}" autocomplete="email"{% if contactFormFields.email.isRequired %} required{% endif %}>
+            <label for="contactEmail">{{ translate({ ident: "EMAIL" }) }}{% if contactFormFields.email.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" name="c_subject" id="c_subject" size="70" maxlength=80 value="{{ oView.getContactSubject()|raw }}" class="form-control" placeholder="{{ translate({ ident: "SUBJECT" }) }}{% if contactFormFields.subject.isRequired %}*{% endif %}"{% if contactFormFields.subject.isRequired %} required{% endif %}>
+            <label for="c_subject">{{ translate({ ident: "SUBJECT" }) }}{% if contactFormFields.subject.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "O3_FORM_VALIDATION_SUBJECT" }) }}
+            </div>
+        </div>
+
+        <div class="form-floating mb-3">
+            <textarea name="c_message" id="c_message" class="form-control" placeholder="{{ translate({ ident: "MESSAGE" }) }}{% if contactFormFields.message.isRequired %}*{% endif %}"{% if contactFormFields.message.isRequired %} required{% endif %}>{{ oView.getContactMessage()|raw }}</textarea>
+            <label for="c_message">{{ translate({ ident: "MESSAGE" }) }}{% if contactFormFields.message.isRequired %}*{% endif %}</label>
+            <div class="invalid-feedback">
+                {{ translate({ ident: "O3_FORM_VALIDATION_MESSAGE" }) }}
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block captcha_form %}{{ oViewConf.getCaptchaWidget('contact')|raw }}{% endblock %}
+
+    {% block contact_form_buttons %}
+        <p class="alert alert-info">{{ translate({ ident: "COMPLETE_MARKED_FIELDS" }) }}</p>
+        <button class="btn btn-primary" type="submit">
+            {{ translate({ ident: "SEND" }) }}
+        </button>
+    {% endblock %}
+</form>

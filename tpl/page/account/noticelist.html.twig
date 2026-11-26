@@ -1,0 +1,37 @@
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/remove-from-notice at the start of the content capture, so before the header's scripts;
+   registering it here, at the top level, keeps that order #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/remove-from-notice.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/remove-from-notice.js", priority: 10 }) %}
+{% endif %}
+
+{% block content %}
+    {% set template_title = "MY_WISH_LIST"|translate %}
+
+    <div class="row">
+
+        <div class="col-12 col-md-4 col-lg-3 mb-5">
+            {% include "layout/sidebar.html.twig" with {content: "account", active_link: "noticelist"} %}
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-9">
+
+            <h1 class="title-big">{{ translate({ ident: "MY_WISH_LIST" }) }}</h1>
+            <hr>
+
+            {% if oView.getNoticeProductList() %}
+                <div class="component__productslider">
+                    {% include "widget/product/list_splide.html.twig" with {listId: "noticelistProductList", products: oView.getNoticeProductList(), removeFunction: "tonoticelist", owishid: oxcmp_user.oxuser__oxid.value, splideConfig: '{"mediaQuery":"min","perMove":1,"arrows":false,"pagination":true,"breakpoints":{"1400":{"perPage":3},"992":{"perPage":2},"768":{"perPage":2},"0":{"perPage":1}}}'} %}
+                </div>
+            {% else %}
+                <p class="alert alert-info">{{ translate({ ident: "WISH_LIST_EMPTY" }) }}</p>
+            {% endif %}
+
+        </div>
+
+    </div>
+    {{ insert_tracker({title: template_title}) }}
+{% endblock %}

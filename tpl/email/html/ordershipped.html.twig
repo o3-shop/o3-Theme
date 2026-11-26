@@ -1,0 +1,104 @@
+{% set shop = oEmailView.getShop() %}
+{% set oViewConf = oEmailView.getViewConfig() %}
+
+{% capture assign = "style" %}
+    table.orderarticles th {
+        white-space: nowrap;
+    }
+
+    table.orderarticles th, table.orderarticles td {
+        border: 1px solid #d4d4d4;
+        font-size: 13px;
+        padding:5px;
+        white-space: nowrap;
+    }
+
+    table.orderarticles {
+        border-collapse: collapse;
+    }
+
+    table.orderarticles thead th {
+        background-color: #ebebeb;
+    }
+{% endcapture %}
+
+{% include "email/html/header.html.twig" with {title: "DD_ORDERSHIPPED_HEADING"|translate|cat(" #")|cat(order.oxorder__oxordernr.value), style: style} %}
+
+    {% block email_html_ordershipped_sendemail %}
+       {{ include_content('oxordersendemail') }}
+    {% endblock %}
+
+    {% block email_html_ordershipped_infoheader %}
+        <h3 class="underline">{{ translate({ ident: "SHIPPING_ADDRESS" }) }}</h3>
+    {% endblock %}
+
+    {% block email_html_ordershipped_address %}
+        <p>
+            {% if order.oxorder__oxdellname.value %}
+              {{ order.oxorder__oxdelcompany.value|raw }}<br>
+              {{ order.oxorder__oxdelfname.value|raw }} {{ order.oxorder__oxdellname.value|raw }}<br>
+              {{ order.oxorder__oxdelstreet.value|raw }} {{ order.oxorder__oxdelstreetnr.value|raw }}<br>
+              {{ order.oxorder__oxdelstateid.value|raw }}
+              {{ order.oxorder__oxdelzip.value|raw }} {{ order.oxorder__oxdelcity.value|raw }}
+            {% else %}
+              {{ order.oxorder__oxbillcompany.value|raw }}<br>
+              {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }}<br>
+              {{ order.oxorder__oxbillstreet.value|raw }} {{ order.oxorder__oxbillstreetnr.value|raw }}<br>
+              {{ order.oxorder__oxbillstateid.value|raw }}
+              {{ order.oxorder__oxbillzip.value|raw }} {{ order.oxorder__oxbillcity.value|raw }}
+            {% endif %}
+        </p>
+        <br/>
+    {% endblock %}
+
+    {% block email_html_ordershipped_oxordernr %}
+        <h3 class="underline">{{ translate({ ident: "ORDER_NUMBER", suffix: "COLON" }) }} {{ order.oxorder__oxordernr.value|raw }}</h3>
+    {% endblock %}
+
+    <table class="orderarticles" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <thead>
+            <tr>
+                <th class="text-right">{{ translate({ ident: "QUANTITY" }) }}</th>
+                <th>{{ translate({ ident: "PRODUCT" }) }}</th>
+                {% if blShowReviewLink %}
+                    <th>{{ translate({ ident: "PRODUCT_RATING" }) }}</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% block email_html_ordershipped_orderarticles %}
+                {% for oOrderArticle in order.getOrderArticles(true) %}
+                    <tr valign="top">
+                        <td align="right" class="text-right">{{ oOrderArticle.oxorderarticles__oxamount.value|raw }}</td>
+                        <td>
+                            {{ oOrderArticle.oxorderarticles__oxtitle.value|escape }} {{ oOrderArticle.oxorderarticles__oxselvariant.value|raw }}
+                            <br>{{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }} {{ oOrderArticle.oxorderarticles__oxartnum.value|raw }}
+                        </td>
+                        {% if blShowReviewLink %}
+                            <td align="right" class="text-right">
+                                <p>
+                                    <a href="{{ oViewConf.getBaseDir()|raw }}index.php?shp={{ shop.oxshops__oxid.value|raw }}&amp;anid={{ oOrderArticle.oxorderarticles__oxartid.value|raw }}&amp;cl=review&amp;reviewuserhash={{ reviewuserhash }}" target="_blank">{{ translate({ ident: "REVIEW" }) }}</a>
+                                </p>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endblock %}
+        </tbody>
+    </table>
+
+    <br/>
+
+    {% block email_html_ordershipped_infofooter %}
+        <p>{{ translate({ ident: "YOUR_TEAM", args: shop.oxshops__oxname.getRawValue() }) }}</p>
+        <br/>
+    {% endblock %}
+
+    {% block email_html_ordershipped_shipmenttrackingurl %}
+        {% if order.getShipmentTrackingUrl() %}
+            <p>{{ translate({ ident: "SHIPMENT_TRACKING", suffix: "COLON" }) }} <a href="{{ order.getShipmentTrackingUrl()|raw }}" target="_blank" title="{{ translate({ ident: "CLICK_HERE" }) }}">{{ translate({ ident: "CLICK_HERE" }) }}</a></p>
+            <br/>
+        {% endif %}
+    {% endblock %}
+
+{% include "email/html/footer.html.twig" %}

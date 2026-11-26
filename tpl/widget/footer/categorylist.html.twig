@@ -1,0 +1,15 @@
+{% if oxcmp_categories %}
+    {% set categories = oxcmp_categories %}
+    {% block footer_categories %}
+        {% for _cat in categories %}
+            {% if _cat.getIsVisible() %}
+                {% if _cat.getContentCats() %}
+                    {% for _oCont in _cat.getContentCats() %}
+                        <div><a href="{{ _oCont.getLink()|raw }}">{{ _oCont.oxcontents__oxtitle.value|raw }}</a></div>
+                    {% endfor %}
+                {% endif %}
+                <div><a href="{{ _cat.getLink()|raw }}">{{ _cat.oxcategories__oxtitle.value|raw }}</a></div>
+            {% endif %}
+        {% endfor %}
+    {% endblock %}
+{% endif %}

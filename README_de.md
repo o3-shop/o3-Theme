@@ -11,6 +11,18 @@
 - Optional PurgeCSS (standardmäßig deaktiviert)
 - SplideJS for sliders
 
+### O3-Theme 2.x (Twig)
+
+O3-Theme 2.x ist ein **Twig**-Theme (`'templateEngine' => 'twig'` in `theme.php`) und
+setzt **O3-Shop 2.0** voraus (`o3-shop/shop-ce: ^2.0`). Es liegt auf dem Branch `b-2.0`.
+Die Smarty-Linie, O3-Theme 1.x, bleibt auf `main` für O3-Shop-1.x-Shops und für 2.0-Shops,
+die eine Smarty-Storefront behalten. Offener Punkt: Die veröffentlichten 1.x-Tags verlangen
+`o3-shop/shop-ce: ^1.2`, daher kann Composer sie noch nicht neben O3-Shop 2.0 installieren;
+dafür braucht es ein O3-Theme-1.x-Release, dessen `composer.json` auch shop-ce 2.0 erlaubt
+(noch nicht veröffentlicht). Bis dahin den Theme-Checkout bzw. das Paket manuell auf der
+1.x-Linie halten. Regeln für Template-, Modul- und Child-Theme-Autoren: `docs/twig.md` in shop-ce.
+Ein Child-Theme von O3-Theme 2.x muss ebenfalls ein Twig-Theme sein.
+
 ## 2. Installation
 Das Theme wird mit dem o3-Shop System ausgeliefert und muss nicht installiert werden.
 
@@ -149,7 +161,7 @@ gulp dev
 The watcher monitors:
 - `build/js/**/*.js` → Rebuilds JavaScript bundles
 - `build/scss/**/*.scss` → Rebuilds CSS
-- `**/*.tpl` → Clears OXID TMP directory
+- `tpl/**/*.html.twig` → Clears OXID TMP directory
 - `Application/translations/**/*.php` → Clears OXID TMP directory
 
 **Production build:**
@@ -178,9 +190,9 @@ erzeugte Klassennamen aus JavaScript oder Templates müssen dann in die
 Safelist aufgenommen werden.
 
 **Beispiel dynamischer Klassen:**
-```smarty
-{* Template with dynamic class *}
-<div class="[{$type}]-view"></div>
+```twig
+{# Template with dynamic class #}
+<div class="{{ type }}-view"></div>
 ```
 
 **Safelist in `gulpfile.js` ergänzen:**
@@ -203,7 +215,7 @@ safelist: [
   ``<DOCUMENT_ROOT>/source/Application/views/o3-theme/build/js/main.bundle.js``
 - ``import`` new scripts here to include them in the **main JS**.
 - Files in `build/js/widgets/` are standalone and must be explicitly loaded in templates:
-  ``[{oxscript include="js/widgets/checkagb.js" priority=10}]``
+  ``{{ script({ include: "js/widgets/checkagb.js", priority: 10 }) }}``
 > JavaScript from modules can also be integrated into ``main.bundle.js``. Descriptions and examples can be found in the bundle-file.
 
 ### SCSS
@@ -226,7 +238,7 @@ safelist: [
 
 ## 7. Compatibility with PayPal
 The PayPal module checks the active theme ID in one of its templates:
-``[{if $oViewConf->getActiveTheme()=='flow'}]`` 
+``[{if $oViewConf->getActiveTheme()=='flow'}]`` (Smarty-Template des Moduls) 
 Change ``'flow'`` to ``'o3-theme'`` for compatibility.
 
 

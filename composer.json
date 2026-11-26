@@ -20,7 +20,7 @@
     }
   ],
   "require": {
-    "o3-shop/shop-ce": "^1.2"
+    "o3-shop/shop-ce": "^2.0 || dev-b-2.0"
   },
   "extra": {
     "frontend": {

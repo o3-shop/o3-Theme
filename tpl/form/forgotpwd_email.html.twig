@@ -1,0 +1,35 @@
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
+{% else %}
+    {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
+{% endif %}
+
+<form action="{{ oViewConf.getSelfActionLink()|raw }}" name="forgotpwd" method="post" class="needs-validation" novalidate>
+
+    <div class="d-none">
+        {{ oViewConf.getHiddenSid()|raw }}
+        {{ oViewConf.getNavFormParams()|raw }}
+        <input type="hidden" name="fnc" value="forgotpassword">
+        <input type="hidden" name="cl" value="forgotpwd">
+        <input type="hidden" name="actcontrol" value="forgotpwd">
+    </div>
+
+    {{ translate({ ident: "REQUEST_PASSWORD_AFTERCLICK" }) }}<br><br>
+    {% ifcontent ident "oxforgotpwd" set oCont %}
+        {{ oCont.oxcontents__oxcontent.value|raw }}
+    {% endifcontent %}
+
+    {# getActiveUsername(): request-escaped lgn_usr or oxusername->value (FrontendController::getActiveUsername), so |raw #}
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" value="{{ oView.getActiveUsername()|raw }}" id="forgotPasswordUserLoginName{{ idPrefix }}" name="lgn_usr" placeholder="{{ translate({ ident: "YOUR_EMAIL_ADDRESS" }) }}" required autocomplete="email">
+        <label for="forgotPasswordUserLoginName">{{ translate({ ident: "YOUR_EMAIL_ADDRESS" }) }}</label>
+        <div class="invalid-feedback">
+            {{ translate({ ident: "DD_FORM_VALIDATION_VALIDEMAIL" }) }}
+        </div>
+    </div>
+
+    {% block captcha_form %}{{ oViewConf.getCaptchaWidget('forgotpwd')|raw }}{% endblock %}
+
+    <button class="btn btn-primary" type="submit">{{ translate({ ident: "REQUEST_PASSWORD" }) }}</button>
+
+</form>

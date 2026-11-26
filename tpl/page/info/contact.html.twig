@@ -1,0 +1,76 @@
+{% extends "layout/page.html.twig" %}
+
+{# 1.x registered js/widget/validate (in form/contact) before the header's scripts; registering it here, at the top level, keeps that
+   order (the registration in form/contact is deduplicated by the core) #}
+{% if oxcmp_shop.oxshops__oxproductive.value %}
+    {% do script({ include: "js/widget/validate.min.js", priority: 10 }) %}
+{% else %}
+    {% do script({ include: "js/widget/validate.js", priority: 10 }) %}
+{% endif %}
+
+{% block content %}
+    {% if oView.getContactSendStatus() %}
+        {# the shop name is a field .value (already escaped); a {% set %} block keeps the message safe, so message/notice does not escape it again #}
+        {% set _statusMessage %}{{ "PAGE_DETAILS_THANKYOUMESSAGE1"|translate }} {{ oxcmp_shop.oxshops__oxname.value|raw }}{% endset %}
+        {% set _statusMessageSuffix = "PAGE_DETAILS_THANKYOUMESSAGE2"|translate %}
+        {% set _statusMessage %}{{ _statusMessage }}{{ _statusMessageSuffix }}{% endset %}
+        {% include "message/notice.html.twig" with {statusMessage: _statusMessage} %}
+    {% endif %}
+    <h1 class="title-big">{{ translate({ ident: "DD_CONTACT_PAGE_HEADING" }) }}</h1>
+
+    {% set sGoogleMapsAddr = oViewConf.getViewThemeParam('sGoogleMapsAddr') %}
+    {# No custom map address configured: derive it from the shop's contact address. #}
+    {% if not sGoogleMapsAddr and oxcmp_shop.oxshops__oxstreet.value %}
+        {% set sGoogleMapsAddr = oxcmp_shop.oxshops__oxstreet.value|cat(", ")|cat(oxcmp_shop.oxshops__oxzip.value)|cat(" ")|cat(oxcmp_shop.oxshops__oxcity.value)|cat(", ")|cat(oxcmp_shop.oxshops__oxcountry.value) %}
+    {% endif %}
+    {% if sGoogleMapsAddr %}
+        {# oxscript include="js/libs/pages/contact.min.js" priority=10 #}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="google-maps">
+                    <figure>
+                        <iframe width="100%" height="400" style="width:100%;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.de/maps?t=m&amp;q={{ sGoogleMapsAddr|urlencode|raw }}&amp;ie=UTF8&amp;hq={{ sGoogleMapsAddr|urlencode|raw }}&amp;output=embed"></iframe>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12 col-lg-3">
+
+            <h3 class="title-small">{{ translate({ ident: "ADDRESS" }) }}</h3>
+
+            <div itemscope itemtype="https://schema.org/Organization">
+                <address>
+                    <strong itemprop="name">{{ oxcmp_shop.oxshops__oxcompany.value|raw }}</strong><br>
+                    <span class="d-block" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <span itemprop="streetAddress">{{ oxcmp_shop.oxshops__oxstreet.value|raw }}</span><br>
+                        <span itemprop="postalCode">{{ oxcmp_shop.oxshops__oxzip.value|raw }}</span> {{ oxcmp_shop.oxshops__oxcity.value|raw }}<br>
+                        {{ oxcmp_shop.oxshops__oxcountry.value|raw }}<br>
+                        <span class="hidden" itemprop="addressLocality">{{ oxcmp_shop.oxshops__oxcity.value|raw }}, {{ oxcmp_shop.oxshops__oxcountry.value|raw }}</span>
+                    </span>
+                    {% if oxcmp_shop.oxshops__oxtelefon.value %}
+                        <strong>{{ translate({ ident: "PHONE", suffix: "COLON" }) }}</strong> <span itemprop="telephone">{{ oxcmp_shop.oxshops__oxtelefon.value|raw }}</span><br>
+                    {% endif %}
+                    {% if oxcmp_shop.oxshops__oxtelefax.value %}
+                        <strong>{{ translate({ ident: "FAX", suffix: "COLON" }) }}</strong> <span itemprop="faxNumber">{{ oxcmp_shop.oxshops__oxtelefax.value|raw }}</span><br>
+                    {% endif %}
+                    {% if oxcmp_shop.oxshops__oxinfoemail.value %}
+                        <strong>{{ translate({ ident: "EMAIL", suffix: "COLON" }) }}</strong> <span itemprop="email">{{ mailto(oxcmp_shop.oxshops__oxinfoemail.value) }}</span><br>
+                    {% endif %}
+                    <span class="hidden" itemprop="url">{{ oViewConf.getHomeLink()|raw }}</span>
+                </address>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-9">
+            <h3 class="title-small">{{ translate({ ident: "DD_CONTACT_FORM_HEADING" }) }}</h3>
+            {% include "form/contact.html.twig" %}
+        </div>
+
+    </div>
+
+    {{ insert_tracker({title: template_title}) }}
+{% endblock %}

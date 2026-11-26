@@ -1,0 +1,41 @@
+{% set shop = oEmailView.getShop() %}
+{% set oViewConf = oEmailView.getViewConfig() %}
+{% set sOrderId = order.getId() %}
+{% set oOrderFileList = oEmailView.getOrderFileList(sOrderId) %}
+
+{% include "email/html/header.html.twig" with {title: "DD_DOWNLOADLINKS_HEADING"|translate|cat(" #")|cat(order.oxorder__oxordernr.value)} %}
+
+{% block email_html_senddownloadlinks_infoheader %}
+    {{ translate({ ident: "EMAIL_SENDDOWNLOADS_GREETING" }) }} {{ order.oxorder__oxbillsal.value|translate_salutation|raw }} {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }},<br>
+    <br>
+{% endblock %}
+
+{% block email_html_senddownloadlinks_oxordernr %}{% endblock %}
+
+{% if oOrderFileList %}
+    {% block email_html_senddownloadlinks_download_header %}
+        <h3 class="underline">{{ translate({ ident: "MY_DOWNLOADS_DESC" }) }}</h3>
+    {% endblock %}
+    {% block email_html_senddownloadlinks_download_link %}
+        {% for oOrderFile in oOrderFileList %}
+            <ul>
+                <li>
+                    {% if order.oxorder__oxpaid.value != "0000-00-00 00:00:00" or not oOrderFile.oxorderfiles__oxpurchasedonly.value %}
+                        <a href="{{ seo_url({ ident: oViewConf.getBaseDir()|cat("index.php?cl=download"), params: "sorderfileid="|cat(oOrderFile.getId()) }) }}">{{ oOrderFile.oxorderfiles__oxfilename.value|raw }}</a> {{ oOrderFile.getFileSize()|file_size }}
+                    {% else %}
+                        <span>{{ oOrderFile.oxorderfiles__oxfilename.value|raw }}</span>
+                        <strong>{{ translate({ ident: "DOWNLOADS_PAYMENT_PENDING" }) }}</strong>
+                    {% endif %}
+                </li>
+            </ul>
+        {% endfor %}
+        <br/>
+    {% endblock %}
+{% endif %}
+
+{% block email_html_senddownloadlinks_infofooter %}
+    <p>{{ translate({ ident: "YOUR_TEAM", args: shop.oxshops__oxname.getRawValue() }) }}</p>
+    <br/>
+{% endblock %}
+
+{% include "email/html/footer.html.twig" %}

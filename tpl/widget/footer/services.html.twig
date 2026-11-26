@@ -1,0 +1,44 @@
+{# 1.x saw oxcmp_basket leaked from the page's Smarty assigns; this widget does not load the basket component #}
+{% set oxcmp_basket = oxcmp_basket ?? oViewConf.getSession().getBasket() %}
+{% block footer_services %}
+
+    {% block footer_services_items %}
+        <div><a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=contact") }) }}">{{ translate({ ident: "CONTACT" }) }}</a></div>
+        {% if oViewConf.getViewThemeParam('blFooterShowHelp') %}
+            <div><a href="{{ oViewConf.getHelpPageLink()|raw }}">{{ translate({ ident: "HELP" }) }}</a></div>
+        {% endif %}
+        {% hasrights { ident: "TOBASKET" } %}
+            {% block footer_services_cart %}
+                <div>
+                    <a href="{{ seo_url({ ident: oViewConf.getBasketLink() }) }}">
+                        {{ translate({ ident: "CART" }) }}
+                    </a>
+                    {% if oxcmp_basket and oxcmp_basket.getItemsCount() > 0 %} ({{ oxcmp_basket.getItemsCount() }}){% endif %}
+                </div>
+            {% endblock %}
+        {% endhasrights %}
+        <div><a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=account") }) }}">{{ translate({ ident: "ACCOUNT" }) }}</a></div>
+        {% if oViewConf.getRevocationLinkVisible() %}
+            {% block o3_footer_revocation %}
+                <div class="footer__revocation">
+                    <a href="{{ oViewConf.getSelfLink()|raw }}cl=revocation"
+                       class="btn btn-primary footer__revocation-btn"
+                       rel="nofollow"
+                       data-testid="footer-revocation-btn">
+                        {{ translate({ ident: "O3_REVOCATION_FOOTER_LINK" }) }}
+                    </a>
+                </div>
+            {% endblock %}
+        {% endif %}
+        {% block o3_footer_guarantee_notice %}
+            {% if oViewConf.getGuaranteeNoticeUrl is defined and oViewConf.getGuaranteeNoticeUrl() %}
+                {# The notice artwork must be visible without any interaction - no click-to-reveal. #}
+                <div class="footer__guarantee-rights o3-guarantee-rights">
+                    <div class="o3-guarantee-rights__title">{{ translate({ ident: "O3_GUARANTEE_RIGHTS_LINK" }) }}</div>
+                    {% include "layout/inc/guaranteenotice.html.twig" %}
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endblock %}
+
+{% endblock %}

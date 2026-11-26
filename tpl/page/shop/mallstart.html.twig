@@ -1,0 +1,41 @@
+{% capture append = "oxidBlock_pageBody" %}
+
+<div id="page">
+    <div id="header" class="clear">
+       {% include "widget/header/languages.html.twig" %}
+       <div><a id="logo" href="{{ oViewConf.getHomeLink()|raw }}" title="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}"><img src="{{ oViewConf.getImageUrl('logo.png') }}" alt="{{ oxcmp_shop.oxshops__oxtitleprefix.value|raw }}"></a></div>
+    </div>
+    <div>
+        {% ifcontent ident "oxstartwelcome" set oCont %}
+            {{ oCont.oxcontents__oxcontent.value|raw }}
+        {% endifcontent %}
+        <div>
+            {{ translate({ ident: "PLEASE_CHOOSE" }) }}
+            <br>
+            <br>
+            {% set shoplinks = oView.getShopLinks() %}
+            {% set shoplangs = oView.getShopDefaultLangs() %}
+            {% for shopid, mallshop in oView.getShopList() %}
+                {% if shoplinks[shopid] is defined and shoplinks[shopid] %}
+                    <a href="{{ shoplinks[shopid] }}">{{ mallshop.oxshops__oxname.value|raw }}</a><br>
+                {% else %}
+                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=mallstart"), params: "fnc=chshp&shp=#{mallshop.oxshops__oxid.value}&lang=#{shoplangs[shopid]}" }) }}" >{{ mallshop.oxshops__oxname.value|raw }}</a><br>
+                {% endif %}
+            {% endfor %}
+         </div>
+    </div>
+
+
+    <div id="footer">
+        <div class="copyright">
+            <img src="{{ oViewConf.getImageUrl('logo_small.png') }}" alt="{{ translate({ ident: "OXID_ESALES_URL_TITLE" }) }}">
+        </div>
+        <div class="text">
+            {% ifcontent ident "oxstdfooter" set oCont %}
+            {{ oCont.oxcontents__oxcontent.value|raw }}
+            {% endifcontent %}
+        </div>
+    </div>
+</div>
+{% endcapture %}
+{% include "layout/base.html.twig" %}

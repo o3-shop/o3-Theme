@@ -1,0 +1,37 @@
+{% extends "layout/page.html.twig" %}
+{% set blHideBreadcrumb = true %}
+{% set template_title = "" %}
+
+{% block content %}
+
+    <h1 class="title-big">
+        {{ translate({ ident: "O3_CHECKOUT" }) }}
+    </h1>
+
+    <hr class="hr-big">
+
+    {% block checkout_user_main %}
+        {% if not oxcmp_user and not oView.getLoginOption() %}
+            {% include "page/checkout/inc/options.html.twig" %}
+        {% endif %}
+
+        {% block checkout_user_noregistration %}
+            {% if not oxcmp_user and oView.getLoginOption() == 1 %}
+                {% include "form/user_checkout_noregistration.html.twig" %}
+            {% endif %}
+        {% endblock %}
+
+        {% block checkout_user_registration %}
+            {% if not oxcmp_user and oView.getLoginOption() == 3 %}
+                {% include "form/user_checkout_registration.html.twig" %}
+            {% endif %}
+        {% endblock %}
+
+        {% block checkout_user_change %}
+            {% if oxcmp_user %}
+                {% include "form/user_checkout_change.html.twig" %}
+            {% endif %}
+        {% endblock %}
+    {% endblock %}
+    {{ insert_tracker({title: template_title}) }}
+{% endblock %}

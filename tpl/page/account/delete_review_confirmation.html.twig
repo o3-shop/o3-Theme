@@ -1,0 +1,51 @@
+{% block delete_review_confirmation_modal %}
+    <div class="modal fade"
+         id="delete_review_{{ reviewCounterIteration }}"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="delete_review_{{ reviewCounterIteration }}"
+         aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% block delete_review_confirmation_modal_header %}
+                        <div class="modal-title fs-5">{{ translate({ ident: "DD_DELETE_REVIEW_CONFIRMATION_QUESTION" }) }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    {% endblock %}
+                </div>
+                <div class="modal-body">
+                    {% block delete_review_confirmation_modal_body %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% block delete_review_confirmation_modal_form %}
+                                    <form
+                                        action="{{ oViewConf.getSslSelfLink()|raw }}"
+                                        method="post"
+                                        id="remove_review_{{ reviewCounterIteration }}"
+                                    >
+                                        {{ oViewConf.getNavFormParams()|raw }}
+                                        {{ oViewConf.getHiddenSid()|raw }}
+                                        <input name="pgNr" value="{{ oView.getActPage() }}"  type="hidden">
+                                        <input name="cl" value="account_reviewlist" type="hidden">
+                                        <input name="fnc" value="deleteReviewAndRating" type="hidden">
+                                        <input name="reviewId" value="{{ reviewId }}" type="hidden">
+                                        <input name="ratingId" value="{{ ratingId }}" type="hidden">
+                                        {% block delete_review_confirmation_modal_buttons_set %}
+                                            <button type="submit" class="btn btn-danger">
+                                                {{ translate({ ident: "DD_DELETE" }) }}
+                                            </button>
+                                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal" aria-label="Close">
+                                                {{ translate({ ident: "DD_DELETE_MY_ACCOUNT_CANCEL" }) }}
+                                            </button>
+                                        {% endblock %}
+                                    </form>
+                                {% endblock %}
+                            </div>
+                        </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

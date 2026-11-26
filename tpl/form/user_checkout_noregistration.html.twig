@@ -1,0 +1,91 @@
+{% set aErrors = oView.getFieldValidationErrors() %}
+
+{% block user_checkout_noregistration %}
+
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {{ script({ include: "js/widget/shippingaddress.min.js", priority: 10 }) }}
+    {% else %}
+        {{ script({ include: "js/widget/shippingaddress.js", priority: 10 }) }}
+    {% endif %}
+
+    {% if oxcmp_shop.oxshops__oxproductive.value %}
+        {{ script({ include: "js/widget/validate.min.js", priority: 10 }) }}
+    {% else %}
+        {{ script({ include: "js/widget/validate.js", priority: 10 }) }}
+    {% endif %}
+
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" name="order" method="post" class="needs-validation" novalidate>
+        {% block user_checkout_noregistration_form %}
+            <div class="d-none">
+                {{ oViewConf.getHiddenSid()|raw }}
+                {{ oViewConf.getNavFormParams()|raw }}
+                <input type="hidden" name="cl" value="user">
+                <input type="hidden" name="option" value="1">
+                {% if not oxcmp_user.oxuser__oxpassword.value %}
+                    <input type="hidden" name="fnc" value="createuser">
+                {% else %}
+                    <input type="hidden" name="fnc" value="changeuser">
+                    <input type="hidden" name="lgn_cook" value="0">
+                {% endif %}
+                <input type="hidden" id="reloadAddress" name="reloadaddress" value="">
+                <input type="hidden" name="blshowshipaddress" value="1">
+            </div>
+
+            {% block user_checkout_noregistration_next_step_top %}
+            {% endblock %}
+
+            <div class="row">
+
+                <div class="col-12 col-md-5 mb-5">
+                    <h3 class="title-small">{{ translate({ ident: "NOTREGISTERED_ACCOUNTINFO" }) }}</h3>
+                    {% include "form/fieldset/user_noaccount.html.twig" %}
+                </div>
+
+                <div class="col-12 offset-md-2 col-md-5 mb-5">
+                    <h3 class="title-small">{{ translate({ ident: "BILLING_ADDRESS" }) }}</h3>
+                    {% include "form/fieldset/user_billing.html.twig" with {noFormSubmit: true, blOrderRemark: true} %}
+                </div>
+
+                <div class="col-12 offset-md-7 col-md-5 mb-5">
+
+                    <h3 class="title-small">{{ translate({ ident: "SHIPPING_ADDRESS" }) }}</h3>
+
+                    {% block user_checkout_noregistration_shipping_address_body %}
+
+                        <div class="form-check">
+                            <input data-bs-toggle="collapse" data-bs-target="#user__shippingaddress-change" class="form-check-input" type="checkbox" name="blshowshipaddress" value="0" id="user__shippingaddress-chance"{% if not oView.showShipAddress() %} checked{% endif %} aria-controls="user__shippingaddress-change">
+                            <label class="form-check-label" for="user__shippingaddress-chance">
+                                {{ translate({ ident: "USE_BILLINGADDRESS_FOR_SHIPPINGADDRESS" }) }}
+                            </label>
+                        </div>
+
+                        <div id="user__shippingaddress-change" class="user__shippingaddress-change collapse{% if oView.showShipAddress() %} show{% endif %}">
+                            {% include "form/fieldset/user_shipping.html.twig" with {noFormSubmit: true} %}
+                        </div>
+
+                    {% endblock %}
+
+                </div>
+
+                <div class="col-12 offset-md-7 col-md-5">
+                    {% include "form/fieldset/order_remark.html.twig" with {blOrderRemark: true} %}
+                </div>
+            </div>
+
+            {% block user_checkout_noregistration_next_step_bottom %}
+                <div class="user__navi">
+                    <a href="{{ seo_url({ ident: oViewConf.getBasketLink() }) }}" class="btn btn-lg text-primary">
+                        <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.469669 5.96967C0.176776 6.26256 0.176776 6.73744 0.469669 7.03033L5.24264 11.8033C5.53553 12.0962 6.01041 12.0962 6.3033 11.8033C6.59619 11.5104 6.59619 11.0355 6.3033 10.7426L2.06066 6.5L6.3033 2.25736C6.59619 1.96447 6.59619 1.48959 6.3033 1.1967C6.01041 0.903806 5.53553 0.903806 5.24264 1.1967L0.469669 5.96967ZM16 5.75L0.999999 5.75V7.25L16 7.25V5.75Z" fill="currentColor"/>
+                        </svg>
+                        {{ translate({ ident: "PREVIOUS_STEP" }) }}
+                    </a>
+                    <button class="btn btn-primary btn-lg" name="userform" type="submit">
+                        {{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }}
+                    </button>
+                </div>
+            {% endblock %}
+        {% endblock %}
+    </form>
+    {% include "form/fieldset/delete_shipping_address_modal.html.twig" %}
+{% endblock %}

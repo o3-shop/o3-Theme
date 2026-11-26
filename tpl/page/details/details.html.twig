@@ -1,0 +1,45 @@
+{#
+    Exception to the page convention (layout/page.html.twig): this template is also included as a partial by
+    widget/product/details (blWorkaroundInclude), so it cannot extend the layout; the page branch keeps the 1.x
+    capture append="oxidBlock_content" + include, which the layout's "content" block prints. The file has no blocks.
+#}
+{% if not blWorkaroundInclude %}
+    {% capture append = "oxidBlock_content" %}
+        {% if oxcmp_user %}
+            {% set force_sid = oView.getSidForWidget() %}
+        {% endif %}
+        {{ include_widget({ cl: "oxwArticleDetails", _parent: oView.getClassName(), nocookie: 1, force_sid: force_sid, _navurlparams: oViewConf.getNavUrlParams(), _object: oView.getProduct(), anid: oViewConf.getActArticleId(), iPriceAlarmStatus: oView.getPriceAlarmStatus(), sorting: oView.getSortingParameters(), skipESIforUser: 1 }) }}
+    {% endcapture %}
+    {% include "layout/page.html.twig" %}
+{% else %}
+    {% set oDetailsProduct = oView.getProduct() %}
+    {% set oPictureProduct = oView.getPicturesProduct() %}
+    {% set currency = oView.getActCurrency() %}
+    {% set sPageHeadTitle = oDetailsProduct.oxarticles__oxtitle.value|cat(' ')|cat(oDetailsProduct.oxarticles__oxvarselect.value) %}
+
+    {# {% set %}…{% endset %} yields safe markup: the parts are escaped once, the literal <br> stays HTML (1.x printed the message raw) #}
+    {% if oView.getPriceAlarmStatus() == 1 %}
+        {% set statusMessage %}{{ "PAGE_DETAILS_THANKYOUMESSAGE1"|translate }} {{ oxcmp_shop.oxshops__oxname.value|raw }}{{ "PAGE_DETAILS_THANKYOUMESSAGE2"|translate }} {{ "PAGE_DETAILS_THANKYOUMESSAGE3"|translate }} {{ oView.getBidPrice() }} {{ currency.sign }} {{ "PAGE_DETAILS_THANKYOUMESSAGE4"|translate }}{% endset %}
+        {% include "message/success.html.twig" with {statusMessage: statusMessage} %}
+    {% elseif oView.getPriceAlarmStatus() == 2 %}
+        {% set _statusMessage = "MESSAGE_WRONG_VERIFICATION_CODE"|translate %}
+        {% include "message/error.html.twig" with {statusMessage: _statusMessage} %}
+    {% elseif oView.getPriceAlarmStatus() is same as(0) %}
+        {% set statusMessage %}{{ "MESSAGE_NOT_ABLE_TO_SEND_EMAIL"|translate }}<br> {{ "MESSAGE_VERIFY_YOUR_EMAIL"|translate }}{% endset %}
+        {% include "message/error.html.twig" with {statusMessage: statusMessage} %}
+    {% endif %}
+
+    {% if oView.getSearchTitle() %}
+        {% set detailsLocation = oView.getSearchTitle() %}
+    {% else %}
+        {% for oCatPath in oView.getCatTreePath() %}
+            {% if loop.last %}
+                {% set detailsLocation = oCatPath.oxcategories__oxtitle.value %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {# RDFa offering #}
+    {% include "page/details/inc/fullproductinfo.html.twig" %}
+
+{% endif %}

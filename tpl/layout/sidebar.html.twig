@@ -1,0 +1,31 @@
+{% for _block in oxidBlock_sidebar %}
+    {{ _block|raw }}
+{% endfor %}
+
+{% block sidebar %}
+
+    {% if content == "attributes" %}
+        {% include "widget/locator/attributes.html.twig" with {attributes: oView.getAttributes()} %}
+    {% endif %}
+
+    {% if content == "account" %}
+        {% include "page/account/inc/account_menu.html.twig" with {active_link: active_link} %}
+    {% endif %}
+
+    {% block sidebar_categoriestree %}{% endblock %}
+
+    {% block sidebar_tags %}{% endblock %}
+
+    {% block sidebar_partners %}{% endblock %}
+
+    {% block sidebar_boxproducts %}{% endblock %}
+
+    {% block sidebar_recommendation %}{% endblock %}
+
+    {% block sidebar_news %}{% endblock %}
+
+    {% block sidebar_social %}{% endblock %}
+
+    {% block sidebar_shopluperatings %}{% endblock %}
+{% endblock %}
+

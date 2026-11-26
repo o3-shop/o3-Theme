@@ -1,0 +1,71 @@
+{#
+    Page layout convention (O3-Theme 2.x, Twig)
+
+    A page template extends this layout and fills the block "content":
+
+        {% extends "layout/page.html.twig" %}
+        {% set blHideBreadcrumb = true %}        (optional, top level only)
+        {% block content %}
+            ... page markup with the page's own blocks (same names as in 1.x) ...
+        {% endblock %}
+
+    - "content" replaces the 1.x pattern [{capture append="oxidBlock_content"}]...[{include file="layout/page.tpl"}].
+      It is the only block that is not in the Smarty theme (Twig inheritance needs a block to fill); its default
+      output is the oxidBlock_content list, so templates that still append to oxidBlock_content and include this
+      layout keep working.
+    - Variables the layout reads (blHideBreadcrumb, ...) must be set at the top level of the page, outside any block:
+      blocks and includes get a copy of the context, a {% set %} inside a block never reaches the layout.
+    - A child template may not output anything outside blocks, so a page cannot {% capture append %} markup at its top
+      level (Twig rejects it). Lists a page fills for its own includes (e.g. oxidBlock_sidebar for layout/sidebar)
+      are appended inside the page's block, before the include that reads them. No 1.x page appends to the
+      layout's oxidBlock_head/oxidBlock_pageScript; use script()/style() instead.
+    - Scripts and styles: use script()/style() anywhere in the page; the body is rendered before the <head> is
+      written (see layout/base.html.twig), so they all end up in the page's script/style output.
+      A 1.x page that registered a script before its content capture (so before the header's scripts) keeps that
+      order with {% do script({...}) %} at the top level of the page, outside any block (e.g. page/list/list).
+    - Pages that render without the page frame (1.x included layout/base.tpl or layout/popup.tpl directly, e.g.
+      page/info/content_plain, page/account/register) keep that: {% capture append = "oxidBlock_pageBody" %} (base) or
+      "oxidBlock_content" (popup), then {% include "layout/base.html.twig" %} / {% include "layout/popup.html.twig" %}.
+    - Module extensions of the page template use {% extends %} on the page and override "content" or the page's own blocks.
+#}
+{% capture append = "oxidBlock_pageBody" %}
+    {% if oView.showRDFa() %}
+        {% include "rdfa/rdfa.html.twig" %}
+    {% endif %}
+
+    {% block layout_header %}
+        {% include "layout/header.html.twig" %}
+    {% endblock %}
+
+    <main>
+        <div class="container-xxl">
+
+            {% if oView.getClassName() != "start" and not blHideBreadcrumb %}
+                {% block layout_breadcrumb %}
+                    {% include "widget/breadcrumb.html.twig" %}
+                {% endblock %}
+            {% endif %}
+
+            {# 1.x printed $smarty.capture.loginErrors here; it is captured in widget/header/loginbox, which renders inside
+               a widget, so it was always empty here (1.6.5 prints nothing either) and is not ported. #}
+
+            {% block content_main %}
+                {% include "message/errors.html.twig" %}
+
+                {% block content %}
+                    {% for _block in oxidBlock_content %}
+                        {{ _block|raw }}
+                    {% endfor %}
+                {% endblock %}
+            {% endblock %}
+
+        </div>
+    </main>
+
+    {% include "layout/footer.html.twig" %}
+
+    {% block layout_init_social %}
+    {% endblock %}
+
+{% endcapture %}
+{% include "layout/base.html.twig" %}

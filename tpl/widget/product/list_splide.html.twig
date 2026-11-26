@@ -1,0 +1,83 @@
+{% if not type %}
+    {% set type = "grid" %}
+{% endif %}
+
+
+{% if not testid  %}
+    {% set testid = oView.getViewParameter('testid') %}
+{% endif %}
+{% if not listId  %}
+    {% set listId = oView.getViewParameter('listId') %}
+{% endif %}
+
+{% block widget_product_list %}
+
+    {% block widget_product_list_head %}{% endblock %}
+
+    {% if products %}
+
+        {# Cap perPage at item count so a short list (e.g. 4 articles) fills the
+ full slider width instead of leaving an empty trailing slot. #}
+        {% set _splideCount = products|length %}
+        <div class="component__productslider-{{ listId }} splide" data-list-id="{{ listId }}" data-splide='{% if splideConfig %}{{ splideConfig }}{% else %}{
+                                "mediaQuery": "min",
+                                "perMove":1,
+                                "breakpoints":{
+                                    {% if oViewConf.getViewThemeParam('sEnable3xl') %}"1720":{
+                                        "perPage":{% if _splideCount < 5 %}{{ _splideCount }}{% else %}5{% endif %},
+                                        "pagination": false,
+                                        "arrows": true
+                                    },{% endif %}
+                                    "1400":{
+                                        "perPage":{% if _splideCount < 4 %}{{ _splideCount }}{% else %}4{% endif %},
+                                        "pagination": false,
+                                        "arrows": true
+                                    },
+                                    "992":{
+                                        "perPage":{% if _splideCount < 4 %}{{ _splideCount }}{% else %}4{% endif %},
+                                        "arrows": true
+                                    },
+                                    "768":{
+                                        "perPage":{% if _splideCount < 3 %}{{ _splideCount }}{% else %}3{% endif %}
+                                    },
+                                    "0":{
+                                        "perPage":{% if _splideCount < 2 %}{{ _splideCount }}{% else %}2{% endif %},
+                                        "gap": "1rem"
+                                    }
+                                }
+                                }{% endif %}'
+        >
+            <div class="splide__arrows">
+                <button type="button" class="splide__arrow splide__arrow--prev">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 1L1 5L5 9" stroke="#121212" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button type="button" class="splide__arrow splide__arrow--next">
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L5 5L1 9" stroke="#121212" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="splide__track">
+                <div class="splide__list">
+                    {% for _product in products %}
+
+                        {% set testid = listId|cat("_")|cat(loop.index) %}
+                        {% block widget_product_list_item %}
+                            <div class="component__productbox splide__slide">
+                                {{ include_widget({ cl: "oxwArticleBox", _parent: oView.getClassName(), nocookie: 1, _navurlparams: oViewConf.getNavUrlParams(), iLinkType: _product.getLinkType(), _object: _product, anid: _product.getId(), sWidgetType: "product", sListType: "listitem_" ~ type, iIndex: testid, blDisableToCart: blDisableToCart, isVatIncluded: oView.isVatIncluded(), showMainLink: showMainLink, recommid: recommid|default(''), owishid: owishid|default(''), toBasketFunction: toBasketFunction|default(''), removeFunction: removeFunction|default(''), altproduct: altproduct, inlist: _product.isInList(), skipESIforUser: 1, testid: testid }) }}
+                            </div>
+                        {% endblock %}
+
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="splide__progress">
+                <div class="splide__progress-bar"></div>
+            </div>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

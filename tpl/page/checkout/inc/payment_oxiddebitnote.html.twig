@@ -1,0 +1,48 @@
+{% set dynvalue = oView.getDynValue() %}
+{# dynvalue holds request values the core already HTML-escaped (getRequestEscapedParameter, kept in the session) or core-escaped
+   oxuserpayments field values: printed |raw, like 1.x, so they are encoded once #}
+<div class="form-check">
+    <input value="{{ sPaymentID }}" class="form-check-input" type="radio" name="paymentid" id="payment_{{ sPaymentID }}" {% if oView.getCheckedPaymentId() == paymentmethod.oxpayments__oxid.value %}checked{% endif %}>
+    <label class="form-check-label" for="payment_{{ sPaymentID }}">
+        <span>{{ paymentmethod.oxpayments__oxdesc.value|raw }}</span>
+
+        <div class="input-group mb-3 row">
+            <label class="req control-label col-lg-4">{{ translate({ ident: "BANK" }) }}</label>
+            <div class="col-lg-8">
+                <input id="payment_{{ sPaymentID }}_1" class="form-control js-oxValidate js-oxValidate_notEmpty" type="text" size="20" maxlength="64" name="dynvalue[lsbankname]" value="{{ dynvalue.lsbankname|raw }}" required="required">
+            </div>
+        </div>
+        <div class="input-group mb-3 row">
+            <label class="req control-label col-lg-4">{{ translate({ ident: "BANK_CODE" }) }}</label>
+            <div class="col-lg-8">
+                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[lsblz]" value="{{ dynvalue.lsblz|raw }}" required="required">
+            </div>
+        </div>
+        <div class="input-group mb-3 row">
+            <label class="req control-label col-lg-4">{{ translate({ ident: "BANK_ACCOUNT_NUMBER" }) }}</label>
+            <div class="col-lg-8">
+                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[lsktonr]" value="{{ dynvalue.lsktonr|raw }}" required="required">
+            </div>
+        </div>
+        <div class="input-group mb-3 row">
+            <label class="req control-label col-lg-4">{{ translate({ ident: "BANK_ACCOUNT_HOLDER" }) }}</label>
+            <div class="col-lg-8">
+                <input type="text" class="form-control js-oxValidate js-oxValidate_notEmpty" size="20" maxlength="64" name="dynvalue[lsktoinhaber]" value="{% if dynvalue.lsktoinhaber %}{{ dynvalue.lsktoinhaber|raw }}{% else %}{{ oxcmp_user.oxuser__oxfname.value|raw }} {{ oxcmp_user.oxuser__oxlname.value|raw }}{% endif %}" required="required">
+            </div>
+        </div>
+
+        {% block checkout_payment_longdesc %}
+            {% if paymentmethod.oxpayments__oxlongdesc.value %}
+                <div class="row input-group">
+
+                    <div class="col-12">
+                        <div class="alert alert-info desc">
+                           {# admin-maintained HTML description, printed as HTML like in 1.x #}
+                    {{ paymentmethod.oxpayments__oxlongdesc.getRawValue()|raw }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+    </label>
+</div>

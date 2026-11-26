@@ -1,0 +1,39 @@
+{% block details_relatedproducts_also_bought %}
+    {% if oView.getAlsoBoughtTheseProducts() %}
+        <div class="component__productslider">
+            <h2 class="title-big">{{ translate({ ident: "CUSTOMERS_ALSO_BOUGHT" }) }}</h2>
+            <hr>
+            {% include "widget/product/list_splide.html.twig" with {listId: "alsoBought", products: oView.getAlsoBoughtTheseProducts()} %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block details_relatedproducts_accessoires %}
+    {% if oView.getAccessoires() %}
+        <div class="component__productslider">
+            <h2 class="title-big">{{ translate({ ident: "ACCESSORIES" }) }}</h2>
+            <hr>
+            {% include "widget/product/list_splide.html.twig" with {listId: "accessories", products: oView.getAccessoires()} %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block details_relatedproducts_similarproducts %}
+    {% if oView.getSimilarProducts() %}
+        <div class="component__productslider">
+            <h2 class="title-big">{{ translate({ ident: "SIMILAR_PRODUCTS" }) }}</h2>
+            <hr>
+            {% include "widget/product/list_splide.html.twig" with {listId: "similar", products: oView.getSimilarProducts()} %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block details_relatedproducts_crossselling %}
+    {% if oView.getCrossSelling() %}
+        <div class="component__productslider">
+            <h2 class="title-big">{{ translate({ ident: "HAVE_YOU_SEEN" }) }}</h2>
+            <hr>
+            {% include "widget/product/list_splide.html.twig" with {listId: "cross", products: oView.getCrossSelling()} %}
+        </div>
+    {% endif %}
+{% endblock %}

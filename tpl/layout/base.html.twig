@@ -1,0 +1,191 @@
+{# Important ! render page head and body to collect scripts and styles #}
+{% capture append = "oxidBlock_pageHead" %}
+    {% apply spaceless %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset={{ oView.getCharSet() }}">
+
+        {% set sPageTitle = oView.getPageTitle() %}
+        <title>{% block head_title %}{{ sPageTitle|raw }}{% endblock %}</title>
+
+        {% block head_meta_robots %}
+            {% if oView.noIndex() == 1 %}
+                <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+            {% elseif oView.noIndex() == 2 %}
+                <meta name="ROBOTS" content="NOINDEX, FOLLOW">
+            {% endif %}
+        {% endblock %}
+
+        {% block head_meta_description %}
+            {% if oView.getMetaDescription() %}
+                <meta name="description" content="{{ oView.getMetaDescription()|raw }}">
+            {% endif %}
+        {% endblock %}
+
+        {% block head_meta_keywords %}
+            {% if oView.getMetaKeywords() %}
+                <meta name="keywords" content="{{ oView.getMetaKeywords()|raw }}">
+            {% endif %}
+        {% endblock %}
+
+        {% block head_meta_open_graph %}
+            <meta property="og:site_name" content="{{ oViewConf.getBaseDir()|raw }}">
+            <meta property="og:title" content="{{ sPageTitle|raw }}">
+            <meta property="og:description" content="{{ oView.getMetaDescription()|raw }}">
+            {% if oViewConf.getActiveClassName() == 'details' %}
+                <meta property="og:type" content="product">
+                <meta property="og:image" content="{{ oView.getActPicture() }}">
+                <meta property="og:url" content="{{ oView.getCanonicalUrl()|raw }}">
+            {% else %}
+                <meta property="og:type" content="website">
+                <meta property="og:image" content="{{ oViewConf.getImageUrl('basket.png') }}">
+                <meta property="og:url" content="{{ oViewConf.getCurrentHomeDir()|raw }}">
+            {% endif %}
+        {% endblock %}
+
+        {% block head_meta_schema %}
+            <meta itemprop="copyrightHolder" content="{{ oxcmp_shop.oxshops__oxname.value|raw }}">
+            <meta itemprop="image" content="{{ oViewConf.getImageUrl() }}{{ oViewConf.getViewThemeParam('sLogoFile') }}">
+        {% endblock %}
+
+        {% set canonical_url = oView.getCanonicalUrl() %}
+        {% block head_link_canonical %}
+            {% if canonical_url %}
+                <link rel="canonical" href="{{ canonical_url|raw }}">
+            {% endif %}
+        {% endblock %}
+
+        {% block head_link_hreflang %}
+            {% if oView.isLanguageLoaded() %}
+                {% set oConfig = oViewConf.getConfig() %}
+                {% for _lng in oxcmp_lang %}
+                    {% if _lng.id == oConfig.getConfigParam('sDefaultLang') %}
+                        <link rel="alternate" hreflang="x-default" href="{{ _lng.link|raw }}"/>
+                    {% endif %}
+                    <link rel="alternate" hreflang="{{ _lng.abbr }}" href="{{ _lng.link|add_url_parameters(oView.getDynUrlParams()) }}"/>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+
+        {% block head_link_favicon %}
+            {% set sFaviconFile = oViewConf.getViewThemeParam('sFaviconIcoFile') %}
+            {% set sFavicon16File = oViewConf.getViewThemeParam('sFaviconSvgFile') %}
+            {% set sFavicon32File = oViewConf.getViewThemeParam('sFaviconAppleFile') %}
+
+            <link rel="icon" href="{{ oViewConf.getResourceUrl() }}favicon/favicon.ico" sizes="any">
+            <link rel="apple-touch-icon" href="{{ oViewConf.getResourceUrl() }}favicon/apple-touch-icon.png"> {# 180×180 #}
+            <link rel="manifest" href="{{ oViewConf.getResourceUrl() }}favicon/manifest.webmanifest">
+        {% endblock %}
+
+        {% block base_style %}
+            {% if oxcmp_shop.oxshops__oxproductive.value %}
+                {{ style({ include: "css/main.min.css" }) }}
+            {% else %}
+                {{ style({ include: "css/main.css" }) }}
+            {% endif %}
+            {{ style({ include: "css/photoswipe.css" }) }}
+        {% endblock %}
+
+        {% set rsslinks = oView.getRssLinks() %}
+        {% block head_link_rss %}
+            {% if rsslinks %}
+                {% for rssentry in rsslinks %}
+                    <link rel="alternate" type="application/rss+xml" title="{{ rssentry.title|striptags|raw }}" href="{{ rssentry.link|raw }}">
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+
+        {% block head_css %}
+            {% for _block in oxidBlock_head %}
+                {{ _block|raw }}
+            {% endfor %}
+        {% endblock %}
+    {% endapply %}
+{% endcapture %}
+
+{% set blIsCheckout = oView.getIsOrderStep() %}
+
+<!DOCTYPE html>
+<html lang="{{ oView.getActiveLangAbbr() }}" itemscope="itemscope" itemtype="https://schema.org/WebPage" {% block head_html_namespace %}{% endblock %}>
+    <!--suppress HtmlRequiredTitleElement -->
+    <head>
+        {% for _block in oxidBlock_pageHead %}
+            {{ _block|raw }}
+        {% endfor %}
+        {{ style() }}
+        <style>
+            :root {
+            {% if oViewConf.getViewThemeParam('sPrimaryColor') %}
+                --bs-primary: {{ oViewConf.getViewThemeParam('sPrimaryColor') }};
+            {% endif %}
+            {% if oViewConf.getViewThemeParam('sSecondaryColor') %}
+                --bs-secondary: {{ oViewConf.getViewThemeParam('sSecondaryColor') }};
+            {% endif %}
+            {% if oViewConf.getViewThemeParam('sAccentColor') %}
+                --accent-color: {{ oViewConf.getViewThemeParam('sAccentColor') }};
+            {% endif %}
+            {% if oViewConf.getViewThemeParam('sFooterColor') %}
+                --footer-bg: {{ oViewConf.getViewThemeParam('sFooterColor') }};
+            {% endif %}
+            {% if oViewConf.getViewThemeParam('sBackgroundColor') %}
+                --page-bg: {{ oViewConf.getViewThemeParam('sBackgroundColor') }};
+                --bs-body-bg: var(--page-bg);
+            {% endif %}
+            {% if oViewConf.getViewThemeParam('iContentInnerMargin') %}
+                --content-inner-margin: {{ oViewConf.getViewThemeParam('iContentInnerMargin')|cat("px") }};
+            {% endif %}
+            }
+            {% set sBgFile = oViewConf.getViewThemeParam('sBackgroundImage') %}
+            {% if oViewConf.getViewThemeParam('sShowBackgroundImage') and sBgFile and not get_global_get("plain") %}
+            body {
+                background-image: url('{{ oViewConf.getResourceUrl()|cat("img/")|cat(sBgFile) }}');
+                background-size: cover;
+                background-attachment: fixed;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+            {% endif %}
+        </style>
+    </head>
+
+    <body class="cl-{{ oView.getClassName() }}{% if blIsCheckout %} is-checkout{% endif %}{% if oxcmp_user and oxcmp_user.oxuser__oxpassword.value %} is-logged{% endif %}{% if oViewConf.getViewThemeParam('sShowBackgroundImage') and sBgFile and not get_global_get("plain") %} has-bg-image{% endif %}{% if oViewConf.getViewThemeParam('sEnable3xl') %} xxxl-enabled{% endif %}">
+
+    {% block theme_svg_icons %}{% endblock %}
+
+    {% include "page/details/inc/photoswipe.html.twig" %}
+
+    {% for _block in oxidBlock_pageBody %}
+        {{ _block|raw }}
+    {% endfor %}
+
+    {% if oViewConf.getViewThemeParam('sShowMode') %}
+        <div class="mode__{{ oViewConf.getViewThemeParam('sShowModePosition') }}{% if oxcmp_shop.oxshops__oxproductive.value %} is-prod{% else %} is-dev{% endif %}">
+            {% if oxcmp_shop.oxshops__oxproductive.value %}
+                ProductiveMode
+            {% else %}
+                DevMode
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% block base_js %}
+        {% if oxcmp_shop.oxshops__oxproductive.value %}
+            {{ script({ include: "js/main.min.js", priority: 1 }) }}
+        {% else %}
+            {{ script({ include: "js/main.js", priority: 1 }) }}
+        {% endif %}
+    {% endblock %}
+
+    {% if oViewConf.getViewThemeParam('activateJquery') %}
+        {{ script({ include: "js/jquery.min.js", priority: 1 }) }}
+    {% endif %}
+
+    {{ script() }}
+
+    {% include_dynamic "widget/dynscript.html.twig" %}
+
+    {% for _block in oxidBlock_pageScript %}
+        {{ _block|raw }}
+    {% endfor %}
+    </body>
+</html>
