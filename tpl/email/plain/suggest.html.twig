@@ -1,6 +1,7 @@
 {% set shop = oEmailView.getShop() %}
 {% set oViewConf = oEmailView.getViewConfig() %}
 {% set user = oEmailView.getUser() %}
+{% set userinfo = oEmailView.getUser() %}
 
 {{ translate({ ident: "PRODUCT_POST_CARD_FROM" }) }} {{ shop.oxshops__oxname.getRawValue() }}
 

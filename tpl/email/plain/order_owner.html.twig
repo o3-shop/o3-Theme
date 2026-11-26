@@ -194,7 +194,11 @@
 
 {# grand total price #}
 {{ translate({ ident: "GRAND_TOTAL" }) }} {{ basket.getFPrice() }} {{ currency.name }}
-{# 1.x printed the greeting card here only if basket.oCard was set: the core never sets it, so this never rendered (reading it in Twig throws, Base::__call) #}
+{% if basket.getCard() %}
+    {{ translate({ ident: "ATENTION_GREETING_CARD" }) }}
+    {{ translate({ ident: "WHAT_I_WANTED_TO_SAY" }) }}
+    {{ basket.getCardMessage() }}
+{% endif %}
 {% endblock %}
 
 

@@ -3,7 +3,6 @@
 {% set sOrderId = order.getId() %}
 {% set oOrderFileList = oEmailView.getOrderFileList(sOrderId) %}
 
-{% include "email/html/header.html.twig" with {title: shop.oxshops__oxname.value} %}
 {% block email_html_senddownloadlinks_infoheader %}
 
     {{ translate({ ident: "EMAIL_SENDDOWNLOADS_GREETING" }) }}, {{ order.oxorder__oxbillsal.value|translate_salutation }} {{ order.oxorder__oxbillfname.value }} {{ order.oxorder__oxbilllname.value }},

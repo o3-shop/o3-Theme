@@ -1,6 +1,7 @@
 {% set shop = oEmailView.getShop() %}
 {% set oViewConf = oEmailView.getViewConfig() %}
 {% set user = oEmailView.getUser() %}
+{% set userinfo = oEmailView.getUser() %}
 
 
 {{ translate({ ident: "GIFT_REGISTRY_OF" }) }} {{ shop.oxshops__oxname.getRawValue() }}

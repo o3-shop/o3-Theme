@@ -111,6 +111,11 @@
     <br/>
 {% endblock %}
 
+{# set before <tbody>: the greeting-card row there uses it (1.x set it only in <tfoot>) #}
+{% set iFooterColspan = 4 %}
+{% if oViewConf.getViewThemeParam('blEmailsShowProductPictures') %}
+    {% set iFooterColspan = 5 %}
+{% endif %}
 <table class="orderarticles" border="0" cellspacing="0" cellpadding="0" width="100%">
     <thead>
         <tr bgcolor="#ebebeb">
@@ -180,7 +185,20 @@
         {% endfor %}
         {% set giftwrappingPart = 'card' %}
         {% block email_html_order_owner_giftwrapping %}{% if giftwrappingPart == 'card' %}
-            {# 1.x printed the greeting card here only if basket.oCard was set: the core never sets it, so this never rendered (reading it in Twig throws, Base::__call) #}
+            {% if basket.getCard() %}
+                {% set oCard = basket.getCard() %}
+                <tr valign="top">
+                    <td>
+                        <img src="{{ oCard.getPictureUrl() }}" alt="{{ oCard.oxwrapping__oxname.value|raw }}" hspace="0" vspace="0" border="0" align="top">
+                    </td>
+                    <td colspan="{{ iFooterColspan }}">
+                        <b>{{ translate({ ident: "ATENTION_GREETING_CARD" }) }}</b><br>
+                        {{ translate({ ident: "WHAT_I_WANTED_TO_SAY" }) }}
+                        <br><br>
+                        {{ basket.getCardMessage()|raw }}
+                    </td>
+                </tr>
+            {% endif %}
         {% else %}
                 <!-- Greeting card -->
                 {% if basket.getGiftCardCostNet() %}
@@ -207,10 +225,6 @@
         {% endif %}{% endblock %}
     </tbody>
     <tfoot>
-        {% set iFooterColspan = 4 %}
-        {% if oViewConf.getViewThemeParam('blEmailsShowProductPictures') %}
-            {% set iFooterColspan = 5 %}
-        {% endif %}
         {% block email_html_order_owner_voucherdiscount_top %}
             {% if oViewConf.getShowVouchers() %}
                 {% if basket.getVoucherDiscValue() %}

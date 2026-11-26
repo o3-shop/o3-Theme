@@ -15,8 +15,9 @@
  * |escape (|e) — the explicit marker for a `.value` that is not a core-escaped Field (raw DB/array values).
  * Output: "escape: <file>:<line>: <expression>", exit 1 on findings, else "OK <n> files".
  *
- * Mails: email/html/** follows the same rules; email/plain/** is not autoescaped (core), and Email::setAltBody() decodes
- * one level of entities, so plain mails print core-escaped values as they are: they are counted but not checked.
+ * Mails: email/html/** follows the same rules. email/plain/** is not autoescaped (core), and Email::setAltBody() decodes
+ * one level of entities, so plain mails print values as they are: there any |e, |escape or |raw is reported
+ * ("plain: <file>:<line>: <expression>"), as it would put entities into the text or claim escaping that never happens.
  *
  * Usage: php build/lint-twig.php [dir|file …]   (default scope: the areas converted so far; widen it per task)
  */
@@ -60,11 +61,17 @@ foreach ($scope as $dir) {
         }
         $count++;
         $rel = substr((string) $file, strlen($base) + 1);
-        if (strpos($rel, 'tpl/email/plain/') === 0) {
-            continue;
-        }
         $src = file_get_contents((string) $file);
         $src = preg_replace_callback('/\{#.*?#\}/s', fn ($m) => str_repeat("\n", substr_count($m[0], "\n")), $src);
+        if (strpos($rel, 'tpl/email/plain/') === 0) {
+            preg_match_all('/\{[{%]-?\s*(.*?)\s*-?[}%]\}/s', $src, $tags, PREG_OFFSET_CAPTURE);
+            foreach ($tags[1] as [$expr, $offset]) {
+                if (preg_match('/\|\s*(e|escape|raw)\b/', $expr)) {
+                    $findings[] = 'plain: ' . $rel . ':' . (substr_count($src, "\n", 0, $offset) + 1) . ": $expr";
+                }
+            }
+            continue;
+        }
 
         // basket items: {% for x in ….getContents() %} → x.getTitle()/getVarSelect() are encoded
         preg_match_all('/\{%-?\s*for\s+(?:\w+\s*,\s*)?(\w+)\s+in\s+[\w.()]*getContents\(\)/', $src, $loops);
