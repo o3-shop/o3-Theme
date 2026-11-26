@@ -42,6 +42,7 @@ cleanup_customer() {
     delete from oxrecommlists where oxuserid=@u;
     delete from oxobject2group where oxobjectid=@u;
     delete from oxaddress where oxuserid=@u;
+    delete from oxremark where oxparentid=@u;
     delete from oxpricealarm where oxemail='$EMAIL';
     delete from oxuser where oxid=@u;")" || { echo "WARNING: cleanup SQL failed: $out"; RC=3; }
   if [ "$(sql "select count(*) from oxuser where oxusername='$EMAIL'")" != 0 ]; then
