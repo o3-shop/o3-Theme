@@ -46,8 +46,8 @@
                 {% endblock %}
             {% endif %}
 
-            {# 1.x: $smarty.capture.loginErrors (set in widget/header/loginbox, which renders inside a widget, so 1.6.5 prints nothing here either) #}
-            {{ twig.capture.loginErrors|default('')|raw }}
+            {# 1.x printed $smarty.capture.loginErrors here; it is captured in widget/header/loginbox, which renders inside
+               a widget, so it was always empty here (1.6.5 prints nothing either) and is not ported. #}
 
             {% block content_main %}
                 {% include "message/errors.html.twig" %}
