@@ -33,22 +33,22 @@
         {% for oProduct in articles %}
             <tr valign="top">
                 <td>
-                    <img src="{{ oProduct.getIconUrl(false) }}" border="0" hspace="0" vspace="0" alt="{{ oProduct.oxarticles__oxtitle.value|striptags }}" align="texttop">
+                    <img src="{{ oProduct.getIconUrl(false) }}" border="0" hspace="0" vspace="0" alt="{{ oProduct.oxarticles__oxtitle.value|striptags|raw }}" align="texttop">
                 </td>
                 <td>
                     <p>
-                        <b>{{ oProduct.oxarticles__oxtitle.value }}{% if oProduct.oxarticles__oxvarselect.value %}, {{ oProduct.oxarticles__oxvarselect.value }}{% endif %}</b>
+                        <b>{{ oProduct.oxarticles__oxtitle.value|raw }}{% if oProduct.oxarticles__oxvarselect.value %}, {{ oProduct.oxarticles__oxvarselect.value|raw }}{% endif %}</b>
                         {% if chosen_selectlist %}
                             ,
                             {% for oList in chosen_selectlist %}
-                                {{ oList.name }} {{ oList.value }}&nbsp;
+                                {{ oList.name|raw }} {{ oList.value|raw }}&nbsp;
                             {% endfor %}
                         {% endif %}
                         <br>
-                        {{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }} {{ oProduct.oxarticles__oxartnum.value }}
+                        {{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }} {{ oProduct.oxarticles__oxartnum.value|raw }}
                     </p>
                 </td>
-                <td align="right" class="text-right">{{ oProduct.oxarticles__oxstock.value }} ({{ oProduct.oxarticles__oxremindamount.value }})</td>
+                <td align="right" class="text-right">{{ oProduct.oxarticles__oxstock.value|raw }} ({{ oProduct.oxarticles__oxremindamount.value|raw }})</td>
             </tr>
         {% endfor %}
     </tbody>

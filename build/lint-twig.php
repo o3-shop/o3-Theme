@@ -15,6 +15,9 @@
  * |escape (|e) — the explicit marker for a `.value` that is not a core-escaped Field (raw DB/array values).
  * Output: "escape: <file>:<line>: <expression>", exit 1 on findings, else "OK <n> files".
  *
+ * Mails: email/html/** follows the same rules; email/plain/** is not autoescaped (core), and Email::setAltBody() decodes
+ * one level of entities, so plain mails print core-escaped values as they are: they are counted but not checked.
+ *
  * Usage: php build/lint-twig.php [dir|file …]   (default scope: the areas converted so far; widen it per task)
  */
 
@@ -23,6 +26,7 @@ $scope = array_slice($argv, 1) ?: [
     'tpl/page/list', 'tpl/page/details', 'tpl/page/search', 'tpl/page/compare', 'tpl/page/recommendations',
     'tpl/page/review', 'tpl/page/privatesales', 'tpl/rdfa',
     'tpl/page/checkout', 'tpl/form', 'tpl/page/account', 'tpl/page/info', 'tpl/page/revocation', 'tpl/page/wishlist',
+    'tpl/email',
 ];
 
 $urlGetters = [
@@ -34,6 +38,8 @@ $urlGetters = [
     'getLink', 'getMainLink', 'getStdLink', 'getBaseStdLink', 'getBaseSeoLink', 'getToBasketLink', 'getBannerLink',
     // Application/Controller/FrontendController.php and list/details controllers
     'getCanonicalUrl', 'getBaseLink', 'getCatMoreUrl', 'getWidgetLink',
+    // Application/Model/Order.php, Basket.php (values built from escaped fields / an `&amp;` config URL)
+    'getShipmentTrackingUrl', 'getCardMessage',
 ];
 $basketItemGetters = ['getTitle', 'getVarSelect'];
 
@@ -54,6 +60,9 @@ foreach ($scope as $dir) {
         }
         $count++;
         $rel = substr((string) $file, strlen($base) + 1);
+        if (strpos($rel, 'tpl/email/plain/') === 0) {
+            continue;
+        }
         $src = file_get_contents((string) $file);
         $src = preg_replace_callback('/\{#.*?#\}/s', fn ($m) => str_repeat("\n", substr_count($m[0], "\n")), $src);
 

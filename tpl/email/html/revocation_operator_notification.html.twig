@@ -8,7 +8,7 @@
     <dd><code>{{ submission.getId()|escape('html') }}</code></dd>
 
     <dt><strong>{{ translate({ ident: "O3_REVOCATION_ADMIN_FIELD_SUBMITTED" }) }}:</strong></dt>
-    <dd>{{ submission.o3revocation__oxsubmitted.value }}</dd>
+    <dd>{{ submission.o3revocation__oxsubmitted.value|raw }}</dd>
 
     <dt><strong>{{ translate({ ident: "O3_REVOCATION_FIELD_NAME_LABEL" }) }}:</strong></dt>
     <dd>{{ submission.o3revocation__oxname.getRawValue()|escape('html') }}</dd>

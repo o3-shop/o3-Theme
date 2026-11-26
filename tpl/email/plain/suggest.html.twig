@@ -16,9 +16,9 @@
 
 {{ translate({ ident: "RECOMMENDED_PRODUCTS" }) }}
 
-{{ product.oxarticles__oxtitle.getRawValue()|striptags }}
+{{ product.oxarticles__oxtitle.getRawValue()|regex_replace('!<[^>]*?>!', ' ') }}
 {{ product.oxarticles__oxshortdesc.getRawValue() }}
 
 {{ translate({ ident: "CHECK" }) }} {{ sArticleUrl }}
 
-{% include_content 'oxemailfooterplain' %}
+{{ include_content('oxemailfooterplain') }}

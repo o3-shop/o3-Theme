@@ -4,6 +4,6 @@
 
 {% include "email/html/header.html.twig" with {title: "DD_REGISTER_HEADING"|translate} %}
 
-{% include_content 'contentident|default("oxregisteremail")' %}<br/>
+{{ include_content(contentident|default('oxregisteremail')) }}<br/>
 
 {% include "email/html/footer.html.twig" %}

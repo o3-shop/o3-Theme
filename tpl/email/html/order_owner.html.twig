@@ -38,9 +38,9 @@
 {% block email_html_order_owner_orderemail %}
     <p>
         {% if payment.oxuserpayments__oxpaymentsid.value == "oxempty" %}
-            {% include_content 'oxadminordernpemail' %}
+            {{ include_content('oxadminordernpemail') }}
         {% else %}
-            {% include_content 'oxadminorderemail' %}
+            {{ include_content('oxadminorderemail') }}
         {% endif %}
     </p>
 {% endblock %}
@@ -58,15 +58,15 @@
                             <td class="left-text-pad">
                                 <h3 style="margin: 0; padding: 0 0 5px; line-height: 20px; text-transform: uppercase;">{{ translate({ ident: "BILLING_ADDRESS" }) }}</h3>
                                 <p>
-                                    {{ order.oxorder__oxbillcompany.value }}<br>
-                                    {{ order.oxorder__oxbillsal.value|translate_salutation }} {{ order.oxorder__oxbillfname.value }} {{ order.oxorder__oxbilllname.value }}<br>
-                                    {% if order.oxorder__oxbilladdinfo.value %}{{ order.oxorder__oxbilladdinfo.value }}<br>{% endif %}
-                                    {{ order.oxorder__oxbillstreet.value }} {{ order.oxorder__oxbillstreetnr.value }}<br>
-                                    {{ order.oxorder__oxbillstateid.value }}
-                                    {{ order.oxorder__oxbillzip.value }} {{ order.oxorder__oxbillcity.value }}<br>
-                                    {{ order.oxorder__oxbillcountry.value }}<br>
-                                    {% if order.oxorder__oxbillustid.value %}{{ translate({ ident: "VAT_ID_NUMBER" }) }} {{ order.oxorder__oxbillustid.value }}<br>{% endif %}
-                                    {{ translate({ ident: "PHONE" }) }} {{ order.oxorder__oxbillfon.value }}<br><br>
+                                    {{ order.oxorder__oxbillcompany.value|raw }}<br>
+                                    {{ order.oxorder__oxbillsal.value|translate_salutation|raw }} {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }}<br>
+                                    {% if order.oxorder__oxbilladdinfo.value %}{{ order.oxorder__oxbilladdinfo.value|raw }}<br>{% endif %}
+                                    {{ order.oxorder__oxbillstreet.value|raw }} {{ order.oxorder__oxbillstreetnr.value|raw }}<br>
+                                    {{ order.oxorder__oxbillstateid.value|raw }}
+                                    {{ order.oxorder__oxbillzip.value|raw }} {{ order.oxorder__oxbillcity.value|raw }}<br>
+                                    {{ order.oxorder__oxbillcountry.value|raw }}<br>
+                                    {% if order.oxorder__oxbillustid.value %}{{ translate({ ident: "VAT_ID_NUMBER" }) }} {{ order.oxorder__oxbillustid.value|raw }}<br>{% endif %}
+                                    {{ translate({ ident: "PHONE" }) }} {{ order.oxorder__oxbillfon.value|raw }}<br><br>
                                 </p>
                             </td>
                             <td class="expander"></td>
@@ -82,21 +82,21 @@
                                 <h3 style="margin: 0; padding: 0 0 5px; line-height: 20px; text-transform: uppercase;">{{ translate({ ident: "SHIPPING_ADDRESS" }) }}</h3>
                                 <p>
                                     {% if order.oxorder__oxdellname.value %}
-                                        {{ order.oxorder__oxdelcompany.value }}<br>
-                                        {{ order.oxorder__oxdelsal.value|translate_salutation }} {{ order.oxorder__oxdelfname.value }} {{ order.oxorder__oxdellname.value }}<br>
-                                        {% if order.oxorder__oxdeladdinfo.value %}{{ order.oxorder__oxdeladdinfo.value }}<br>{% endif %}
-                                        {{ order.oxorder__oxdelstreet.value }} {{ order.oxorder__oxdelstreetnr.value }}<br>
-                                        {{ order.oxorder__oxdelstateid.value }}
-                                        {{ order.oxorder__oxdelzip.value }} {{ order.oxorder__oxdelcity.value }}<br>
-                                        {{ order.oxorder__oxdelcountry.value }}
+                                        {{ order.oxorder__oxdelcompany.value|raw }}<br>
+                                        {{ order.oxorder__oxdelsal.value|translate_salutation|raw }} {{ order.oxorder__oxdelfname.value|raw }} {{ order.oxorder__oxdellname.value|raw }}<br>
+                                        {% if order.oxorder__oxdeladdinfo.value %}{{ order.oxorder__oxdeladdinfo.value|raw }}<br>{% endif %}
+                                        {{ order.oxorder__oxdelstreet.value|raw }} {{ order.oxorder__oxdelstreetnr.value|raw }}<br>
+                                        {{ order.oxorder__oxdelstateid.value|raw }}
+                                        {{ order.oxorder__oxdelzip.value|raw }} {{ order.oxorder__oxdelcity.value|raw }}<br>
+                                        {{ order.oxorder__oxdelcountry.value|raw }}
                                     {% else %}
-                                        {{ order.oxorder__oxbillcompany.value }}<br>
-                                        {{ order.oxorder__oxbillsal.value|translate_salutation }} {{ order.oxorder__oxbillfname.value }} {{ order.oxorder__oxbilllname.value }}<br>
-                                        {% if order.oxorder__oxbilladdinfo.value %}{{ order.oxorder__oxbilladdinfo.value }}<br>{% endif %}
-                                        {{ order.oxorder__oxbillstreet.value }} {{ order.oxorder__oxbillstreetnr.value }}<br>
-                                        {{ order.oxorder__oxbillstateid.value }}
-                                        {{ order.oxorder__oxbillzip.value }} {{ order.oxorder__oxbillcity.value }}<br>
-                                        {{ order.oxorder__oxbillcountry.value }}<br>
+                                        {{ order.oxorder__oxbillcompany.value|raw }}<br>
+                                        {{ order.oxorder__oxbillsal.value|translate_salutation|raw }} {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }}<br>
+                                        {% if order.oxorder__oxbilladdinfo.value %}{{ order.oxorder__oxbilladdinfo.value|raw }}<br>{% endif %}
+                                        {{ order.oxorder__oxbillstreet.value|raw }} {{ order.oxorder__oxbillstreetnr.value|raw }}<br>
+                                        {{ order.oxorder__oxbillstateid.value|raw }}
+                                        {{ order.oxorder__oxbillzip.value|raw }} {{ order.oxorder__oxbillcity.value|raw }}<br>
+                                        {{ order.oxorder__oxbillcountry.value|raw }}<br>
                                     {% endif %}
                                 </p>
                             </td>
@@ -126,31 +126,31 @@
         {% set basketitemlist = basket.getBasketArticles() %}
         {% for basketindex, basketitem in basket.getContents() %}
             {% block email_html_order_owner_basketitem %}
-                {% set basketproduct = basketitemlist.$basketindex %}
+                {% set basketproduct = basketitemlist[basketindex] %}
                 <tr valign="top">
                     {% if oViewConf.getViewThemeParam('blEmailsShowProductPictures') %}
                         <td>
-                            <img src="{{ basketproduct.getIconUrl(false) }}" border="0" hspace="0" vspace="0" alt="{{ basketitem.getTitle()|striptags }}" align="texttop" style="max-width:80px;">
+                            <img src="{{ basketproduct.getIconUrl(false) }}" border="0" hspace="0" vspace="0" alt="{{ basketitem.getTitle()|striptags|raw }}" align="texttop" style="max-width:80px;">
                         </td>
                     {% endif %}
                     <td>
                         <p>
-                            <b>{{ basketitem.getTitle() }}</b>
+                            <b>{{ basketitem.getTitle()|raw }}</b>
                             {% if basketitem.getChosenSelList() %},
                                 {% for oList in basketitem.getChosenSelList() %}
-                                    {{ oList.name }} {{ oList.value }}&nbsp;
+                                    {{ oList.name|raw }} {{ oList.value|raw }}&nbsp;
                                 {% endfor %}
                             {% endif %}
                             {% if basketitem.getPersParams() %}
                                 {% for sVar, aParam in basketitem.getPersParams() %}
-                                    ,&nbsp;<em>{{ sVar }} : {{ aParam }}</em>
+                                    ,&nbsp;<em>{{ sVar|raw }} : {{ aParam|raw }}</em>
                                 {% endfor %}
                             {% endif %}
-                            <br>{{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }} {{ basketproduct.oxarticles__oxartnum.value }}
+                            <br>{{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }} {{ basketproduct.oxarticles__oxartnum.value|raw }}
 
                             {% if oViewConf.getShowGiftWrapping() %}
                                 {% set oWrapping = basketitem.getWrapping() %}
-                                <br><b>{{ translate({ ident: "GIFT_WRAPPING" }) }}</b>:&nbsp;{% if not basketitem.getWrappingId() %}{{ translate({ ident: "NONE" }) }}{% else %}{{ oWrapping.oxwrapping__oxname.value }}{% endif %}
+                                <br><b>{{ translate({ ident: "GIFT_WRAPPING" }) }}</b>:&nbsp;{% if not basketitem.getWrappingId() %}{{ translate({ ident: "NONE" }) }}{% else %}{{ oWrapping.oxwrapping__oxname.value|raw }}{% endif %}
                             {% endif %}
                         </p>
                     </td>
@@ -164,15 +164,9 @@
                                     <br><s>{{ basketitem.getFRegularUnitPrice() }}&nbsp;{{ currency.sign }}</s>
                                 {% endif %}
                             {% endif %}
-                            {% if basketitem.aDiscounts %}<br><br>
-                                <em style="font-size: 7pt;font-weight: normal;">{{ translate({ ident: "DISCOUNT" }) }}
-                                    {% for oDiscount in basketitem.aDiscounts %}
-                                        <br>{{ oDiscount.sDiscount }}
-                                    {% endfor %}
-                                </em>
-                            {% endif %}
+                            {# 1.x printed basketitem.aDiscounts here: the core never sets it (always empty), and reading it in Twig throws (Base::__call) #}
                             {% if basketproduct.oxarticles__oxorderinfo.value %}
-                                {{ basketproduct.oxarticles__oxorderinfo.value }}
+                                {{ basketproduct.oxarticles__oxorderinfo.value|raw }}
                             {% endif %}
                         </p>
                     </td>
@@ -184,21 +178,33 @@
                 </tr>
             {% endblock %}
         {% endfor %}
-        {% block email_html_order_owner_giftwrapping %}
-            {% if basket.oCard %}
-                <tr valign="top">
-                    <td>
-                        <img src="{{ basket.oCard.getPictureUrl() }}" alt="{{ basket.oCard.oxwrapping__oxname.value }}" hspace="0" vspace="0" border="0" align="top">
-                    </td>
-                    <td colspan="{{ iFooterColspan }}">
-                        <b>{{ translate({ ident: "ATENTION_GREETING_CARD" }) }}</b><br>
-                        {{ translate({ ident: "WHAT_I_WANTED_TO_SAY" }) }}
-                        <br><br>
-                        {{ basket.getCardMessage() }}
-                    </td>
-                </tr>
-            {% endif %}
-        {% endblock %}
+        {% set giftwrappingPart = 'card' %}
+        {% block email_html_order_owner_giftwrapping %}{% if giftwrappingPart == 'card' %}
+            {# 1.x printed the greeting card here only if basket.oCard was set: the core never sets it, so this never rendered (reading it in Twig throws, Base::__call) #}
+        {% else %}
+                <!-- Greeting card -->
+                {% if basket.getGiftCardCostNet() %}
+                    <tr valign="top" bgcolor="#ebebeb">
+                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "BASKET_TOTAL_GIFTCARD_COSTS_NET" }) }}:</td>
+                        <td align="right" class="odd text-right">{{ basket.getGiftCardCostNet() }} {{ currency.sign }}</td>
+                    </tr>
+                    {% if basket.getGiftCardCostVat() %}
+                    <tr>
+                        {% if basket.isProportionalCalculationOn() %}
+                            <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "BASKET_TOTAL_PLUS_PROPORTIONAL_VAT" }) }}:</td>
+                        {% else %}
+                            <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: basket.getGiftCardCostVatPercent() }) }}</td>
+                        {% endif %}
+                        <td align="right" class="odd text-right">{{ basket.getGiftCardCostVat() }} {{ currency.sign }}</td>
+                    </tr>
+                    {% endif %}
+                {% elseif basket.getFGiftCardCosts() %}
+                    <tr valign="top" bgcolor="#ebebeb">
+                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "GREETING_CARD" }) }}:</td>
+                        <td align="right" class="odd text-right">{{ basket.getFGiftCardCosts() }} {{ currency.sign }}</td>
+                    </tr>
+                {% endif %}
+        {% endif %}{% endblock %}
     </tbody>
     <tfoot>
         {% set iFooterColspan = 4 %}
@@ -216,8 +222,8 @@
                 {% for voucher in order.getVoucherList() %}
                     {% set voucherseries = voucher.getSerie() %}
                     <tr valign="top" bgcolor="#ebebeb">
-                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ voucher.oxvouchers__oxvouchernr.value }}</td>
-                        <td align="right" class="odd text-right">{{ voucherseries.oxvoucherseries__oxdiscount.value }} {% if voucherseries.oxvoucherseries__oxdiscounttype.value == "absolute" %}{{ currency.sign }}{% else %}%{% endif %}</td>
+                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ voucher.oxvouchers__oxvouchernr.value|raw }}</td>
+                        <td align="right" class="odd text-right">{{ voucherseries.oxvoucherseries__oxdiscount.value|raw }} {% if voucherseries.oxvoucherseries__oxdiscounttype.value == "absolute" %}{{ currency.sign }}{% else %}%{% endif %}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -273,7 +279,7 @@
                 <!-- discounts -->
                 {% for oDiscount in basket.getDiscounts() %}
                     <tr valign="top" bgcolor="#ebebeb">
-                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{% if oDiscount.dDiscount < 0 %}{{ translate({ ident: "SURCHARGE" }) }}{% else %}{{ translate({ ident: "DISCOUNT" }) }}{% endif %} <em>{{ oDiscount.sDiscount }}</em>:</td>
+                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{% if oDiscount.dDiscount < 0 %}{{ translate({ ident: "SURCHARGE" }) }}{% else %}{{ translate({ ident: "DISCOUNT" }) }}{% endif %} <em>{{ oDiscount.sDiscount|raw }}</em>:</td>
                         <td align="right" class="odd text-right">{% if oDiscount.dDiscount < 0 %}{{ oDiscount.fDiscount|replace({"-": ""}) }}{% else %}-{{ oDiscount.fDiscount }}{% endif %} {{ currency.sign }}</td>
                     </tr>
                 {% endfor %}
@@ -393,30 +399,7 @@
                 {% endif %}
             {% endblock %}
 
-            {% block email_html_order_owner_giftwrapping %}
-                <!-- Greeting card -->
-                {% if basket.getGiftCardCostNet() %}
-                    <tr valign="top" bgcolor="#ebebeb">
-                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "BASKET_TOTAL_GIFTCARD_COSTS_NET" }) }}:</td>
-                        <td align="right" class="odd text-right">{{ basket.getGiftCardCostNet() }} {{ currency.sign }}</td>
-                    </tr>
-                    {% if basket.getGiftCardCostVat() %}
-                    <tr>
-                        {% if basket.isProportionalCalculationOn() %}
-                            <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "BASKET_TOTAL_PLUS_PROPORTIONAL_VAT" }) }}:</td>
-                        {% else %}
-                            <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "VAT_PLUS_PERCENT_AMOUNT", suffix: "COLON", args: basket.getGiftCardCostVatPercent() }) }}</td>
-                        {% endif %}
-                        <td align="right" class="odd text-right">{{ basket.getGiftCardCostVat() }} {{ currency.sign }}</td>
-                    </tr>
-                    {% endif %}
-                {% elseif basket.getFGiftCardCosts() %}
-                    <tr valign="top" bgcolor="#ebebeb">
-                        <td colspan="{{ iFooterColspan }}" class="odd text-right">{{ translate({ ident: "GREETING_CARD" }) }}:</td>
-                        <td align="right" class="odd text-right">{{ basket.getFGiftCardCosts() }} {{ currency.sign }}</td>
-                    </tr>
-                {% endif %}
-            {% endblock %}
+            {% with { giftwrappingPart: 'costs' } %}{{ block('email_html_order_owner_giftwrapping') }}{% endwith %}
         {% endif %}
 
         {% block email_html_order_owner_grandtotal %}
@@ -447,7 +430,7 @@
     {% if payment.oxuserpayments__oxpaymentsid.value != "oxempty" %}
         <h3 class="underline">{{ translate({ ident: "PAYMENT_INFORMATION" }) }}</h3>
         <p>
-            <b>{{ translate({ ident: "PAYMENT_METHOD" }) }} {{ payment.oxpayments__oxdesc.value }} {% if basket.getPaymentCosts() %}({{ basket.getFPaymentCosts() }} {{ currency.sign }}){% endif %}</b>
+            <b>{{ translate({ ident: "PAYMENT_METHOD" }) }} {{ payment.oxpayments__oxdesc.value|raw }} {% if basket.getPaymentCosts() %}({{ basket.getFPaymentCosts() }} {{ currency.sign }}){% endif %}</b>
         </p>
         <br>
     {% endif %}
@@ -455,14 +438,14 @@
 
 {% block email_html_order_owner_username %}
     <h3 class="underline">{{ translate({ ident: "EMAIL_ADDRESS" }) }}</h3>
-    <p>{{ user.oxuser__oxusername.value }}</p>
+    <p>{{ user.oxuser__oxusername.value|raw }}</p>
     <br>
 {% endblock %}
 
 {% block email_html_order_owner_deliveryinfo %}
     {% if payment.oxuserpayments__oxpaymentsid.value != "oxempty" %}
         <h3 class="underline">{{ translate({ ident: "SELECTED_SHIPPING_CARRIER" }) }}</h3>
-        <p>{{ oDelSet.oxdeliveryset__oxtitle.value }}</p>
+        <p>{{ oDelSet.oxdeliveryset__oxtitle.value|raw }}</p>
         <br>
     {% endif %}
 {% endblock %}

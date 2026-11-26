@@ -13,7 +13,7 @@
     <dd>{{ submission.o3revocation__oxorderident.getRawValue()|escape('html') }}</dd>
 
     <dt><strong>{{ translate({ ident: "O3_REVOCATION_ADMIN_FIELD_SUBMITTED" }) }}:</strong></dt>
-    <dd>{{ submission.o3revocation__oxsubmitted.value }}</dd>
+    <dd>{{ submission.o3revocation__oxsubmitted.value|raw }}</dd>
 </dl>
 
 <p><em>{{ translate({ ident: "O3_REVOCATION_CUSTOMER_EMAIL_BODY_RECEIPT_NOTE" }) }}</em></p>

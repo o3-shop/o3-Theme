@@ -6,7 +6,7 @@
 {% include "email/html/header.html.twig" with {title: "DD_DOWNLOADLINKS_HEADING"|translate|cat(" #")|cat(order.oxorder__oxordernr.value)} %}
 
 {% block email_html_senddownloadlinks_infoheader %}
-    {{ translate({ ident: "EMAIL_SENDDOWNLOADS_GREETING" }) }} {{ order.oxorder__oxbillsal.value|translate_salutation }} {{ order.oxorder__oxbillfname.value }} {{ order.oxorder__oxbilllname.value }},<br>
+    {{ translate({ ident: "EMAIL_SENDDOWNLOADS_GREETING" }) }} {{ order.oxorder__oxbillsal.value|translate_salutation|raw }} {{ order.oxorder__oxbillfname.value|raw }} {{ order.oxorder__oxbilllname.value|raw }},<br>
     <br>
 {% endblock %}
 
@@ -21,9 +21,9 @@
             <ul>
                 <li>
                     {% if order.oxorder__oxpaid.value != "0000-00-00 00:00:00" or not oOrderFile.oxorderfiles__oxpurchasedonly.value %}
-                        <a href="{{ seo_url({ ident: oViewConf.getBaseDir()|cat("index.php?cl=download"), params: "sorderfileid="|cat(oOrderFile.getId()) }) }}">{{ oOrderFile.oxorderfiles__oxfilename.value }}</a> {{ oOrderFile.getFileSize()|file_size }}
+                        <a href="{{ seo_url({ ident: oViewConf.getBaseDir()|cat("index.php?cl=download"), params: "sorderfileid="|cat(oOrderFile.getId()) }) }}">{{ oOrderFile.oxorderfiles__oxfilename.value|raw }}</a> {{ oOrderFile.getFileSize()|file_size }}
                     {% else %}
-                        <span>{{ oOrderFile.oxorderfiles__oxfilename.value }}</span>
+                        <span>{{ oOrderFile.oxorderfiles__oxfilename.value|raw }}</span>
                         <strong>{{ translate({ ident: "DOWNLOADS_PAYMENT_PENDING" }) }}</strong>
                     {% endif %}
                 </li>
@@ -34,7 +34,7 @@
 {% endif %}
 
 {% block email_html_senddownloadlinks_infofooter %}
-    <p>{{ translate({ ident: "YOUR_TEAM", args: shop.oxshops__oxname.value }) }}</p>
+    <p>{{ translate({ ident: "YOUR_TEAM", args: shop.oxshops__oxname.getRawValue() }) }}</p>
     <br/>
 {% endblock %}
 

@@ -45,16 +45,16 @@
 <br>
 
 <p class="lead">
-    <a href="{{ sArticleUrl }}"><b>{{ product.oxarticles__oxtitle.value }}</b></a>
+    <a href="{{ sArticleUrl|raw }}"><b>{{ product.oxarticles__oxtitle.value|raw }}</b></a>
     {% if product.oxarticles__oxshortdesc.value %}
-        <br>{{ product.oxarticles__oxshortdesc.value }}
+        <br>{{ product.oxarticles__oxshortdesc.value|raw }}
     {% endif %}
 </p>
 <br>
 
 <p>
-    <a href="{{ sArticleUrl }}">
-        <img src="{{ product.getThumbnailUrl() }}" border="0" hspace="0" vspace="0" alt="{{ product.oxarticles__oxtitle.value|striptags }}">
+    <a href="{{ sArticleUrl|raw }}">
+        <img src="{{ product.getThumbnailUrl() }}" border="0" hspace="0" vspace="0" alt="{{ product.oxarticles__oxtitle.value|striptags|raw }}">
     </a>
 </p>
 <br>

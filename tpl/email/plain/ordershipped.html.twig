@@ -2,14 +2,19 @@
 {% set oViewConf = oEmailView.getViewConfig() %}
 
 {% block email_plain_ordershipped_sendemail %}
-{% include_content 'oxordersendplainemail' %}
+
+{{ include_content('oxordersendplainemail') }}
 {% endblock %}
 
+
 {% block email_plain_ordershipped_infoheader %}
+
 {{ translate({ ident: "ORDER_SHIPPED_TO", suffix: "COLON" }) }}
 {% endblock %}
 
+
 {% block email_plain_ordershipped_address %}
+
 {% if order.oxorder__oxdellname.value  %}
     {{  order.oxorder__oxdelcompany.getRawValue()  }}
     {{  order.oxorder__oxdelfname.getRawValue()  }} {{  order.oxorder__oxdellname.getRawValue()  }}
@@ -25,22 +30,31 @@
 {% endif %}
 {% endblock %}
 
+
 {% block email_plain_ordershipped_oxordernr %}
+
 {{ translate({ ident: "ORDER_NUMBER", suffix: "COLON" }) }} {{  order.oxorder__oxordernr.value  }}
 {% endblock %}
 
+
 {% block email_plain_ordershipped_orderarticles %}
+
 {% for oOrderArticle in order.getOrderArticles(true) %}
 {{  oOrderArticle.oxorderarticles__oxamount.value  }} {{  oOrderArticle.oxorderarticles__oxtitle.getRawValue()  }} {{  oOrderArticle.oxorderarticles__oxselvariant.getRawValue()  }}
 {% endfor %}
 {% endblock %}
 
+
 {% block email_plain_ordershipped_infofooter %}
+
 {{ translate({ ident: "YOUR_TEAM", args: shop.oxshops__oxname.getRawValue() }) }}
 {% endblock %}
 
+
 {% block email_html_ordershipped_shipmenttrackingurl %}
+
 {% if order.getShipmentTrackingUrl() %}{{ translate({ ident: "SHIPMENT_TRACKING", suffix: "COLON" }) }} {{  order.getShipmentTrackingUrl() }}{% endif %}
 {% endblock %}
 
-{% include_content 'oxemailfooterplain' %}
+
+{{ include_content('oxemailfooterplain') }}
