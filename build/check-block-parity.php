@@ -6,7 +6,8 @@
  *
  * Usage: php build/check-block-parity.php <ref-with-tpl> <dir-with-twig>
  *   e.g. php build/check-block-parity.php main .
- * Also fails on a Twig block that is not in the Smarty file ("extra: <file>: <block>") and on a
+ * Also fails on a Twig block that is not in the Smarty file ("extra: <file>: <block>"; except the blocks in
+ * $forced, which Twig syntax forces and the CHANGELOG lists) and on a
  * `dynamic:` parameter in script()/style() calls ("dynamic: <file>"): the core reads that flag itself.
  * Exit 0 + "OK <n> blocks", else the problem lines and exit 1.
  */
@@ -16,6 +17,9 @@ $git = 'git -C ' . escapeshellarg($dir);
 
 $files = array_filter(explode("\n", (string) shell_exec("$git ls-tree -r --name-only " . escapeshellarg($ref) . ' -- tpl')));
 $total = 0;
+// Blocks Twig syntax forces (no Smarty counterpart), listed in CHANGELOG.md: "content" is the page-layout block
+// that pages fill via {% extends "layout/page.html.twig" %} (replaces capture append="oxidBlock_content").
+$forced = ['content'];
 $missing = [];
 
 foreach ($files as $file) {
@@ -36,7 +40,7 @@ foreach ($files as $file) {
         }
     }
     preg_match_all('/\{%-?\s*block\s+(\w+)/', $twig, $t);
-    foreach (array_diff(array_unique($t[1]), $blocks) as $block) {
+    foreach (array_diff(array_unique($t[1]), $blocks, $forced) as $block) {
         $missing[] = "extra: $file: $block";
     }
     preg_match_all('/\{\{-?\s*(?:script|style)\(.*?\}\)\s*-?\}\}/s', $twig, $calls);
