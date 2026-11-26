@@ -56,7 +56,7 @@ $urlGetters = [
     'getLabel',
 ];
 $basketItemGetters = ['getTitle', 'getVarSelect'];
-// T_RAW fields holding plain text (raw DB value, never core-escaped)
+// T_RAW fields: .value is the DB string as stored, not escaped on read (persparams: a serialized array; print getPersParams() values)
 $rawTextFields = [
     'oxorderarticles__oxtitle', 'oxorderarticles__oxpersparam', 'oxorderarticles__oxerpstatus', // OrderArticle::_setFieldData
     'oxuserbasketitems__oxsellist', 'oxuserbasketitems__oxpersparam',                           // UserBasketItem::_setFieldData
