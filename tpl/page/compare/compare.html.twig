@@ -45,7 +45,7 @@
                                 {% for iProdNr, product in articleList %}
                                     <td class="attrib-text">
                                         {% if oAttrib.aProd[iProdNr] is defined and oAttrib.aProd[iProdNr].value %}
-                                            {{ oAttrib.aProd[iProdNr].value|raw }}
+                                            {{ oAttrib.aProd[iProdNr].value|escape }}
                                         {% else %}
                                             -
                                         {% endif %}

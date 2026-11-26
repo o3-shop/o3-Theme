@@ -36,7 +36,7 @@
         <div typeof="v:Review-aggregate">
             {% set aRDFaRating = oView.getRDFaNormalizedRating() %}
             <div property="v:count" content="{{ aRDFaRating.count }}" datatype="xsd:float"></div>
-            <div property="v:rating" content="{{ aRDFaRating.value|raw }}" datatype="xsd:float"></div>
+            <div property="v:rating" content="{{ aRDFaRating.value|escape }}" datatype="xsd:float"></div>
         </div>
     </div>
 {% endif %}

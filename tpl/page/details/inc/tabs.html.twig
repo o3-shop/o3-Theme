@@ -1,13 +1,17 @@
 {#
     Tabs (2.x): Twig blocks get a copy of the context, so the 1.x pattern (each block appends to the "tabs" and
     "tabsContent" captures and resets blFirstTab, details_tabs_main prints them) cannot work across blocks.
-    Instead every tab block prints its nav link when tabPart == 'nav' and its pane when tabPart == 'content'
-    (and nothing otherwise). The loop below renders each block in both parts, in the 1.x order, and collects the
-    non-empty ones into "tabs"/"tabsContent"; blFirstTab is true while the block is the first visible tab.
-    A module that adds a tab overrides one of the (empty) tab blocks the same way.
+    Instead every tab block is rendered twice by the loop below, in the 1.x order: once with tabPart == 'nav'
+    (it prints its nav link) and, if that printed anything, once with tabPart == 'content' (it prints its pane).
+    The non-empty results go to "tabs"/"tabsContent"; blFirstTab is true while the block is the first visible tab.
+    All output and side effects of a tab block (includes, widgets, script()) must be gated by tabPart; one block
+    yields at most one tab. A module adds a tab by overriding one of the (empty) tab blocks the same way.
+    The definitions sit inside {% if false %}: a block in a template that does not extend is otherwise also rendered
+    where it is defined; inside the if it stays registered (and overridable) for block().
 #}
 {% set tabPart = '' %}
 
+{% if false %}
 {% block details_tabs_longdescription %}
     {% hasrights { ident: "SHOWLONGDESCRIPTION" } %}
         {% set oLongdesc = oDetailsProduct.getLongDescription() %}
@@ -47,10 +51,12 @@
 {% block details_tabs_reviews %}
     {% if oView.isReviewActive() %}
 
-        {% if oxcmp_shop.oxshops__oxproductive.value %}
-            {{ script({ include: "js/widget/rating.min.js", priority: 10 }) }}
-        {% else %}
-            {{ script({ include: "js/widget/rating.js", priority: 10 }) }}
+        {% if tabPart == 'content' %}
+            {% if oxcmp_shop.oxshops__oxproductive.value %}
+                {{ script({ include: "js/widget/rating.min.js", priority: 10 }) }}
+            {% else %}
+                {{ script({ include: "js/widget/rating.js", priority: 10 }) }}
+            {% endif %}
         {% endif %}
 
         {% if tabPart == 'nav' %}<a class="nav-link{% if blFirstTab %} active{% endif %}" href="#details__reviews" role="tab" data-bs-toggle="tab" aria-controls="details__reviews" aria-selected="{% if blFirstTab %}true{% else %}false{% endif %}">{{ translate({ ident: "REVIEWS" }) }} ({% if oView.getReviews() %}{{ oView.getReviews()|length }}{% else %}0{% endif %})</a>{% endif %}
@@ -96,6 +102,7 @@
 
 {% block details_tabs_invite %}
 {% endblock %}
+{% endif %}
 
 {% set tabs = [] %}
 {% set tabsContent = [] %}

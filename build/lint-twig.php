@@ -11,6 +11,8 @@
  *   - BasketItem::getTitle()/getVarSelect() (they return field `.value`s) on a loop variable over `….getContents()`
  *     (other getTitle()s, e.g. Attribute::getTitle(), return raw DB text and must stay escaped),
  *   - a variable {% set %} from one of the above in the same file (also via "#{…}" interpolation).
+ * Not reported: outputs with |raw, and outputs whose first filter is length/format_price/…/add_url_parameters or
+ * |escape (|e) — the explicit marker for a `.value` that is not a core-escaped Field (raw DB/array values).
  * Output: "escape: <file>:<line>: <expression>", exit 1 on findings, else "OK <n> files".
  *
  * Usage: php build/lint-twig.php [dir …]   (default scope: the areas converted so far; widen it per task)
@@ -81,7 +83,7 @@ foreach ($scope as $dir) {
             $parts = explode('|', $expr);
             $first = trim($parts[0]);
             $filters = implode('|', array_slice($parts, 1));
-            if (preg_match('/^\s*(length|format_price|date_format|format_date|count|add_url_parameters)\b/', $filters)) {
+            if (preg_match('/^\s*(length|format_price|date_format|format_date|count|add_url_parameters|escape|e)\b/', $filters)) {
                 continue;
             }
             if ($isEncoded($first) || in_array($first, $tainted, true)) {
