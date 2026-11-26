@@ -5,7 +5,7 @@
             <label class="form-label" for="formSelect">{{ oSelectionList.getLabel() }}</label>
         {% endif %}
 
-        {% if editable != false %}
+        {% if editable is not same as(false) %}
             <select id="formSelect" class="form-select" aria-label="{{ oSelectionList.getLabel() }}" name="{{ sFieldName|default("varselid") }}[{{ iKey }}]">
 
                 <option value="">

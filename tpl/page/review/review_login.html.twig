@@ -1,5 +1,7 @@
 {% set template_title = "LOGIN"|translate %}
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     <div class="accountLoginView">
         <h1 id="loginAccount" class="page-header">{{ translate({ ident: "LOGIN" }) }}</h1>
         <p>{{ translate({ ident: "MESSAGE_LOGIN_TO_WRITE_REVIEW" }) }}</p>
@@ -7,6 +9,4 @@
         {% include "form/login_account.html.twig" %}
     </div>
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

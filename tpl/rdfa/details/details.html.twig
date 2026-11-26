@@ -9,24 +9,24 @@
     xmlns:gr="http://purl.org/goodrelations/v1#"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:v="http://rdf.data-vocabulary.org/#"
-    xml:base="{{ sRDFaUrl }}"
-    typeof="gr:Offering" about="{{ sRDFaUrl }}#offeringdata">
-    <div rel="foaf:page" resource="{{ sRDFaUrl }}"></div>
+    xml:base="{{ sRDFaUrl|raw }}"
+    typeof="gr:Offering" about="{{ sRDFaUrl|raw }}#offeringdata">
+    <div rel="foaf:page" resource="{{ sRDFaUrl|raw }}"></div>
 {% ifcontent ident oView.getRDFaBusinessEntityLoc() set oCont %}
-    <div rev="gr:offers" resource="{{ oCont.getLink() }}#companydata"></div>
+    <div rev="gr:offers" resource="{{ oCont.getLink()|raw }}#companydata"></div>
 {% endifcontent %}
 {% if oProduct.oxarticles__oxtitle.value %}
-    <div property="gr:name" content="{{ oProduct.oxarticles__oxtitle.value|striptags|strip }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
+    <div property="gr:name" content="{{ oProduct.oxarticles__oxtitle.value|striptags|regex_replace('/\\s+/', ' ')|raw }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
 {% endif %}
 {% hasrights { ident: "SHOWLONGDESCRIPTION" } %}
 {% set oLongdesc = oProduct.getLongDescription() %}
 {% if oLongdesc.value %}
-    <div property="gr:description" content="{{ oLongdesc.value|striptags|strip }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
+    <div property="gr:description" content="{{ oLongdesc.value|striptags|regex_replace('/\\s+/', ' ')|raw }}" {% if oView.getActiveLangAbbr() %} xml:lang="{{ oView.getActiveLangAbbr() }}"{% endif %}></div>
 {% endif %}
 {% if not oProduct.oxarticles__oxbundleid.value %}
-    <div property="gr:hasStockKeepingUnit" content="{{ oProduct.oxarticles__oxartnum.value }}" datatype="xsd:string"></div>
+    <div property="gr:hasStockKeepingUnit" content="{{ oProduct.oxarticles__oxartnum.value|raw }}" datatype="xsd:string"></div>
     {% if oProduct.oxarticles__oxmpn.value %}
-        <div property="gr:hasMPN" content="{{ oProduct.oxarticles__oxmpn.value }}" datatype="xsd:string"></div>
+        <div property="gr:hasMPN" content="{{ oProduct.oxarticles__oxmpn.value|raw }}" datatype="xsd:string"></div>
     {% endif %}
 {% endif %}
 {% endhasrights %}
@@ -36,14 +36,14 @@
         <div typeof="v:Review-aggregate">
             {% set aRDFaRating = oView.getRDFaNormalizedRating() %}
             <div property="v:count" content="{{ aRDFaRating.count }}" datatype="xsd:float"></div>
-            <div property="v:rating" content="{{ aRDFaRating.value }}" datatype="xsd:float"></div>
+            <div property="v:rating" content="{{ aRDFaRating.value|raw }}" datatype="xsd:float"></div>
         </div>
     </div>
 {% endif %}
 {% if oView.showRDFaProductStock() %}
     <div rel="gr:hasInventoryLevel">
         <div typeof="gr:QuantitativeValue">
-            <div property="gr:hasMinValue" content="{% if oProduct.getStockStatus() == -1 %}0{% else %}{{ oProduct.oxarticles__oxstock.value }}{% endif %}" datatype="xsd:float"></div>
+            <div property="gr:hasMinValue" content="{% if oProduct.getStockStatus() == -1 %}0{% else %}{{ oProduct.oxarticles__oxstock.value|raw }}{% endif %}" datatype="xsd:float"></div>
             <div property="gr:hasUnitOfMeasurement" content="C62" datatype="xsd:string"></div>
         </div>
     </div>
@@ -68,7 +68,7 @@
 {% endif %}
 {% if oViewConf.getCountryList() %}
 {% for oRegion in oViewConf.getCountryList() %}
-    <div property="gr:eligibleRegions" content="{{ oRegion.oxcountry__oxisoalpha2.value }}" datatype="xsd:string"></div>
+    <div property="gr:eligibleRegions" content="{{ oRegion.oxcountry__oxisoalpha2.value|raw }}" datatype="xsd:string"></div>
 {% endfor %}
 {% endif %}
 {% hasrights { ident: "SHOWARTICLEPRICE" } %}

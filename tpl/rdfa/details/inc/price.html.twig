@@ -12,17 +12,19 @@
             <div property="gr:hasUnitOfMeasurement" content="C62" datatype="xsd:string"></div>
             <div property="gr:hasCurrency" content="{{ currency.name }}" datatype="xsd:string"></div>
 {% endcapture %}
+{# set before the loop: Twig drops variables first created inside a for #}
+{% set iRDFaMinAmount = null %}
 {% if oProduct.loadAmountPriceInfo() %}
     {% for priceItem in oProduct.loadAmountPriceInfo() %}
         {% if loop.first %}
             {% set iRDFaMinAmount = priceItem.oxprice2article__oxamount.value %}
         {% endif %}
-{{ smarty.capture.sRDFaPriceStart }}
-            <div property="gr:hasCurrencyValue" content="{{ priceItem.oxpricealarm__oxprice.value }}" datatype="xsd:float"></div>
+{{ twig.capture.sRDFaPriceStart|raw }}
+            <div property="gr:hasCurrencyValue" content="{{ priceItem.oxpricealarm__oxprice.value|raw }}" datatype="xsd:float"></div>
             <div rel="gr:hasEligibleQuantity">
                 <div typeof="gr:QuantitativeValue">
-                    <div property="gr:hasMinValue" content="{{ priceItem.oxprice2article__oxamount.value }}" datatype="xsd:float"></div>
-                    <div property="gr:hasMaxValue" content="{{ priceItem.oxprice2article__oxamountto.value }}" datatype="xsd:float"></div>
+                    <div property="gr:hasMinValue" content="{{ priceItem.oxprice2article__oxamount.value|raw }}" datatype="xsd:float"></div>
+                    <div property="gr:hasMaxValue" content="{{ priceItem.oxprice2article__oxamountto.value|raw }}" datatype="xsd:float"></div>
                     <div property="gr:hasUnitOfMeasurement" content="C62" datatype="xsd:string"></div>
                 </div>
             </div>
@@ -31,10 +33,10 @@
     {% endfor %}
 {% endif %}
 {% if oProduct.getFPrice() %}
-{{ smarty.capture.sRDFaPriceStart }}
+{{ twig.capture.sRDFaPriceStart|raw }}
             {% set price = oDetailsProduct.getPrice() %}
             <div property="gr:hasCurrencyValue" content="{{ price.getBruttoPrice() }}" datatype="xsd:float"></div>
-            {% if isset(iRDFaMinAmount) %}
+            {% if iRDFaMinAmount is not null %}
                 <div rel="gr:hasEligibleQuantity">
                     <div typeof="gr:QuantitativeValue">
                         <div property="gr:hasMinValue" content="1" datatype="xsd:float"></div>

@@ -10,10 +10,10 @@
     <tbody>
         {% for priceItem in oDetailsProduct.loadAmountPriceInfo() %}
             <tr>
-                <td>{{ translate({ ident: "O3_FROM" }) }} {{ priceItem.oxprice2article__oxamount.value }}</td>
+                <td>{{ translate({ ident: "O3_FROM" }) }} {{ priceItem.oxprice2article__oxamount.value|raw }}</td>
                 <td>
                     {% if priceItem.oxprice2article__oxaddperc.value %}
-                        {{ priceItem.oxprice2article__oxaddperc.value }}% {{ translate({ ident: "DISCOUNT" }) }}
+                        {{ priceItem.oxprice2article__oxaddperc.value|raw }}% {{ translate({ ident: "DISCOUNT" }) }}
                     {% else %}
                         {% block details_productmain_price %}
                             {% if oView.isVatIncluded() %}

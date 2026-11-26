@@ -1,7 +1,9 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set template_title = "COMPARE"|translate %}
 
-    {{ oView.setNoPaging() }}
+    {% do oView.setNoPaging() %}
 
     {% set articleList = oView.getCompArtList() %}
     {% set atributeList = oView.getAttributeList() %}
@@ -23,13 +25,13 @@
                                 <td class="item-wrapper text-center compare-item-wrapper">
                                     <div class="move-controls btn-group">
                                         {% if not product.hidePrev %}
-                                            <a id="compareLeft_{{ product.oxarticles__oxid.value }}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=")|cat(oViewConf.getActiveClassName()), params: "fnc=moveleft&amp;aid=`$product.oxarticles__oxnid.value`&amp;pgNr="|cat(oView.getActPage()) }) }}" class="btn btn-outline-dark movePrev">&laquo;</a>
+                                            <a id="compareLeft_{{ product.oxarticles__oxid.value|raw }}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=")|cat(oViewConf.getActiveClassName()), params: "fnc=moveleft&aid=#{product.oxarticles__oxnid.value}&pgNr="|cat(oView.getActPage()) }) }}" class="btn btn-outline-dark movePrev">&laquo;</a>
                                         {% endif %}
 
                                         <a href="javascript:;" class="btn btn-outline-dark disabled">{{ translate({ ident: "MOVE" }) }}</a>
 
                                         {% if not product.hideNext %}
-                                            <a id="compareRight_{{ product.oxarticles__oxid.value }}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=")|cat(oViewConf.getActiveClassName()), params: "fnc=moveright&amp;aid=`$product.oxarticles__oxnid.value`&amp;pgNr="|cat(oView.getActPage()) }) }}" class="btn btn-outline-dark moveNext">&raquo;</a>
+                                            <a id="compareRight_{{ product.oxarticles__oxid.value|raw }}" href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=")|cat(oViewConf.getActiveClassName()), params: "fnc=moveright&aid=#{product.oxarticles__oxnid.value}&pgNr="|cat(oView.getActPage()) }) }}" class="btn btn-outline-dark moveNext">&raquo;</a>
                                         {% endif %}
                                     </div>
                                     {% include "page/compare/inc/compareitem.html.twig" with {product: product, testid: loop.index} %}
@@ -42,8 +44,8 @@
 
                                 {% for iProdNr, product in articleList %}
                                     <td class="attrib-text">
-                                        {% if oAttrib.aProd.$iProdNr and oAttrib.aProd.$iProdNr.value %}
-                                            {{ oAttrib.aProd.$iProdNr.value }}
+                                        {% if oAttrib.aProd[iProdNr] is defined and oAttrib.aProd[iProdNr].value %}
+                                            {{ oAttrib.aProd[iProdNr].value|raw }}
                                         {% else %}
                                             -
                                         {% endif %}
@@ -59,13 +61,11 @@
         <p class="alert alert-danger">{{ translate({ ident: "MESSAGE_SELECT_AT_LEAST_ONE_PRODUCT" }) }}</p>
     {% endif %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
 
-{% if not oxcmp_user.oxuser__oxpassword.value %}
-    {% include "layout/page.html.twig" %}
-{% else %}
-    {% capture append = "oxidBlock_sidebar" %}
-        {% include "page/account/inc/account_menu.html.twig" with {active_link: "compare"} %}
-    {% endcapture %}
-    {% include "layout/page.html.twig" %}
-{% endif %}
+    {# 1.x captured the account menu into oxidBlock_sidebar for logged-in users; layout/page never prints that list (1.6.5 neither) #}
+    {% if oxcmp_user.oxuser__oxpassword.value %}
+        {% capture append = "oxidBlock_sidebar" %}
+            {% include "page/account/inc/account_menu.html.twig" with {active_link: "compare"} %}
+        {% endcapture %}
+    {% endif %}
+{% endblock %}

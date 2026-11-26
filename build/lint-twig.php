@@ -16,7 +16,11 @@
  * Usage: php build/lint-twig.php [dir …]   (default scope: the areas converted so far; widen it per task)
  */
 
-$scope = array_slice($argv, 1) ?: ['tpl/layout', 'tpl/widget', 'tpl/message', 'tpl/page/shop'];
+$scope = array_slice($argv, 1) ?: [
+    'tpl/layout', 'tpl/widget', 'tpl/message', 'tpl/page/shop',
+    'tpl/page/list', 'tpl/page/details', 'tpl/page/search', 'tpl/page/compare', 'tpl/page/recommendations',
+    'tpl/page/review', 'tpl/page/privatesales', 'tpl/rdfa',
+];
 
 $urlGetters = [
     // Core/ViewConfig.php

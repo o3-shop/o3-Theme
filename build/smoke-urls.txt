@@ -23,7 +23,7 @@ anon 200 search-empty             cl-search                       GET /index.php
 anon 200 manufacturer-list        cl-manufacturerlist             GET /index.php?cl=manufacturerlist&mnid={MANUFACTURER}
 anon 200 vendor-list              cl-vendorlist                   GET /index.php?cl=vendorlist
 anon 200 compare-empty            cl-compare                      GET /index.php?cl=compare
-anon 200 compare-add              cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tocomparelist&aid={ARTICLE}&anid={ARTICLE}&am=1
+anon 200 compare-add              cl-start                        POST /index.php stoken={STOKEN}&cl=start&fnc=tocomparelist&addcompare=1&aid={ARTICLE}&anid={ARTICLE}&am=1
 anon 200 compare-with-product     cl-compare~{TERM}               GET /index.php?cl=compare
 anon 200 price-alarm-submit       cl-details~alert-success        POST /index.php stoken={STOKEN}&cl=details&anid={ARTICLE}&fnc=addme&pa[price]=1&pa[email]=smoke-test@example.invalid&pa[aid]={ARTICLE}
 anon 200 recommendation-list      cl-recommlist                   GET /index.php?cl=recommlist

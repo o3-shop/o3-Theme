@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     <h1 class="page-header">{{ translate({ ident: "CATEGORY_OVERVIEW" }) }}</h1>
 
     {% set _navcategorytree = oView.getCategoryTree() %}
@@ -18,7 +20,7 @@
                                 {% set iSubCategoriesCount = iSubCategoriesCount+1 %}
                                 <div class="box">
                                     <h3>
-                                        <a id="moreSubCms_{{ loop.index }}" href="{{ ocont.getLink() }}">{{ ocont.oxcontents__oxtitle.value }}</a>
+                                        <a id="moreSubCms_{{ loop.index }}" href="{{ ocont.getLink()|raw }}">{{ ocont.oxcontents__oxtitle.value|raw }}</a>
                                     </h3>
                                     <ul class="content"></ul>
                                 </div>
@@ -33,8 +35,8 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">
-                                        <a id="moreSubCat_{{ loop.index }}" href="{{ category.getLink() }}">
-                                            {{ category.oxcategories__oxtitle.value }}{% if oView.showCategoryArticlesCount() and (category.getNrOfArticles() > 0) %} ({{ category.getNrOfArticles() }}){% endif %}
+                                        <a id="moreSubCat_{{ loop.index }}" href="{{ category.getLink()|raw }}">
+                                            {{ category.oxcategories__oxtitle.value|raw }}{% if oView.showCategoryArticlesCount() and (category.getNrOfArticles() > 0) %} ({{ category.getNrOfArticles() }}){% endif %}
                                         </a>
                                     </h3>
                                 </div>
@@ -43,8 +45,8 @@
                                     <div class="card-body">
                                         {% if iconUrl %}
                                             <div class="text-center">
-                                                <a href="{{ category.getLink() }}">
-                                                    <img src="{{ category.getIconUrl() }}" alt="{{ category.oxcategories__oxtitle.value }}" class="img-thumbnail" height="100" width="168">
+                                                <a href="{{ category.getLink()|raw }}">
+                                                    <img src="{{ category.getIconUrl() }}" alt="{{ category.oxcategories__oxtitle.value|raw }}" class="img-thumbnail" height="100" width="168">
                                                 </a>
                                             </div>
                                         {% endif %}
@@ -54,12 +56,12 @@
                                                     {# CMS subcategories #}
                                                     {% for ocont in subcategory.getContentCats() %}
                                                         <li>
-                                                            <a href="{{ ocont.getLink() }}"><strong>{{ ocont.oxcontents__oxtitle.value }}</strong></a>
+                                                            <a href="{{ ocont.getLink()|raw }}"><strong>{{ ocont.oxcontents__oxtitle.value|raw }}</strong></a>
                                                         </li>
                                                     {% endfor %}
                                                     <li>
-                                                        <a href="{{ subcategory.getLink() }}">
-                                                            <strong>{{ subcategory.oxcategories__oxtitle.value }}</strong>{% if oView.showCategoryArticlesCount() and (subcategory.getNrOfArticles() > 0) %} ({{ subcategory.getNrOfArticles() }}){% endif %}
+                                                        <a href="{{ subcategory.getLink()|raw }}">
+                                                            <strong>{{ subcategory.oxcategories__oxtitle.value|raw }}</strong>{% if oView.showCategoryArticlesCount() and (subcategory.getNrOfArticles() > 0) %} ({{ subcategory.getNrOfArticles() }}){% endif %}
                                                         </a>
                                                     </li>
                                                 {% endif %}
@@ -70,8 +72,8 @@
                                     <div class="card-body catPicOnly">
                                         <div class="subcatPic text-center">
                                             {% if iconUrl %}
-                                                <a href="{{ category.getLink() }}">
-                                                    <img src="{{ category.getIconUrl() }}" alt="{{ category.oxcategories__oxtitle.value }}" class="img-thumbnail" height="100" width="168">
+                                                <a href="{{ category.getLink()|raw }}">
+                                                    <img src="{{ category.getIconUrl() }}" alt="{{ category.oxcategories__oxtitle.value|raw }}" class="img-thumbnail" height="100" width="168">
                                                 </a>
                                             {% endif %}
                                         </div>
@@ -91,7 +93,4 @@
         </div>
     {% endif %}
     {{ insert_tracker() }}
-{% endcapture %}
-
-
-{% include "layout/page.html.twig" %}
+{% endblock %}

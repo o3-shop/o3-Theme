@@ -10,12 +10,12 @@
                             {% if blEdit %}
                                 {% set editclass = "account_recommlist&amp;fnc=editList" %}
                             {% endif %}
-                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=`$editclass`"), params: "recommid=`$recommlist->oxrecommlists__oxid->value`&amp;searchrecomm=`$searchrecomm`" }) }}" class="lead" title="{{ recommlist.oxrecommlists__oxtitle.value }}">{{ recommlist.oxrecommlists__oxtitle.value }}</a>
+                            <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=#{editclass}"), params: "recommid=#{recommlist.oxrecommlists__oxid.value}&searchrecomm=#{searchrecomm}" }) }}" class="lead" title="{{ recommlist.oxrecommlists__oxtitle.value|raw }}">{{ recommlist.oxrecommlists__oxtitle.value|raw }}</a>
                             {% if blEdit %}
                             <div class="listmania-buttons float-right">
-                                <form action="{{ oViewConf.getSelfActionLink() }}" method="post" class="form-inline pull-right">
+                                <form action="{{ oViewConf.getSelfActionLink()|raw }}" method="post" class="form-inline pull-right">
                                     <div class="d-none">
-                                        {{ oViewConf.getHiddenSid() }}
+                                        {{ oViewConf.getHiddenSid()|raw }}
                                         <input type="hidden" name="cl" value="account_recommlist">
                                         <input type="hidden" name="fnc" value="editList">
                                         <input type="hidden" name="recommid" value="{{ recommlist.getId() }}">
@@ -30,11 +30,11 @@
                             </div>
                                 <div class="clearfix"></div>
                             {% endif %}
-                            <small class="text-muted">{{ translate({ ident: "LIST_BY" }) }} <strong>{{ recommlist.oxrecommlists__oxauthor.value }}</strong></small>
+                            <small class="text-muted">{{ translate({ ident: "LIST_BY" }) }} <strong>{{ recommlist.oxrecommlists__oxauthor.value|raw }}</strong></small>
 
 
                         </div>
-                        <div class="card-body">{{ recommlist.oxrecommlists__oxdesc.value }}</div>
+                        <div class="card-body">{{ recommlist.oxrecommlists__oxdesc.value|raw }}</div>
                     </div>
 
                 </li>

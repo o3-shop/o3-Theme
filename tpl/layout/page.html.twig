@@ -21,6 +21,8 @@
       layout's oxidBlock_head/oxidBlock_pageScript; use script()/style() instead.
     - Scripts and styles: use script()/style() anywhere in the page; the body is rendered before the <head> is
       written (see layout/base.html.twig), so they all end up in the page's script/style output.
+      A 1.x page that registered a script before its content capture (so before the header's scripts) keeps that
+      order with {% do script({...}) %} at the top level of the page, outside any block (e.g. page/list/list).
     - Pages that render without the page frame (1.x included layout/base.tpl or layout/popup.tpl directly, e.g.
       page/info/content_plain, page/account/register) keep that: {% capture append = "oxidBlock_pageBody" %} (base) or
       "oxidBlock_content" (popup), then {% include "layout/base.html.twig" %} / {% include "layout/popup.html.twig" %}.

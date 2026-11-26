@@ -12,10 +12,10 @@
                             <li class="breadcrumb-item{% if loop.last %} active{% endif %}"{% if loop.last %} aria-current="page"{% endif %} itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement">
                                 {% if sCrum.link %}
                                     <a href="{{ sCrum.link|raw }}" itemprop="item">
-                                        <span itemprop="name">{{ sCrum.title }}</span>
+                                        <span itemprop="name">{{ sCrum.title|raw }}</span>
                                     </a>
                                 {% else %}
-                                    <span itemprop="name">{{ sCrum.title }}</span>
+                                    <span itemprop="name">{{ sCrum.title|raw }}</span>
                                 {% endif %}
                                 <meta itemprop="position" content="{{ loop.index + 1 }}" />
                             </li>

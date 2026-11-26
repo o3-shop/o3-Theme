@@ -1,10 +1,12 @@
 {# {{ script({ add: "$('a.js-external').attr('target', '_blank');" }) }} #}
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% set search_title = "SEARCH"|translate %}
     {% set searchparamforhtml = oView.getSearchParamForHtml() %}
-    {% set template_title = "$search_title - $searchparamforhtml" %}
-    {% set search_head = "HITS_FOR"|translate %}
-    {% set search_head = oView.getArticleCount()|cat(" ")|cat(search_head)|cat(" &quot;")|cat(oView.getSearchParamForHtml())|cat("&quot;") %}
+    {% set template_title = "#{search_title} - #{searchparamforhtml}" %}
+    {# getSearchParamForHtml() is already HTML-escaped by the core; {% set %}…{% endset %} keeps the heading safe markup #}
+    {% set search_head %}{{ oView.getArticleCount() }} {{ "HITS_FOR"|translate }} &quot;{{ oView.getSearchParamForHtml()|raw }}&quot;{% endset %}
 
 
     <div class="page-header">
@@ -36,7 +38,4 @@
         {% endif %}
     {% endblock %}
     {{ insert_tracker({title: template_title}) }}
-{% endcapture %}
-{% set template_title = "SEARCH"|translate %}
-
-{% include "layout/page.html.twig" with {title: template_title, location: "SEARCH"|translate} %}
+{% endblock %}

@@ -16,10 +16,10 @@
             {% set shoplinks = oView.getShopLinks() %}
             {% set shoplangs = oView.getShopDefaultLangs() %}
             {% for shopid, mallshop in oView.getShopList() %}
-                {% if shoplinks.$shopid %}
-                    <a href="{{ shoplinks.$shopid }}">{{ mallshop.oxshops__oxname.value|raw }}</a><br>
+                {% if shoplinks[shopid] is defined and shoplinks[shopid] %}
+                    <a href="{{ shoplinks[shopid] }}">{{ mallshop.oxshops__oxname.value|raw }}</a><br>
                 {% else %}
-                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=mallstart"), params: "fnc=chshp&amp;shp=`$mallshop->oxshops__oxid->value`&amp;lang=`$shoplangs.$shopid`" }) }}" >{{ mallshop.oxshops__oxname.value|raw }}</a><br>
+                    <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=mallstart"), params: "fnc=chshp&shp=#{mallshop.oxshops__oxid.value}&lang=#{shoplangs[shopid]}" }) }}" >{{ mallshop.oxshops__oxname.value|raw }}</a><br>
                 {% endif %}
             {% endfor %}
          </div>

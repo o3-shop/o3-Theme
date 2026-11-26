@@ -1,13 +1,13 @@
 {% set oConfig = oViewConf.getConfig() %}
 {% if oDetailsProduct.oxarticles__oxfile.value %}
-    <a id="productFile" href="{{ oConfig.getPictureUrl('media/') }}{{ oDetailsProduct.oxarticles__oxfile.value }}">{{ oDetailsProduct.oxarticles__oxfile.value }}</a>
+    <a id="productFile" href="{{ oConfig.getPictureUrl('media/') }}{{ oDetailsProduct.oxarticles__oxfile.value|raw }}">{{ oDetailsProduct.oxarticles__oxfile.value|raw }}</a>
 {% endif %}
 
 {% if oView.getMediaFiles() %}
     {% for oMediaUrl in oView.getMediaFiles() %}
         {% set sUrl = oMediaUrl.oxmediaurls__oxurl.value %}
         {% set blIsYouTubeMedia = false %}
-        {% if sUrl|strpos('youtube.com') or sUrl|strpos('youtu.be') %}
+        {% if 'youtube.com' in sUrl or 'youtu.be' in sUrl %}
             {% set blIsYouTubeMedia = true %}
         {% endif %}
 
@@ -15,7 +15,7 @@
             <hr/>
         {% endif %}
         <div class="{% if blIsYouTubeMedia %}embed-responsive embed-responsive-4by3{% endif %}">
-            {{ oMediaUrl.getHtml() }}
+            {{ oMediaUrl.getHtml()|raw }}
         </div>
     {% endfor %}
 {% endif %}

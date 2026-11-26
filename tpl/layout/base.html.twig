@@ -90,7 +90,7 @@
         {% block head_link_rss %}
             {% if rsslinks %}
                 {% for rssentry in rsslinks %}
-                    <link rel="alternate" type="application/rss+xml" title="{{ rssentry.title|striptags }}" href="{{ rssentry.link|raw }}">
+                    <link rel="alternate" type="application/rss+xml" title="{{ rssentry.title|striptags|raw }}" href="{{ rssentry.link|raw }}">
                 {% endfor %}
             {% endif %}
         {% endblock %}

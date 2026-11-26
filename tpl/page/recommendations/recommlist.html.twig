@@ -1,18 +1,20 @@
 {# {{ script({ add: "$('a.js-external').attr('target', '_blank');" }) }} #}
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
     {% if oView.getActiveRecommList() %}
         {% set _actvrecommlist = oView.getActiveRecommList() %}
-        {% set recommendation_head = "LIST_BY"|translate %}
-        {% set recommendation_head = _actvrecommlist.oxrecommlists__oxtitle.value|cat(" <span>(")|cat(recommendation_head)|cat(" ")|cat(_actvrecommlist.oxrecommlists__oxauthor.value)|cat("))</span>" %}
+        {# {% set %}…{% endset %}: safe markup (field values are already escaped by the core, <span> is ours) #}
+        {% set recommendation_head %}{{ _actvrecommlist.oxrecommlists__oxtitle.value|raw }} <span>({{ "LIST_BY"|translate }} {{ _actvrecommlist.oxrecommlists__oxauthor.value|raw }})</span>{% endset %}
         {% set rsslinks = oView.getRssLinks() %}
         <h1 class="page-header">{{ recommendation_head }}
 
         {% set rsslinks = oView.getRssLinks() %}
 
         {% if rsslinks.recommlistarts %}
-            <a class="rss js-external" id="rssRecommListProducts" href="{{ rsslinks.recommlistarts.link }}" title="{{ rsslinks.recommlistarts.title }}">
-                <img src="{{ oViewConf.getImageUrl('rss.png') }}" alt="{{ rsslinks.recommlistarts.title }}">
-                <span class="FXgradOrange corners glowShadow">{{ rsslinks.recommlistarts.title }}</span>
+            <a class="rss js-external" id="rssRecommListProducts" href="{{ rsslinks.recommlistarts.link|raw }}" title="{{ rsslinks.recommlistarts.title|raw }}">
+                <img src="{{ oViewConf.getImageUrl('rss.png') }}" alt="{{ rsslinks.recommlistarts.title|raw }}">
+                <span class="FXgradOrange corners glowShadow">{{ rsslinks.recommlistarts.title|raw }}</span>
             </a>
         {% endif %}
 
@@ -25,7 +27,7 @@
             <div>
                 <div class="clear">
                     <div>
-                        {{ _actvrecommlist.oxrecommlists__oxdesc.value }}
+                        {{ _actvrecommlist.oxrecommlists__oxdesc.value|raw }}
                     </div>
                     {% if oView.isReviewActive() %}
                     <div class="rating clear">
@@ -46,12 +48,11 @@
         {% endif %}
     {% else %}
 
-        {% set hitsfor = "HITS_FOR"|translate %}
-        {% set recommendation_head = oView.getArticleCount()|cat(" ")|cat(hitsfor)|cat(" &quot;")|cat(oView.getSearchForHtml())|cat("&quot;") %}
+        {# getSearchForHtml() is already escaped by the core (list title .value or getRequestEscapedParameter) #}
+        {% set recommendation_head %}{{ oView.getArticleCount() }} {{ "HITS_FOR"|translate }} &quot;{{ oView.getSearchForHtml()|raw }}&quot;{% endset %}
 
         <h1 class="page-header">{{ recommendation_head }}</h1>
         {% include "page/recommendations/inc/list.html.twig" %}
     {% endif %}
     {{ insert_tracker() }}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
+{% endblock %}

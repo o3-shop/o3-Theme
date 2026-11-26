@@ -1,4 +1,6 @@
-{% capture append = "oxidBlock_content" %}
+{% extends "layout/page.html.twig" %}
+
+{% block content %}
 
     {% if oView.getProduct() %}
         {% set product = oView.getProduct() %}
@@ -21,6 +23,4 @@
             {% include "widget/reviews/reviews.html.twig" with {sReviewUserHash: oView.getReviewUserHash(), oDetailsProduct: oView.getProduct(), oReviewUser: oView.getReviewUser()} %}
         </div>
     {% endif %}
-{% endcapture %}
-{% include "layout/page.html.twig" %}
-
+{% endblock %}

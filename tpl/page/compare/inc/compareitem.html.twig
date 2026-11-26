@@ -8,42 +8,42 @@
 
     <div class="row picture">
         <div class="col-12">
-            <a href="{{ _productLink }}" {% if oView.noIndex() %}rel="nofollow"{% endif %}>
-                <img src="{% if size=='big' %}{{ product.getPictureUrl(1) }}{% elseif size=='thinest' %}{{ product.getIconUrl() }}{% else %}{{ product.getThumbnailUrl() }}{% endif %}" alt="{{ product.oxarticles__oxtitle.value|striptags }} {{ product.oxarticles__oxvarselect.value|default('') }}" class="img-fluid">
+            <a href="{{ _productLink|raw }}" {% if oView.noIndex() %}rel="nofollow"{% endif %}>
+                <img src="{% if size=='big' %}{{ product.getPictureUrl(1) }}{% elseif size=='thinest' %}{{ product.getIconUrl() }}{% else %}{{ product.getThumbnailUrl() }}{% endif %}" alt="{{ product.oxarticles__oxtitle.value|striptags|raw }} {{ product.oxarticles__oxvarselect.value|default('')|raw }}" class="img-fluid">
             </a>
         </div>
     </div>
 
     <strong class="title">
-        <a class="fn" href="{{ _productLink }}" {% if oView.noIndex() %}rel="nofollow"{% endif %}>{{ product.oxarticles__oxtitle.value }} {{ product.oxarticles__oxvarselect.value }}</a>
+        <a class="fn" href="{{ _productLink|raw }}" {% if oView.noIndex() %}rel="nofollow"{% endif %}>{{ product.oxarticles__oxtitle.value|raw }} {{ product.oxarticles__oxvarselect.value|raw }}</a>
     </strong><br/>
     <span class="identifier">
         {% if product.oxarticles__oxweight.value %}
             <div>
                 <span title="weight">{{ translate({ ident: "WEIGHT" }) }}</span>
-                <span class="value">{{ product.oxarticles__oxweight.value }} {{ translate({ ident: "KG" }) }}</span>
+                <span class="value">{{ product.oxarticles__oxweight.value|raw }} {{ translate({ ident: "KG" }) }}</span>
             </div>
         {% endif %}
         <small class="text-muted" title="sku">{{ translate({ ident: "PRODUCT_NO", suffix: "COLON" }) }}</small>
-        <small class="value text-muted">{{ product.oxarticles__oxartnum.value }}</small>
+        <small class="value text-muted">{{ product.oxarticles__oxartnum.value|raw }}</small>
     </span>
 
     {% if size=='thin' or size=='thinest' %}
         <span class="flag {% if product.getStockStatus() == -1 %}red{% elseif product.getStockStatus() == 1 %}orange{% elseif product.getStockStatus() == 0 %}green{% endif %}">&nbsp;</span>
     {% endif %}
 
-    {% set aVariantSelections = product.getVariantSelections("null", "null", 1) %}
+    {% set aVariantSelections = product.getVariantSelections(null, null, 1) %}
     {% set blShowToBasket = true %} {# tobasket or more info ? #}
-    {% if product.isNotBuyable()||(aVariantSelections&&$aVariantSelections.selections)||$product.hasMdVariants() or (oViewConf.showSelectListsInList() and product.getSelections(1)) or product.getVariants() %}
+    {% if product.isNotBuyable() or (aVariantSelections and aVariantSelections.selections) or product.hasMdVariants() or (oViewConf.showSelectListsInList() and product.getSelections(1)) or product.getVariants() %}
         {% set blShowToBasket = false %}
     {% endif %}
 
-    <form name="tobasket.{{ testid }}" {% if blShowToBasket %}action="{{ oViewConf.getSelfActionLink() }}" method="post"{% else %}action="{{ _productLink }}" method="get"{% endif %}>
+    <form name="tobasket.{{ testid }}" {% if blShowToBasket %}action="{{ oViewConf.getSelfActionLink()|raw }}" method="post"{% else %}action="{{ _productLink|raw }}" method="get"{% endif %}>
         <div class="variants">
             {% hasrights { ident: "TOBASKET" } %}
                 {% if blShowToBasket %}
-                    {{ oViewConf.getHiddenSid() }}
-                    {{ oViewConf.getNavFormParams() }}
+                    {{ oViewConf.getHiddenSid()|raw }}
+                    {{ oViewConf.getNavFormParams()|raw }}
                     <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
                     {% if owishid %}
                         <input type="hidden" name="owishid" value="{{ owishid }}">
@@ -53,11 +53,11 @@
                     {% else %}
                         <input type="hidden" name="fnc" value="tobasket">
                     {% endif %}
-                    <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
+                    <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value|raw }}">
                     {% if altproduct %}
                         <input type="hidden" name="anid" value="{{ altproduct }}">
                     {% else %}
-                        <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+                        <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value|raw }}">
                     {% endif %}
                     {% if recommid %}
                         <input type="hidden" name="recommid" value="{{ recommid }}">
@@ -100,7 +100,7 @@
                     {% endhasrights %}
                 {% else %}
                     <span >
-                        <a id="variantMoreInfo_{{ testid }}" class="btn btn-primary btn-block" href="{{ _productLink }}" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_{{ testid }}'); return false;">{{ translate({ ident: "MORE_INFO" }) }}</a>
+                        <a id="variantMoreInfo_{{ testid }}" class="btn btn-primary btn-block" href="{{ _productLink|raw }}" onclick="oxid.mdVariants.getMdVariantUrl('mdVariant_{{ testid }}'); return false;">{{ translate({ ident: "MORE_INFO" }) }}</a>
                     </span>
                 {% endif %}
             </div>
@@ -115,7 +115,7 @@
                 {% if product.getStockStatus() == -1 %}
                     <span class="stockFlag notOnStock">
                         {% if product.oxarticles__oxnostocktext.value %}
-                            {{ product.oxarticles__oxnostocktext.value }}
+                            {{ product.oxarticles__oxnostocktext.value|raw }}
                         {% elseif oViewConf.getStockOffDefaultMessage() %}
                             <span class="text-danger">{{ translate({ ident: "MESSAGE_NOT_ON_STOCK" }) }}</span>
                         {% endif %}
@@ -130,7 +130,7 @@
                 {% elseif product.getStockStatus() == 0 %}
                     <span class="stockFlag">
                         {% if product.oxarticles__oxstocktext.value %}
-                            {{ product.oxarticles__oxstocktext.value }}
+                            {{ product.oxarticles__oxstocktext.value|raw }}
                         {% elseif oViewConf.getStockOnDefaultMessage() %}
                             <span class="text-success">{{ translate({ ident: "READY_FOR_SHIPPING" }) }}</span>
                         {% endif %}
@@ -142,20 +142,20 @@
 
     </form>
 
-    <form action="{{ oViewConf.getSelfActionLink() }}" method="post">
+    <form action="{{ oViewConf.getSelfActionLink()|raw }}" method="post">
         <div class="d-none">
-            {{ oViewConf.getHiddenSid() }}
-            {{ oViewConf.getNavFormParams() }}
+            {{ oViewConf.getHiddenSid()|raw }}
+            {{ oViewConf.getNavFormParams()|raw }}
             <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
             <input type="hidden" name="fnc" value="tocomparelist">
-            <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value }}">
-            <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value }}">
+            <input type="hidden" name="aid" value="{{ product.oxarticles__oxid.value|raw }}">
+            <input type="hidden" name="anid" value="{{ product.oxarticles__oxnid.value|raw }}">
             <input type="hidden" name="pgNr" value="0">
             <input type="hidden" name="am" value="1">
             <input type="hidden" name="removecompare" value="1">
         </div>
         {% hasrights { ident: "TOBASKET" } %}
-            <button class="btn btn-danger btn-sm" id="remove_cmp_{{ product.oxarticles__oxid.value }}" type="submit" title="{{ translate({ ident: "REMOVE" }) }}" name="send">
+            <button class="btn btn-danger btn-sm" id="remove_cmp_{{ product.oxarticles__oxid.value|raw }}" type="submit" title="{{ translate({ ident: "REMOVE" }) }}" name="send">
                 <i class="fa fa-trash"></i> {{ translate({ ident: "REMOVE" }) }}
             </button>
         {% endhasrights %}

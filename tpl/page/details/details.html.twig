@@ -1,3 +1,8 @@
+{#
+    Exception to the page convention (layout/page.html.twig): this template is also included as a partial by
+    widget/product/details (blWorkaroundInclude), so it cannot extend the layout; the page branch keeps the 1.x
+    capture append="oxidBlock_content" + include, which the layout's "content" block prints. The file has no blocks.
+#}
 {% if not blWorkaroundInclude %}
     {% capture append = "oxidBlock_content" %}
         {% if oxcmp_user %}
@@ -12,19 +17,16 @@
     {% set currency = oView.getActCurrency() %}
     {% set sPageHeadTitle = oDetailsProduct.oxarticles__oxtitle.value|cat(' ')|cat(oDetailsProduct.oxarticles__oxvarselect.value) %}
 
+    {# {% set %}…{% endset %} yields safe markup: the parts are escaped once, the literal <br> stays HTML (1.x printed the message raw) #}
     {% if oView.getPriceAlarmStatus() == 1 %}
-        {% set _statusMessage1 = "PAGE_DETAILS_THANKYOUMESSAGE1"|translate|cat(" ")|cat(oxcmp_shop.oxshops__oxname.value) %}
-        {% set _statusMessage2 = "PAGE_DETAILS_THANKYOUMESSAGE2"|translate|cat(" ") %}
-        {% set _statusMessage3 = "PAGE_DETAILS_THANKYOUMESSAGE3"|translate|cat(" ")|cat(oView.getBidPrice())|cat(" ")|cat(currency.sign)|cat(" ") %}
-        {% set _statusMessage4 = "PAGE_DETAILS_THANKYOUMESSAGE4"|translate %}
-        {% include "message/success.html.twig" with {statusMessage=`$_statusMessage1``$_statusMessage2``$_statusMessage3``$_statusMessage4`: statusMessage=`$_statusMessage1``$_statusMessage2``$_statusMessage3``$_statusMessage4`} %}
+        {% set statusMessage %}{{ "PAGE_DETAILS_THANKYOUMESSAGE1"|translate }} {{ oxcmp_shop.oxshops__oxname.value|raw }}{{ "PAGE_DETAILS_THANKYOUMESSAGE2"|translate }} {{ "PAGE_DETAILS_THANKYOUMESSAGE3"|translate }} {{ oView.getBidPrice() }} {{ currency.sign }} {{ "PAGE_DETAILS_THANKYOUMESSAGE4"|translate }}{% endset %}
+        {% include "message/success.html.twig" with {statusMessage: statusMessage} %}
     {% elseif oView.getPriceAlarmStatus() == 2 %}
         {% set _statusMessage = "MESSAGE_WRONG_VERIFICATION_CODE"|translate %}
         {% include "message/error.html.twig" with {statusMessage: _statusMessage} %}
     {% elseif oView.getPriceAlarmStatus() is same as(0) %}
-        {% set _statusMessage1 = "MESSAGE_NOT_ABLE_TO_SEND_EMAIL"|translate|cat("<br> ") %}
-        {% set _statusMessage2 = "MESSAGE_VERIFY_YOUR_EMAIL"|translate %}
-        {% include "message/error.html.twig" with {statusMessage=`$_statusMessage1``$_statusMessage2`: statusMessage=`$_statusMessage1``$_statusMessage2`} %}
+        {% set statusMessage %}{{ "MESSAGE_NOT_ABLE_TO_SEND_EMAIL"|translate }}<br> {{ "MESSAGE_VERIFY_YOUR_EMAIL"|translate }}{% endset %}
+        {% include "message/error.html.twig" with {statusMessage: statusMessage} %}
     {% endif %}
 
     {% if oView.getSearchTitle() %}

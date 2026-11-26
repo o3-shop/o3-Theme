@@ -1,12 +1,12 @@
 {% set aExtends = oView.getBusinessEntityExtends() %}
-<div typeof="gr:BusinessEntity" about="{{ sRDFaUrl }}#companydata">
-    <div property="gr:legalName vcard:fn" content="{{ oxcmp_shop.oxshops__oxcompany.value }}" datatype="xsd:string"></div>
+<div typeof="gr:BusinessEntity" about="{{ sRDFaUrl|raw }}#companydata">
+    <div property="gr:legalName vcard:fn" content="{{ oxcmp_shop.oxshops__oxcompany.value|raw }}" datatype="xsd:string"></div>
     <div rel="vcard:adr">
         <div typeof="vcard:Address">
-            <div property="vcard:country-name" content="{{ oxcmp_shop.oxshops__oxcountry.value }}"></div>
-            <div property="vcard:locality" content="{{ oxcmp_shop.oxshops__oxcity.value }}"></div>
-            <div property="vcard:postal-code" content="{{ oxcmp_shop.oxshops__oxzip.value }}"></div>
-            <div property="vcard:street-address" content="{{ oxcmp_shop.oxshops__oxstreet.value }}"></div>
+            <div property="vcard:country-name" content="{{ oxcmp_shop.oxshops__oxcountry.value|raw }}"></div>
+            <div property="vcard:locality" content="{{ oxcmp_shop.oxshops__oxcity.value|raw }}"></div>
+            <div property="vcard:postal-code" content="{{ oxcmp_shop.oxshops__oxzip.value|raw }}"></div>
+            <div property="vcard:street-address" content="{{ oxcmp_shop.oxshops__oxstreet.value|raw }}"></div>
         </div>
     </div>
 {% if aExtends.sRDFaLatitude and aExtends.sRDFaLongitude %}
@@ -17,8 +17,8 @@
         </div>
     </div>
 {% endif %}
-    <div property="vcard:tel" content="{{ oxcmp_shop.oxshops__oxtelefon.value }}"></div>
-    <div property="vcard:fax" content="{{ oxcmp_shop.oxshops__oxtelefax.value }}"></div>
+    <div property="vcard:tel" content="{{ oxcmp_shop.oxshops__oxtelefon.value|raw }}"></div>
+    <div property="vcard:fax" content="{{ oxcmp_shop.oxshops__oxtelefax.value|raw }}"></div>
 {% if aExtends.sRDFaLogoUrl %}
     <div rel="vcard:logo foaf:logo" resource="{{ aExtends.sRDFaLogoUrl }}"></div>
 {% endif %}

@@ -1,40 +1,44 @@
-{% set actCategory = oView.getActiveCategory() %}
+{% extends "layout/page.html.twig" %}
 
+{# registered at the top level (before the layout renders the header), so the script order matches 1.x #}
 {% if oxcmp_shop.oxshops__oxproductive.value %}
-    {{ script({ include: "js/widget/filter.min.js", priority: 10 }) }}
+    {% do script({ include: "js/widget/filter.min.js", priority: 10 }) %}
 {% else %}
-    {{ script({ include: "js/widget/filter.js", priority: 10 }) }}
+    {% do script({ include: "js/widget/filter.js", priority: 10 }) %}
 {% endif %}
 
-{% capture append = "oxidBlock_sidebar" %}
-    {% set listType = oView.getListType() %}
-    {% if listType=='manufacturer' or listType=='vendor' %}
-        {% if actCategory and actCategory.getIconUrl() %}
-        <div class="box">
-            <h3>
-                {% if listType=='manufacturer' %}
-                    {{ translate({ ident: "BRAND" }) }}
-                {% elseif listType=='vendor' %}
-                    {{ translate({ ident: "VENDOR" }) }}
-                {% endif %}
-            </h3>
-            <img loading="lazy" src="{{ actCategory.getIconUrl() }}" alt="{{ actCategory.getTitle() }}">
-        </div>
-        {% endif %}
-    {% endif %}
-{% endcapture %}
+{% block content %}
+    {% set actCategory = oView.getActiveCategory() %}
 
-{% capture append = "oxidBlock_content" %}
+    {# read by layout/sidebar (included below) #}
+    {% capture append = "oxidBlock_sidebar" %}
+        {% set listType = oView.getListType() %}
+        {% if listType=='manufacturer' or listType=='vendor' %}
+            {% if actCategory and actCategory.getIconUrl() %}
+            <div class="box">
+                <h3>
+                    {% if listType=='manufacturer' %}
+                        {{ translate({ ident: "BRAND" }) }}
+                    {% elseif listType=='vendor' %}
+                        {{ translate({ ident: "VENDOR" }) }}
+                    {% endif %}
+                </h3>
+                <img loading="lazy" src="{{ actCategory.getIconUrl() }}" alt="{{ actCategory.getTitle()|raw }}">
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endcapture %}
+
     {% block page_list_listhead %}
         {% if actCategory.oxcategories__oxthumb.value and actCategory.getThumbUrl() %}
-            <img class="alist__image" src="{{ actCategory.getThumbUrl() }}" alt="{{ actCategory.oxcategories__oxtitle.value }}">
+            <img class="alist__image" src="{{ actCategory.getThumbUrl() }}" alt="{{ actCategory.oxcategories__oxtitle.value|raw }}">
         {% endif %}
 
         {% set rsslinks = oView.getRssLinks() %}
         <h1 class="title-big">
-            {{ oView.getTitle() }}
+            {{ oView.getTitle()|raw }}
             {% if rsslinks.activeCategory %}
-                <a class="rss" id="rssActiveCategory" aria-label="RSS Current Category" href="{{ rsslinks.activeCategory.link }}" title="{{ rsslinks.activeCategory.title }}" target="_blank">
+                <a class="rss" id="rssActiveCategory" aria-label="RSS Current Category" href="{{ rsslinks.activeCategory.link|raw }}" title="{{ rsslinks.activeCategory.title|raw }}" target="_blank">
                     <i class="fas fa-rss"></i>
                 </a>
             {% endif %}
@@ -48,7 +52,7 @@
 
         {% set oPageNavigation = oView.getPageNavigation() %}
         {% if actCategory.oxcategories__oxlongdesc.value and oPageNavigation.actPage == 1 %}
-            <div id="catLongDescLocator" class="categoryDescription">{{ include(template_from_string(actCategory.oxcategories__oxlongdesc)) }}</div>
+            <div id="catLongDescLocator" class="categoryDescription">{{ actCategory.getLongDesc()|raw }}</div>
         {% endif %}
 
         {% if oView.hasVisibleSubCats() or oView.getAttributes() %}
@@ -65,7 +69,7 @@
                             {% for category in oView.getSubCatList() %}
                                 {% if category.getContentCats() %}
                                     {% for ocont in category.getContentCats() %}
-                                        <a class="btn" href="{{ ocont.getLink() }}">{{ ocont.oxcontents__oxtitle.value }}</a>
+                                        <a class="btn" href="{{ ocont.getLink()|raw }}">{{ ocont.oxcontents__oxtitle.value|raw }}</a>
                                     {% endfor %}
                                 {% endif %}
                             {% endfor %}
@@ -84,19 +88,19 @@
                                                 {% set iconUrl = category.getIconUrl() %}
                                                 {% if iconUrl %}
                                                     <div class="component__productbox-picture mb-4">
-                                                        <a class="component__productbox-picture-link" href="{{ category.getLink() }}" title="{{ category.oxcategories__oxtitle.value }}">
-                                                            <img loading="lazy" src="{{ iconUrl }}" alt="{{ category.oxcategories__oxtitle.value }}">
+                                                        <a class="component__productbox-picture-link" href="{{ category.getLink()|raw }}" title="{{ category.oxcategories__oxtitle.value|raw }}">
+                                                            <img loading="lazy" src="{{ iconUrl }}" alt="{{ category.oxcategories__oxtitle.value|raw }}">
                                                         </a>
                                                     </div>
                                                 {% else %}
                                                     <div class="component__productbox-picture mb-4">
-                                                        <a href="{{ category.getLink() }}" class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-center">
-                                                            {{ category.oxcategories__oxtitle.value }}
+                                                        <a href="{{ category.getLink()|raw }}" class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-center">
+                                                            {{ category.oxcategories__oxtitle.value|raw }}
                                                         </a>
                                                     </div>
                                                 {% endif %}
-                                                <a href="{{ category.getLink() }}" class="component__productbox-title">
-                                                    {{ category.oxcategories__oxtitle.value }}
+                                                <a href="{{ category.getLink()|raw }}" class="component__productbox-title">
+                                                    {{ category.oxcategories__oxtitle.value|raw }}
                                                 </a>
                                             </div>
                                         </div>
@@ -110,11 +114,11 @@
                                 {% for category in oView.getSubCatList() %}
                                     {% if category.getContentCats() %}
                                         {% for ocont in category.getContentCats() %}
-                                            <a class="btn" href="{{ ocont.getLink() }}">{{ ocont.oxcontents__oxtitle.value }}</a>
+                                            <a class="btn" href="{{ ocont.getLink()|raw }}">{{ ocont.oxcontents__oxtitle.value|raw }}</a>
                                         {% endfor %}
                                     {% endif %}
                                     {% if category.getIsVisible() %}
-                                        <a class="btn" href="{{ category.getLink() }}">{{ category.oxcategories__oxtitle.value }}</a>
+                                        <a class="btn" href="{{ category.getLink()|raw }}">{{ category.oxcategories__oxtitle.value|raw }}</a>
                                     {% endif %}
                                 {% endfor %}
                             </nav>
@@ -127,16 +131,16 @@
                             {% for category in oView.getSubCatList() %}
                                 {% if category.getContentCats() %}
                                     {% for ocont in category.getContentCats() %}
-                                        <a class="btn" href="{{ ocont.getLink() }}">{{ ocont.oxcontents__oxtitle.value }}</a>
+                                        <a class="btn" href="{{ ocont.getLink()|raw }}">{{ ocont.oxcontents__oxtitle.value|raw }}</a>
                                     {% endfor %}
                                 {% endif %}
                                 {% set iconUrl = category.getIconUrl() %}
                                 {% if iconUrl %}
-                                    <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="{{ category.getLink() }}" title="{{ translate({ ident: "VIEW_ALL_PRODUCTS" }) }}">
-                                        <img src="{{ iconUrl }}" alt="{{ category.oxcategories__oxtitle.value }}">
+                                    <a class="start__manufacturer-box g-col-6 g-col-sm-4 g-col-lg-2" href="{{ category.getLink()|raw }}" title="{{ translate({ ident: "VIEW_ALL_PRODUCTS" }) }}">
+                                        <img src="{{ iconUrl }}" alt="{{ category.oxcategories__oxtitle.value|raw }}">
                                     </a>
                                 {% else %}
-                                    <a class="btn" href="{{ category.getLink() }}">{{ category.oxcategories__oxtitle.value }}</a>
+                                    <a class="btn" href="{{ category.getLink()|raw }}">{{ category.oxcategories__oxtitle.value|raw }}</a>
                                 {% endif %}
                             {% endfor %}
                         </nav>
@@ -188,5 +192,4 @@
         {% endif %}
     {% endblock %}
     {{ insert_tracker() }}
-{% endcapture %}
-{% include "layout/page.html.twig" with {tree_path: oView.getTreePath()} %}
+{% endblock %}

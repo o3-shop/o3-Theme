@@ -35,14 +35,14 @@
             <div class="splide__track">
                 <div class="splide__list">
                     {% for iPicNr, oArtIcon in oView.getIcons() %}
-                        {% set sPicName = oPictureProduct.getPictureFieldValue("oxpic", %}
+                        {% set sPicName = oPictureProduct.getPictureFieldValue("oxpic", iPicNr) %}
                         {# Guard getimagesize() against an empty/unresolved path (PHP 8 ValueError). #}
-                        {% set sPicPath = oConfig.getMasterPicturePath("product/`$iPicNr`/`$sPicName`") %}
+                        {% set sPicPath = oConfig.getMasterPicturePath("product/#{iPicNr}/#{sPicName}") %}
                         {% set aPicInfo = "" %}
                         {% if sPicPath %}{% set aPicInfo = sPicPath|getimagesize %}{% endif %}
                         <div class="splide__slide{% if iPicNr == 1 %} active{% endif %}">
                             <a class="details__picture-zoom-link" href="{{ oPictureProduct.getMasterZoomPictureUrl(iPicNr) }}"{% if aPicInfo %} data-width="{{ aPicInfo.0 }}" data-height="{{ aPicInfo.1 }}"{% endif %}>
-                                <img src="{{ oPictureProduct.getPictureUrl(iPicNr) }}" alt="{{ oPictureProduct.oxarticles__oxtitle.value|striptags }} {{ oPictureProduct.oxarticles__oxvarselect.value|striptags }}" itemprop="image" class="splide__img">
+                                <img src="{{ oPictureProduct.getPictureUrl(iPicNr) }}" alt="{{ oPictureProduct.oxarticles__oxtitle.value|striptags|raw }} {{ oPictureProduct.oxarticles__oxvarselect.value|striptags|raw }}" itemprop="image" class="splide__img">
                             </a>
                         </div>
                     {% endfor %}
@@ -51,11 +51,11 @@
         {% else %}
             {% set sPicName = oPictureProduct.oxarticles__oxpic1.value %}
             {# Guard getimagesize() against an empty/unresolved path (PHP 8 ValueError). #}
-            {% set sPicPath = oConfig.getMasterPicturePath("product/1/`$sPicName`") %}
+            {% set sPicPath = oConfig.getMasterPicturePath("product/1/#{sPicName}") %}
             {% set aPicInfo = "" %}
             {% if sPicPath %}{% set aPicInfo = sPicPath|getimagesize %}{% endif %}
             <a class="details__picture-zoom-link" href="{{ oPictureProduct.getMasterZoomPictureUrl(1) }}"{% if aPicInfo %} data-width="{{ aPicInfo.0 }}" data-height="{{ aPicInfo.1 }}"{% endif %}>
-                <img src="{{ oPictureProduct.getPictureUrl(1) }}" alt="{{ oPictureProduct.oxarticles__oxtitle.value|striptags }} {{ oPictureProduct.oxarticles__oxvarselect.value|striptags }}" itemprop="image">
+                <img src="{{ oPictureProduct.getPictureUrl(1) }}" alt="{{ oPictureProduct.oxarticles__oxtitle.value|striptags|raw }} {{ oPictureProduct.oxarticles__oxvarselect.value|striptags|raw }}" itemprop="image">
             </a>
         {% endif %}
     </div>
@@ -100,7 +100,7 @@
                 <div class="splide__list">
                     {% for iPicNr, oArtIcon in oView.getIcons() %}
                         {% set startFromNull = iPicNr-1 %}
-                        <img class="splide__slide" {% if loop.index %}">
+                        <img class="splide__slide" src="{{ oPictureProduct.getIconUrl(iPicNr) }}" alt="{{ loop.index }}">
                     {% endfor %}
                 </div>
             </div>
