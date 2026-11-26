@@ -30,16 +30,10 @@
  * one level of entities, so plain mails print values as they are: there any |e, |escape or |raw is reported
  * ("plain: <file>:<line>: <expression>"), as it would put entities into the text or claim escaping that never happens.
  *
- * Usage: php build/lint-twig.php [dir|file …]   (default scope: the areas converted so far; widen it per task)
+ * Usage: php build/lint-twig.php [dir|file …]   (default scope: all of tpl)
  */
 
-$scope = array_slice($argv, 1) ?: [
-    'tpl/layout', 'tpl/widget', 'tpl/message', 'tpl/page/shop',
-    'tpl/page/list', 'tpl/page/details', 'tpl/page/search', 'tpl/page/compare', 'tpl/page/recommendations',
-    'tpl/page/review', 'tpl/page/privatesales', 'tpl/rdfa',
-    'tpl/page/checkout', 'tpl/form', 'tpl/page/account', 'tpl/page/info', 'tpl/page/revocation', 'tpl/page/wishlist',
-    'tpl/email',
-];
+$scope = array_slice($argv, 1) ?: ['tpl'];
 
 $urlGetters = [
     // Core/ViewConfig.php
@@ -60,6 +54,7 @@ $basketItemGetters = ['getTitle', 'getVarSelect'];
 $rawTextFields = [
     'oxorderarticles__oxtitle', 'oxorderarticles__oxpersparam', 'oxorderarticles__oxerpstatus', // OrderArticle::_setFieldData
     'oxuserbasketitems__oxsellist', 'oxuserbasketitems__oxpersparam',                           // UserBasketItem::_setFieldData
+    'oxorder__oxremark',                                    // Order::finalizeOrder sets it T_RAW in memory (order mails)
 ];
 // admin-entered rich text (T_RAW or read via getRawValue()), printed raw like 1.x
 $richTextFields = ['oxlongdesc', 'oxcontent', 'oxurldesc'];
