@@ -98,8 +98,8 @@
 
                                     <div class="title-small">{{ translate({ ident: "O3_ARTICLE" }) }}</div>
 
-                                    {# oxorderarticles__oxtitle and oxpersparam are T_RAW (OrderArticle::_setFieldData): raw DB text, so the title and the
-                                       persparam values (customer input) are escaped explicitly #}
+                                    {# oxorderarticles__oxtitle is T_RAW (OrderArticle::_setFieldData) and stored raw (Order::_setOrderArticles), so it is escaped
+                                       explicitly. The persparam values were request-escaped before they were stored (BasketComponent), so |raw #}
                                     {% for orderitem in order.getOrderArticles(true) %}
                                         {% set sArticleId = orderitem.oxorderarticles__oxartid.value %}
                                         {% set oArticle = oArticleList[sArticleId] %}
@@ -118,7 +118,7 @@
 
                                                 {% for sVar, aParam in orderitem.getPersParams() %}
                                                 {% if aParam %}
-                                                    <br />{{ translate({ ident: "DETAILS" }) }}: {{ aParam|escape }}
+                                                    <br />{{ translate({ ident: "DETAILS" }) }}: {{ aParam|raw }}
                                                 {% endif %}
                                                 {% endfor %}
                                             </div>

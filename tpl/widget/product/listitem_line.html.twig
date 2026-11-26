@@ -96,7 +96,8 @@
             {% block widget_product_listitem_line_description %}
                 <div class="component__productbox-description d-none d-md-block">
                     {% if recommid %}
-                        <p>{{ product.text }}</p>
+                        {# recommendation note (oxobject2list.oxdesc): stored request-escaped (ArticleDetailsController::addToRecomm), so |raw #}
+                        <p>{{ product.text|raw }}</p>
                     {% else %}
                         {% hasrights { ident: "SHOWSHORTDESCRIPTION" } %}
                             {{ product.oxarticles__oxshortdesc.rawValue }}
